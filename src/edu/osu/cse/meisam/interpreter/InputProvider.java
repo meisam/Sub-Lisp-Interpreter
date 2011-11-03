@@ -28,5 +28,11 @@ public interface InputProvider {
     public boolean hasMore();
     
     public char nextChar();
+    
+    /**
+     * Returns the next char in the InputProvider without moving the seeker ahead.
+     * @return
+     */
+    public char lookaheadChar();
 
 }
