@@ -71,4 +71,8 @@ public class StringInputProvider implements InputProvider {
         return charAt;
     }
 
+    public char lookaheadChar() {
+        return input.charAt(currentLocation);
+    }
+
 }
