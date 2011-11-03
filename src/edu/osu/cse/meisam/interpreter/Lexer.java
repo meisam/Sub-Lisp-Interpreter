@@ -53,9 +53,9 @@ public class Lexer {
             } else if (isWhiteSpace(lookaheadChar)) {
                 // buffer = readWhiteSpace()
             } else if (isOpenParentheses(lookaheadChar)) {
-                // buffer = readOpenParentheses();
+                buffer = readOpenParentheses();
             } else if (isCloseParentheses(lookaheadChar)) {
-                // buffer = readCloseParentheses();
+                buffer = readCloseParentheses();
             }
             return buffer.toString();
         } catch (LexerExeption ex) {
@@ -168,6 +168,30 @@ public class Lexer {
         final StringBuffer buffer = new StringBuffer(100);
         char nextChar = in.nextChar();
         if (isOperation(nextChar)) {
+            buffer.append(nextChar);
+            return buffer.toString();
+        } else {
+            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                    + in.lookaheadChar() + "'is not a valid identifier");
+        }
+    }
+
+    private final String readOpenParentheses() {
+        final StringBuffer buffer = new StringBuffer(100);
+        char nextChar = in.nextChar();
+        if (isOpenParentheses(nextChar)) {
+            buffer.append(nextChar);
+            return buffer.toString();
+        } else {
+            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                    + in.lookaheadChar() + "'is not a valid identifier");
+        }
+    }
+
+    private final String readCloseParentheses() {
+        final StringBuffer buffer = new StringBuffer(100);
+        char nextChar = in.nextChar();
+        if (isCloseParentheses(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
