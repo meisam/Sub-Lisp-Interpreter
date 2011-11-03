@@ -257,13 +257,87 @@ public class LexerTest {
         Assert.assertEquals("+", lexer.nextToken());
         Assert.assertEquals("$", lexer.nextToken());
     }
-  
+    
     @Test
-    public void testNextTokenSpacesPlusOperation() {
-        InputProvider inputProvider = new StringInputProvider(" \n\r\t+");
+    public void testNextTokenOpenParentheses() {
+        InputProvider inputProvider = new StringInputProvider("(");
         Lexer lexer = new Lexer(inputProvider );
-        Assert.assertEquals("+", lexer.nextToken());
+        Assert.assertEquals("(", lexer.nextToken());
         Assert.assertEquals("$", lexer.nextToken());
     }
-  
+    
+    @Test
+    public void testNextTokenCloseParentheses() {
+        InputProvider inputProvider = new StringInputProvider(")");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+    
+    @Test
+    public void testNextTokenOpenParenthesesSpace() {
+        InputProvider inputProvider = new StringInputProvider("( ");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals("(", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+    
+    @Test
+    public void testNextTokenCloseParenthesesSpace() {
+        InputProvider inputProvider = new StringInputProvider(") ");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+    
+    @Test
+    public void testNextTokenOpenParenthesesSpaces() {
+        InputProvider inputProvider = new StringInputProvider("( \t\n\r");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals("(", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+    
+    @Test
+    public void testNextTokenCloseParenthesesSpaces() {
+        InputProvider inputProvider = new StringInputProvider(") \t\n\r");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+    
+    
+    @Test
+    public void testNextTokenSpacesOpenParenthesesSpaces() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r ( \t\n\r");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals("(", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+    
+    @Test
+    public void testNextTokenSpacesCloseParenthesesSpaces() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r ) \t\n\r");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+    
+    @Test
+    public void testNextTokenOpenParenthesesTwo() {
+        InputProvider inputProvider = new StringInputProvider("((");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals("(", lexer.nextToken());
+        Assert.assertEquals("(", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+    
+    @Test
+    public void testNextTokenCloseParenthesesTwo() {
+        InputProvider inputProvider = new StringInputProvider("))");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals(")", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
 }
