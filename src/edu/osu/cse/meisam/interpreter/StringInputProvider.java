@@ -66,8 +66,9 @@ public class StringInputProvider implements InputProvider {
      * @see edu.osu.cse.meisam.interpreter.InputProvider#nextChar()
      */
     public char nextChar() {
+        char charAt = input.charAt(currentLocation);
         currentLocation++;        
-        return input.charAt(currentLocation);
+        return charAt;
     }
 
 }
