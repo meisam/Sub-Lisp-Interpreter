@@ -148,7 +148,7 @@ public class Lexer {
         return buffer.toString();
     }
 
-    public final String readId() {
+    private final String readId() {
         final StringBuffer buffer = new StringBuffer(100);
         while (in.hasMore()) {
             char nextChar = in.nextChar();
