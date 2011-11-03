@@ -17,36 +17,151 @@
  */
 package edu.osu.cse.meisam.interpreter;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
 public class Lexer {
 
-    private final Reader in;
+    private final InputProvider in;
 
     /**
      * 
      */
-    public Lexer(final Reader in) {
-        this.in = in;
+    public Lexer(final InputProvider inputProvider) {
+        this.in = inputProvider;
     }
 
     public String nextToken() {
         try {
-            StringBuffer buffer = new StringBuffer(1000);
-            while (in.ready()) {
-                int nextChar = in.read();
-                buffer.append(nextChar);
+            String buffer = "";
+
+            removeWhitespace();
+
+            if (!in.hasMore()) {
+                return "$";
+            }
+
+            char lookaheadChar = in.lookaheadChar();
+
+            if (isDigit(lookaheadChar)) {
+                buffer = readNumber();
+            } else if (isLetter(lookaheadChar)) {
+                buffer = readId();
+            } else if (isOperation(lookaheadChar)) {
+                // buffer = readOperation();
+            } else if (isWhiteSpace(lookaheadChar)) {
+                // buffer = readWhiteSpace()
+            } else if (isOpenParentheses(lookaheadChar)) {
+                // buffer = readOpenParentheses();
+            } else if (isCloseParentheses(lookaheadChar)) {
+                // buffer = readCloseParentheses();
             }
             return buffer.toString();
-        } catch (IOException e) {
-            throw new LexerExeption("Cannot read the output");
+        } catch (LexerExeption ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new LexerExeption("Cannot read the input");
         }
+    }
+
+    private void removeWhitespace() {
+        while (in.hasMore() && isWhiteSpace(in.lookaheadChar())) {
+            in.nextChar();
+        }
+    }
+
+    private final boolean isDigit(final char ch) {
+        if ('0' <= ch && ch <= '9') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isLowercaseLetter(final char ch) {
+        if ('a' <= ch && ch <= 'z') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isUppercaseLetter(final char ch) {
+        if ('A' <= ch && ch <= 'Z') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isLetter(final char ch) {
+        if (isUppercaseLetter(ch) || isLowercaseLetter(ch)) {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isOperation(final char ch) {
+        if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isWhiteSpace(char ch) {
+        if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isOpenParentheses(char ch) {
+        if (ch == '(') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isCloseParentheses(char ch) {
+        if (ch == ')') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isDelimiter(final char ch) {
+        return isOpenParentheses(ch) || isCloseParentheses(ch)
+                || isWhiteSpace(ch) || isOperation(ch);
+    }
+
+    private final String readNumber() {
+        final StringBuffer buffer = new StringBuffer(100);
+        while (in.hasMore()) {
+            char nextChar = in.nextChar();
+            if (isDigit(nextChar)) {
+                buffer.append(nextChar);
+            } else if (isDelimiter(nextChar)) {
+                break;
+            } else {
+                throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                        + nextChar + "'is not a valid number");
+            }
+        }
+        return buffer.toString();
+    }
+
+    public final String readId() {
+        final StringBuffer buffer = new StringBuffer(100);
+        while (in.hasMore()) {
+            char nextChar = in.nextChar();
+            if (isLetter(nextChar)) {
+                buffer.append(nextChar);
+            } else if (isDelimiter(nextChar)) {
+                break;
+            } else {
+                throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                        + nextChar + "'is not a valid identifier");
+            }
+        }
+        return buffer.toString();
     }
 
 }
