@@ -29,14 +29,11 @@ public class Lexer {
 
     private final Reader in;
 
-    private final PrintStream out;
-
     /**
      * 
      */
-    public Lexer(final Reader in, final PrintStream out) {
+    public Lexer(final Reader in) {
         this.in = in;
-        this.out = out;
     }
 
     public String nextToken() {
