@@ -44,7 +44,7 @@ public class Lexer {
 
             char lookaheadChar = in.lookaheadChar();
 
-            if (isDigit(lookaheadChar)) {
+            if (isDigit(lookaheadChar) || isSign(lookaheadChar)) {
                 buffer = readNumber();
             } else if (isLetter(lookaheadChar)) {
                 buffer = readSymbol();
@@ -54,8 +54,9 @@ public class Lexer {
                 buffer = readOpenParentheses();
             } else if (isCloseParentheses(lookaheadChar)) {
                 buffer = readCloseParentheses();
-            } else{
-                throw new LexerExeption("Unknown Symbol in the input:" + lookaheadChar);
+            } else {
+                throw new LexerExeption("Unknown Symbol in the input:"
+                        + lookaheadChar);
             }
             return buffer.toString();
         } catch (LexerExeption ex) {
@@ -73,6 +74,20 @@ public class Lexer {
 
     private final boolean isDigit(final char ch) {
         if ('0' <= ch && ch <= '9') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isSign(final char ch) {
+        if (ch == '+' || ch == '-') {
+            return true;
+        }
+        return false;
+    }
+
+    private final boolean isMinusSign(final char ch) {
+        if (ch == '-') {
             return true;
         }
         return false;
@@ -122,15 +137,29 @@ public class Lexer {
 
     private final boolean isDelimiter(final char ch) {
         return isOpenParentheses(ch) || isCloseParentheses(ch)
-                || isWhiteSpace(ch) ;
+                || isWhiteSpace(ch);
     }
 
     private final String readNumber() {
         final StringBuffer buffer = new StringBuffer(100);
+
+        // read the sign if there is any
+        if (in.hasMore()) {
+            if (isSign(in.lookaheadChar())) {
+                char nextChar = in.nextChar();
+                if (isMinusSign(nextChar)) {
+                    buffer.append(nextChar);
+                }
+            }
+        }
+
+        boolean atLeastOneDigit = false;
+        // read the rest of the number
         while (in.hasMore()) {
             char nextChar = in.nextChar();
             if (isDigit(nextChar)) {
                 buffer.append(nextChar);
+                atLeastOneDigit = true;
             } else if (isDelimiter(nextChar)) {
                 break;
             } else {
@@ -138,6 +167,12 @@ public class Lexer {
                         + nextChar + "'is not a valid number");
             }
         }
+
+        if (!atLeastOneDigit) {
+            throw new LexerExeption("Expecting to see a number here:"
+                    + buffer.toString());
+        }
+        
         return buffer.toString();
     }
 
