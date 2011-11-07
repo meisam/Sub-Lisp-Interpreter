@@ -22,13 +22,13 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispNumber extends LispToken {
+public class LispNumericAtom extends LispToken {
 
     /**
      * Constructs a number representing the given lexval
      * @param lexval
      */
-    protected LispNumber(String lexval) {
+    protected LispNumericAtom(String lexval) {
         super(lexval);
     }
 
