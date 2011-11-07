@@ -100,7 +100,7 @@ public class Lexer {
     }
 
     private final boolean isOperation(final char ch) {
-        if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+        if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=' || ch == '<' || ch == '>') {
             return true;
         }
         return false;
