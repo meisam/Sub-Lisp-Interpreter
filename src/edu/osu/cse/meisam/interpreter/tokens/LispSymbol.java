@@ -24,4 +24,9 @@ package edu.osu.cse.meisam.interpreter.tokens;
  */
 public class LispSymbol extends LispToken {
 
+    protected LispSymbol(String lexval) {
+        super(lexval);
+        // TODO Auto-generated constructor stub
+    }
+
 }

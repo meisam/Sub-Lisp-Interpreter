@@ -26,4 +26,9 @@ public class LispCloseParentheses extends LispToken {
     final static String[] ALL_KEYWORDS = {
         "DEFUN", "EQ", "ATOM", "NIL", "T", "CAR", "CDR", "CAAR"
     };
+
+    protected LispCloseParentheses(String lexval) {
+        super(lexval);
+    }
+
 }

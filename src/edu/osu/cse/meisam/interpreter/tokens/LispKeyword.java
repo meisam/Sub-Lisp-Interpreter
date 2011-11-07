@@ -24,4 +24,8 @@ package edu.osu.cse.meisam.interpreter.tokens;
  */
 public class LispKeyword extends LispSymbol {
 
+    protected LispKeyword(String lexval) {
+        super(lexval);
+    }
+
 }
