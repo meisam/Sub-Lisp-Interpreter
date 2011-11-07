@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispKeyword extends LispAtom {
+public class LispLiteralAtom extends LispAtom {
 
     /**
      * All the keywords in the Lisp 
@@ -35,7 +35,7 @@ public class LispKeyword extends LispAtom {
      * Constructs a new Token
      * @param lexval
      */
-    protected LispKeyword(String lexval) {
+    protected LispLiteralAtom(String lexval) {
         super(lexval);
     }
 
