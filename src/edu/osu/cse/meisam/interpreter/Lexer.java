@@ -48,8 +48,8 @@ public class Lexer {
                 buffer = readNumber();
             } else if (isLetter(lookaheadChar)) {
                 buffer = readId();
-            } else if (isOperation(lookaheadChar)) {
-                buffer = readOperation();
+            } else if (isOperator(lookaheadChar)) {
+                buffer = readOperator();
             } else if (isWhiteSpace(lookaheadChar)) {
                 // buffer = readWhiteSpace()
             } else if (isOpenParentheses(lookaheadChar)) {
@@ -99,7 +99,7 @@ public class Lexer {
         return false;
     }
 
-    private final boolean isOperation(final char ch) {
+    private final boolean isOperator(final char ch) {
         if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=' || ch == '<' || ch == '>') {
             return true;
         }
@@ -129,7 +129,7 @@ public class Lexer {
 
     private final boolean isDelimiter(final char ch) {
         return isOpenParentheses(ch) || isCloseParentheses(ch)
-                || isWhiteSpace(ch) || isOperation(ch);
+                || isWhiteSpace(ch) || isOperator(ch);
     }
 
     private final String readNumber() {
@@ -164,10 +164,10 @@ public class Lexer {
         return buffer.toString();
     }
 
-    private final String readOperation() {
+    private final String readOperator() {
         final StringBuffer buffer = new StringBuffer(100);
         char nextChar = in.nextChar();
-        if (isOperation(nextChar)) {
+        if (isOperator(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
