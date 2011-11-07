@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public interface LispCloseParentheses extends LispToken {
+public class LispCloseParentheses extends LispToken {
     final static String[] ALL_KEYWORDS = {
         "DEFUN", "EQ", "ATOM", "NIL", "T", "CAR", "CDR", "CAAR"
     };

@@ -22,6 +22,6 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public interface LispKeyword extends LispSymbol {
+public class LispKeyword extends LispSymbol {
 
 }

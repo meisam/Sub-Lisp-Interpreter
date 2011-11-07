@@ -22,8 +22,16 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public interface LispToken {
+public abstract class LispToken {
     
-    public String getLexval();
+    private final String lexval;
+
+    protected LispToken(final String lexval) {
+        this.lexval = lexval;
+    }
+    
+    public String getLexval(){
+        return this.lexval;
+    }
 
 }

@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public abstract class LispTokenImp implements LispToken{
+public abstract class LispTokenImp extends LispToken{
     
     private final String lexval;
 
