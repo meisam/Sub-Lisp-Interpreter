@@ -24,8 +24,14 @@ package edu.osu.cse.meisam.interpreter.tokens;
  */
 public class LispEOF extends LispToken {
 
-    public static final String EOF = "$";
+    /**
+     * End-of-File symbol. This should never show up anywhere. It is only a sentinel used for ease of parsing.
+     */
+    private static final String EOF = "$";
     
+    /**
+     * Constructs a new EOF token.
+     */
     protected LispEOF() {
         super(EOF);
     }
