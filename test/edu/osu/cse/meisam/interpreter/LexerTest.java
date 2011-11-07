@@ -230,32 +230,44 @@ public class LexerTest {
     public void testNextTokenPlusOperation() {
         InputProvider inputProvider = new StringInputProvider("+");
         Lexer lexer = new Lexer(inputProvider );
-        Assert.assertEquals("+", lexer.nextToken());
-        Assert.assertEquals("$", lexer.nextToken());
+        try {
+            lexer.nextToken();
+            fail("Lexer should have reported error");
+        } catch (LexerExeption e) {
+        }
     }
     
     @Test
     public void testNextTokenPlusOperationSpace() {
         InputProvider inputProvider = new StringInputProvider("+ ");
         Lexer lexer = new Lexer(inputProvider );
-        Assert.assertEquals("+", lexer.nextToken());
-        Assert.assertEquals("$", lexer.nextToken());
+        try {
+            lexer.nextToken();
+            fail("Lexer should have reported error");
+        } catch (LexerExeption e) {
+        }
     }
   
     @Test
     public void testNextTokenPlusOperationSpaces() {
         InputProvider inputProvider = new StringInputProvider("+ \n\r\t");
         Lexer lexer = new Lexer(inputProvider );
-        Assert.assertEquals("+", lexer.nextToken());
-        Assert.assertEquals("$", lexer.nextToken());
+        try {
+            lexer.nextToken();
+            fail("Lexer should have reported error");
+        } catch (LexerExeption e) {
+        }
     }
     
     @Test
     public void testNextTokenSpacePlusOperation() {
         InputProvider inputProvider = new StringInputProvider(" +");
         Lexer lexer = new Lexer(inputProvider );
-        Assert.assertEquals("+", lexer.nextToken());
-        Assert.assertEquals("$", lexer.nextToken());
+        try {
+            lexer.nextToken();
+            fail("Lexer should have reported error");
+        } catch (LexerExeption e) {
+        }
     }
     
     @Test
