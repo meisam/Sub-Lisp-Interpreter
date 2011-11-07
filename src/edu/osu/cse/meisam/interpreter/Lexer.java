@@ -48,14 +48,14 @@ public class Lexer {
                 buffer = readNumber();
             } else if (isLetter(lookaheadChar)) {
                 buffer = readSymbol();
-            } else if (isOperator(lookaheadChar)) {
-                buffer = readOperator();
             } else if (isWhiteSpace(lookaheadChar)) {
                 // buffer = readWhiteSpace()
             } else if (isOpenParentheses(lookaheadChar)) {
                 buffer = readOpenParentheses();
             } else if (isCloseParentheses(lookaheadChar)) {
                 buffer = readCloseParentheses();
+            } else{
+                throw new LexerExeption("Unknown Symbol in the input:" + lookaheadChar);
             }
             return buffer.toString();
         } catch (LexerExeption ex) {
@@ -99,13 +99,6 @@ public class Lexer {
         return false;
     }
 
-    private final boolean isOperator(final char ch) {
-        if (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=' || ch == '<' || ch == '>') {
-            return true;
-        }
-        return false;
-    }
-
     private final boolean isWhiteSpace(char ch) {
         if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
             return true;
@@ -129,7 +122,7 @@ public class Lexer {
 
     private final boolean isDelimiter(final char ch) {
         return isOpenParentheses(ch) || isCloseParentheses(ch)
-                || isWhiteSpace(ch) || isOperator(ch);
+                || isWhiteSpace(ch) ;
     }
 
     private final String readNumber() {
@@ -162,18 +155,6 @@ public class Lexer {
             }
         }
         return buffer.toString();
-    }
-
-    private final String readOperator() {
-        final StringBuffer buffer = new StringBuffer(100);
-        char nextChar = in.nextChar();
-        if (isOperator(nextChar)) {
-            buffer.append(nextChar);
-            return buffer.toString();
-        } else {
-            throw new LexerExeption("Lexing Error: '" + buffer.toString()
-                    + in.lookaheadChar() + "'is not a valid identifier");
-        }
     }
 
     private final String readOpenParentheses() {
