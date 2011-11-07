@@ -19,32 +19,38 @@
 package edu.osu.cse.meisam.interpreter.tokens;
 
 /**
- * This class should never be instantiated directly (that's why it is define abstract)
- *  
+ * This class should never be instantiated directly (that's why it is define
+ * abstract)
+ * 
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
 public abstract class LispToken {
-    
+
     /**
      * The lexval for this Token
      */
     private final String lexval;
 
     /**
-     * Constructs a new token for the given lexval.
+     * Constructs a new token for the given lexval. <br>
+     * According to the specifications of this sub-lisp language, The scanner
+     * should be completely case-insensitive. To make the output uniform, the
+     * scanner should translate every letter to upper case; the parser/evaluator
+     * should work only with upper-case letters
+     * 
      * @param lexval
      */
     protected LispToken(final String lexval) {
-        this.lexval = lexval;
+        this.lexval = lexval.toUpperCase();
     }
-    
+
     /**
      * Returns the lexval of this symbol
      * 
      * @return the lexval
      */
-    public String getLexval(){
+    public String getLexval() {
         return this.lexval;
     }
 
