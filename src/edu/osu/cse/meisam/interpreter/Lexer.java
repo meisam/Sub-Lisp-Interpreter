@@ -47,7 +47,7 @@ public class Lexer {
             if (isDigit(lookaheadChar)) {
                 buffer = readNumber();
             } else if (isLetter(lookaheadChar)) {
-                buffer = readId();
+                buffer = readSymbol();
             } else if (isOperator(lookaheadChar)) {
                 buffer = readOperator();
             } else if (isWhiteSpace(lookaheadChar)) {
@@ -148,7 +148,7 @@ public class Lexer {
         return buffer.toString();
     }
 
-    private final String readId() {
+    private final String readSymbol() {
         final StringBuffer buffer = new StringBuffer(100);
         while (in.hasMore()) {
             char nextChar = in.nextChar();
