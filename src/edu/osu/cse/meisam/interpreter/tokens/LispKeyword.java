@@ -24,6 +24,17 @@ package edu.osu.cse.meisam.interpreter.tokens;
  */
 public class LispKeyword extends LispSymbol {
 
+    /**
+     * All the keywords in the Lisp 
+     */
+    final static String[] ALL_KEYWORDS = {
+        "DEFUN", "EQ", "ATOM", "NIL", "T", "CAR", "CDR", "CAAR"
+    };
+
+    /**
+     * Constructs a new Token
+     * @param lexval
+     */
     protected LispKeyword(String lexval) {
         super(lexval);
     }
