@@ -19,17 +19,31 @@
 package edu.osu.cse.meisam.interpreter.tokens;
 
 /**
+ * This class should never be instantiated directly (that's why it is define abstract)
+ *  
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
 public abstract class LispToken {
     
+    /**
+     * The lexval for this Token
+     */
     private final String lexval;
 
+    /**
+     * Constructs a new token for the given lexval.
+     * @param lexval
+     */
     protected LispToken(final String lexval) {
         this.lexval = lexval;
     }
     
+    /**
+     * Returns the lexval of this symbol
+     * 
+     * @return the lexval
+     */
     public String getLexval(){
         return this.lexval;
     }
