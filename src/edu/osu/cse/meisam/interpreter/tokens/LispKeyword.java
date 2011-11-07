@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispKeyword extends LispSymbol {
+public class LispKeyword extends LispAtom {
 
     /**
      * All the keywords in the Lisp 
