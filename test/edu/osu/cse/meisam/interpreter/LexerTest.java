@@ -443,4 +443,53 @@ public class LexerTest {
         Assert.assertEquals(")", lexer.nextToken());
         Assert.assertEquals("$", lexer.nextToken());
     }  
+    
+    @Test
+    public void testNextTokenDot() {
+        InputProvider inputProvider = new StringInputProvider(".");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+
+    @Test
+    public void testNextTokenDotSpace() {
+        InputProvider inputProvider = new StringInputProvider(". ");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+
+    @Test
+    public void testNextTokenDotMultiSpace() {
+        InputProvider inputProvider = new StringInputProvider(". \t\n");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+
+    @Test
+    public void testNextTokenMultiSpaceDot() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n .");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+
+    @Test
+    public void testNextTokenMultiSpaceDotMultiSpace() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n .  \t\n\r");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
+
+    @Test
+    public void testNextTokenMultiSpaceDotMultiSpaceDot() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n .  \t\n\r . \t\r\n");
+        Lexer lexer = new Lexer(inputProvider );
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals(".", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }  
 }
