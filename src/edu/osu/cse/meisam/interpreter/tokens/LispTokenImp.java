@@ -16,12 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter;
+package edu.osu.cse.meisam.interpreter.tokens;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public interface LispOpenParentheses extends LispToken {
+public abstract class LispTokenImp implements LispToken{
+    
+    private final String lexval;
+
+    protected LispTokenImp(final String lexval) {
+        this.lexval = lexval;
+    }
+    
+    public String getLexval(){
+        return this.lexval;
+    }
 
 }
