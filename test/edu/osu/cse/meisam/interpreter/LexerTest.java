@@ -105,6 +105,99 @@ public class LexerTest {
         Assert.assertEquals("$", lexer.nextToken());
     }
 
+
+    @Test
+    public void testNextTokenWithSingleNegativeDigit() {
+        InputProvider inputProvider = new StringInputProvider("-1");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithSinglePositiveDigit() {
+        InputProvider inputProvider = new StringInputProvider("+1");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("1", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithPositiveNumber() {
+        InputProvider inputProvider = new StringInputProvider("+1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithNegativeNumber() {
+        InputProvider inputProvider = new StringInputProvider("-1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithSpacePositiveNumber() {
+        InputProvider inputProvider = new StringInputProvider(" +1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithSpaceNegativeNumber() {
+        InputProvider inputProvider = new StringInputProvider(" -1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithMultiSpacePositiveNumber() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r +1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithMultiSpaceNegativeNumber() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r -1455");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1455", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithTwoSignedNumber() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r -1455   \t\n\r  +999");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1455", lexer.nextToken());
+        Assert.assertEquals("999", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
+    @Test
+    public void testNextTokenWithTwoNumber() {
+        InputProvider inputProvider = new StringInputProvider(" \t\n\r -1455   \t\n\r  999");
+        Lexer lexer = new Lexer(inputProvider );
+        
+        Assert.assertEquals("-1455", lexer.nextToken());
+        Assert.assertEquals("999", lexer.nextToken());
+        Assert.assertEquals("$", lexer.nextToken());
+    }
+
     @Test
     public void testNextTokenWithSingleLetter() {
         InputProvider inputProvider = new StringInputProvider("A");
