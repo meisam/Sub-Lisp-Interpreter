@@ -18,8 +18,6 @@
 
 package edu.osu.cse.meisam.interpreter;
 
-import static org.junit.Assert.*;
-
 import javax.naming.LimitExceededException;
 
 import junit.framework.Assert;
@@ -252,7 +250,7 @@ public class LexerTest {
         try {
             lexer.nextToken();
         } catch (LexerExeption e) {
-            assertTrue(e.getMessage().contains("42A"));
+            Assert.assertTrue(e.getMessage().contains("42A"));
         }
         Assert.assertEquals("$", lexer.nextToken());
     }
@@ -265,7 +263,7 @@ public class LexerTest {
         try {
             lexer.nextToken();
         } catch (LexerExeption e) {
-            assertTrue(e.getMessage().contains("A4"));
+            Assert.assertTrue(e.getMessage().contains("A4"));
         }
         Assert.assertEquals("1", lexer.nextToken());
         Assert.assertEquals("$", lexer.nextToken());
@@ -280,7 +278,7 @@ public class LexerTest {
         try {
             lexer.nextToken();
         } catch (LexerExeption e) {
-            assertTrue(e.getMessage().contains("A4"));
+            Assert.assertTrue(e.getMessage().contains("A4"));
         }
         Assert.assertEquals("1", lexer.nextToken());
         Assert.assertEquals("$", lexer.nextToken());
@@ -325,7 +323,7 @@ public class LexerTest {
         Lexer lexer = new Lexer(inputProvider );
         try {
             lexer.nextToken();
-            fail("Lexer should have reported error");
+            Assert.fail("Lexer should have reported error");
         } catch (LexerExeption e) {
         }
     }
@@ -336,7 +334,7 @@ public class LexerTest {
         Lexer lexer = new Lexer(inputProvider );
         try {
             lexer.nextToken();
-            fail("Lexer should have reported error");
+            Assert.fail("Lexer should have reported error");
         } catch (LexerExeption e) {
         }
     }
@@ -347,7 +345,7 @@ public class LexerTest {
         Lexer lexer = new Lexer(inputProvider );
         try {
             lexer.nextToken();
-            fail("Lexer should have reported error");
+            Assert.fail("Lexer should have reported error");
         } catch (LexerExeption e) {
         }
     }
@@ -358,7 +356,7 @@ public class LexerTest {
         Lexer lexer = new Lexer(inputProvider );
         try {
             lexer.nextToken();
-            fail("Lexer should have reported error");
+            Assert.fail("Lexer should have reported error");
         } catch (LexerExeption e) {
         }
     }
