@@ -54,7 +54,9 @@ public class Lexer {
                 buffer = readOpenParentheses();
             } else if (isCloseParentheses(lookaheadChar)) {
                 buffer = readCloseParentheses();
-            } else {
+            } else if (isDot(lookaheadChar)){
+                buffer = readDot();
+            }else {
                 throw new LexerExeption("Unknown Symbol in the input:"
                         + lookaheadChar);
             }
@@ -135,6 +137,13 @@ public class Lexer {
         return false;
     }
 
+    private final boolean isDot(char ch) {
+        if (ch == '.') {
+            return true;
+        }
+        return false;
+    }
+
     private final boolean isDelimiter(final char ch) {
         return isOpenParentheses(ch) || isCloseParentheses(ch)
                 || isWhiteSpace(ch);
@@ -208,6 +217,18 @@ public class Lexer {
         final StringBuffer buffer = new StringBuffer(100);
         char nextChar = in.nextChar();
         if (isCloseParentheses(nextChar)) {
+            buffer.append(nextChar);
+            return buffer.toString();
+        } else {
+            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                    + in.lookaheadChar() + "'is not a valid identifier");
+        }
+    }
+
+    private final String readDot() {
+        final StringBuffer buffer = new StringBuffer(100);
+        char nextChar = in.nextChar();
+        if (isDot(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
