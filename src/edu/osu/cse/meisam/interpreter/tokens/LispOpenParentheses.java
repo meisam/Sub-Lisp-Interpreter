@@ -23,9 +23,19 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * 
  */
 public class LispOpenParentheses extends LispToken {
+ 
+    /**
+     * Open parenthesis
+     */
+    private static final String OPEN_PARENTHESES = ")";
 
-    protected LispOpenParentheses(String lexval) {
-        super(lexval);
+    /**
+     * Constructs a new Close parenthesis token
+     * 
+     * @param lexval
+     */
+    protected LispOpenParentheses() {
+        super(OPEN_PARENTHESES);
     }
 
 }
