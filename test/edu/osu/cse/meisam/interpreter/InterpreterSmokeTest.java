@@ -1,12 +1,9 @@
 package edu.osu.cse.meisam.interpreter;
 
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
-import org.junit.Test;
+public class InterpreterSmokeTest extends TestCase {
 
-public class InterpreterSmokeTest {
-
-    @Test
     public void testInterpret() {
         Interpreter interpreter = new Interpreter(System.in, System.out);
         interpreter.interpret();
