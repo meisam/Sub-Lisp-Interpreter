@@ -23,17 +23,18 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * 
  */
 public class LispDot extends LispToken {
- 
+
     /**
      * Dot
      */
     private static final String DOT = ".";
-    
+
     /**
      * Constructs a new Close parenthesis token
+     * 
      * @param lexval
      */
-    protected LispDot() {
+    public LispDot() {
         super(DOT);
     }
 

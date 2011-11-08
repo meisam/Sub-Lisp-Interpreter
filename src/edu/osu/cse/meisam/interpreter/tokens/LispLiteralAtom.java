@@ -25,17 +25,17 @@ package edu.osu.cse.meisam.interpreter.tokens;
 public class LispLiteralAtom extends LispAtom {
 
     /**
-     * All the keywords in the Lisp 
+     * All the keywords in the Lisp
      */
-    final static String[] ALL_KEYWORDS = {
-        "DEFUN", "EQ", "ATOM", "NIL", "T", "CAR", "CDR", "CAAR"
-    };
+    final static String[] ALL_KEYWORDS = { "DEFUN", "EQ", "ATOM", "NIL", "T",
+            "CAR", "CDR", "CAAR" };
 
     /**
      * Constructs a new Token
+     * 
      * @param lexval
      */
-    protected LispLiteralAtom(String lexval) {
+    public LispLiteralAtom(String lexval) {
         super(lexval);
     }
 

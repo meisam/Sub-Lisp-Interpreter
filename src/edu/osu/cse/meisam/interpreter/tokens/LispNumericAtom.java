@@ -26,9 +26,10 @@ public class LispNumericAtom extends LispToken {
 
     /**
      * Constructs a number representing the given lexval
+     * 
      * @param lexval
      */
-    protected LispNumericAtom(String lexval) {
+    public LispNumericAtom(String lexval) {
         super(lexval);
     }
 
