@@ -22,10 +22,11 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispAtom extends LispToken {
+public abstract class LispAtom extends LispToken {
 
     /**
      * Constructs a symbol representing the given lexval
+     * 
      * @param lexval
      */
     protected LispAtom(String lexval) {
