@@ -20,17 +20,20 @@ package edu.osu.cse.meisam.interpreter;
 
 /**
  * Provides input for the lexer (and consequently for the interpreter)
+ * 
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
 public interface InputProvider {
-    
+
     public boolean hasMore();
-    
+
     public char nextChar();
-    
+
     /**
-     * Returns the next char in the InputProvider without moving the seeker ahead.
+     * Returns the next char in the InputProvider without moving the seeker
+     * ahead.
+     * 
      * @return
      */
     public char lookaheadChar();

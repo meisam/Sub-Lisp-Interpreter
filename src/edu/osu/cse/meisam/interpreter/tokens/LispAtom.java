@@ -29,7 +29,7 @@ public abstract class LispAtom extends LispToken {
      * 
      * @param lexval
      */
-    protected LispAtom(String lexval) {
+    protected LispAtom(final String lexval) {
         super(lexval);
     }
 

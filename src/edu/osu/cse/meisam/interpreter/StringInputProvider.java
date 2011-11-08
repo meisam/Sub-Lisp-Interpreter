@@ -28,7 +28,7 @@ package edu.osu.cse.meisam.interpreter;
 public class StringInputProvider implements InputProvider {
 
     /**
-     * The input 
+     * The input
      */
     private final String input;
 
@@ -39,14 +39,15 @@ public class StringInputProvider implements InputProvider {
 
     /**
      * Constructs a new StringInputProvider with the given string.
+     * 
      * @param input
      */
     public StringInputProvider(final String input) {
-        if (input==null){
+        if (input == null) {
             throw new NullPointerException("Input provided for lexing is null.");
         }
         this.input = input;
-        currentLocation = 0;
+        this.currentLocation = 0;
     }
 
     /*
@@ -55,8 +56,9 @@ public class StringInputProvider implements InputProvider {
      * @see edu.osu.cse.meisam.interpreter.InputProvider#hasMore()
      */
     public boolean hasMore() {
-        if (currentLocation < input.length())
+        if (this.currentLocation < this.input.length()) {
             return true;
+        }
         return false;
     }
 
@@ -66,13 +68,13 @@ public class StringInputProvider implements InputProvider {
      * @see edu.osu.cse.meisam.interpreter.InputProvider#nextChar()
      */
     public char nextChar() {
-        char charAt = input.charAt(currentLocation);
-        currentLocation++;        
+        final char charAt = this.input.charAt(this.currentLocation);
+        this.currentLocation++;
         return charAt;
     }
 
     public char lookaheadChar() {
-        return input.charAt(currentLocation);
+        return this.input.charAt(this.currentLocation);
     }
 
 }

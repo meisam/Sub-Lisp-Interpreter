@@ -23,11 +23,15 @@ package edu.osu.cse.meisam.interpreter;
  */
 public class LexerExeption extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3418059174552437275L;
 
     /**
      * @param msg
      */
-    public LexerExeption(String msg) {
+    public LexerExeption(final String msg) {
         super(msg);
     }
 

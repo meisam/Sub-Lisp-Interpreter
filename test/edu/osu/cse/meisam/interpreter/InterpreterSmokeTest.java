@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 public class InterpreterSmokeTest extends TestCase {
 
     public void testInterpret() {
-        Interpreter interpreter = new Interpreter(System.in, System.out);
+        final Interpreter interpreter = new Interpreter(System.in, System.out);
         interpreter.interpret();
     }
 

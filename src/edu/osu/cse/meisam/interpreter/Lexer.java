@@ -46,11 +46,11 @@ public class Lexer {
 
             removeWhitespace();
 
-            if (!in.hasMore()) {
+            if (!this.in.hasMore()) {
                 return new LispEOF();
             }
 
-            char lookaheadChar = in.lookaheadChar();
+            final char lookaheadChar = this.in.lookaheadChar();
 
             if (isDigit(lookaheadChar) || isSign(lookaheadChar)) {
                 buffer = readNumber();
@@ -84,28 +84,28 @@ public class Lexer {
             throw new LexerExeption("Unknown Symbol in the input:"
                     + lookaheadChar);
 
-        } catch (LexerExeption ex) {
+        } catch (final LexerExeption ex) {
             throw ex;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new LexerExeption("Cannot read the input");
         }
     }
 
     private void removeWhitespace() {
-        while (in.hasMore() && isWhiteSpace(in.lookaheadChar())) {
-            in.nextChar();
+        while (this.in.hasMore() && isWhiteSpace(this.in.lookaheadChar())) {
+            this.in.nextChar();
         }
     }
 
     private final boolean isDigit(final char ch) {
-        if ('0' <= ch && ch <= '9') {
+        if (('0' <= ch) && (ch <= '9')) {
             return true;
         }
         return false;
     }
 
     private final boolean isSign(final char ch) {
-        if (ch == '+' || ch == '-') {
+        if ((ch == '+') || (ch == '-')) {
             return true;
         }
         return false;
@@ -119,14 +119,14 @@ public class Lexer {
     }
 
     private final boolean isLowercaseLetter(final char ch) {
-        if ('a' <= ch && ch <= 'z') {
+        if (('a' <= ch) && (ch <= 'z')) {
             return true;
         }
         return false;
     }
 
     private final boolean isUppercaseLetter(final char ch) {
-        if ('A' <= ch && ch <= 'Z') {
+        if (('A' <= ch) && (ch <= 'Z')) {
             return true;
         }
         return false;
@@ -139,28 +139,28 @@ public class Lexer {
         return false;
     }
 
-    private final boolean isWhiteSpace(char ch) {
-        if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+    private final boolean isWhiteSpace(final char ch) {
+        if ((ch == ' ') || (ch == '\t') || (ch == '\r') || (ch == '\n')) {
             return true;
         }
         return false;
     }
 
-    private final boolean isOpenParentheses(char ch) {
+    private final boolean isOpenParentheses(final char ch) {
         if (ch == '(') {
             return true;
         }
         return false;
     }
 
-    private final boolean isCloseParentheses(char ch) {
+    private final boolean isCloseParentheses(final char ch) {
         if (ch == ')') {
             return true;
         }
         return false;
     }
 
-    private final boolean isDot(char ch) {
+    private final boolean isDot(final char ch) {
         if (ch == '.') {
             return true;
         }
@@ -176,9 +176,9 @@ public class Lexer {
         final StringBuffer buffer = new StringBuffer(100);
 
         // read the sign if there is any
-        if (in.hasMore()) {
-            if (isSign(in.lookaheadChar())) {
-                char nextChar = in.nextChar();
+        if (this.in.hasMore()) {
+            if (isSign(this.in.lookaheadChar())) {
+                final char nextChar = this.in.nextChar();
                 if (isMinusSign(nextChar)) {
                     buffer.append(nextChar);
                 }
@@ -187,8 +187,8 @@ public class Lexer {
 
         boolean atLeastOneDigit = false;
         // read the rest of the number
-        while (in.hasMore()) {
-            char nextChar = in.nextChar();
+        while (this.in.hasMore()) {
+            final char nextChar = this.in.nextChar();
             if (isDigit(nextChar)) {
                 buffer.append(nextChar);
                 atLeastOneDigit = true;
@@ -210,8 +210,8 @@ public class Lexer {
 
     private final String readSymbol() {
         final StringBuffer buffer = new StringBuffer(100);
-        while (in.hasMore()) {
-            char nextChar = in.nextChar();
+        while (this.in.hasMore()) {
+            final char nextChar = this.in.nextChar();
             if (isLetter(nextChar)) {
                 buffer.append(nextChar);
             } else if (isDelimiter(nextChar)) {
@@ -226,37 +226,37 @@ public class Lexer {
 
     private final String readOpenParentheses() {
         final StringBuffer buffer = new StringBuffer(100);
-        char nextChar = in.nextChar();
+        final char nextChar = this.in.nextChar();
         if (isOpenParentheses(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
             throw new LexerExeption("Lexing Error: '" + buffer.toString()
-                    + in.lookaheadChar() + "'is not a valid identifier");
+                    + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
 
     private final String readCloseParentheses() {
         final StringBuffer buffer = new StringBuffer(100);
-        char nextChar = in.nextChar();
+        final char nextChar = this.in.nextChar();
         if (isCloseParentheses(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
             throw new LexerExeption("Lexing Error: '" + buffer.toString()
-                    + in.lookaheadChar() + "'is not a valid identifier");
+                    + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
 
     private final String readDot() {
         final StringBuffer buffer = new StringBuffer(100);
-        char nextChar = in.nextChar();
+        final char nextChar = this.in.nextChar();
         if (isDot(nextChar)) {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
             throw new LexerExeption("Lexing Error: '" + buffer.toString()
-                    + in.lookaheadChar() + "'is not a valid identifier");
+                    + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
 

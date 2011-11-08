@@ -35,7 +35,7 @@ public class LispLiteralAtom extends LispAtom {
      * 
      * @param lexval
      */
-    public LispLiteralAtom(String lexval) {
+    public LispLiteralAtom(final String lexval) {
         super(lexval);
     }
 

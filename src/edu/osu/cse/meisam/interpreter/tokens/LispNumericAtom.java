@@ -29,7 +29,7 @@ public class LispNumericAtom extends LispToken {
      * 
      * @param lexval
      */
-    public LispNumericAtom(String lexval) {
+    public LispNumericAtom(final String lexval) {
         super(lexval);
     }
 
