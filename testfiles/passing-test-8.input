@@ -1,0 +1,9 @@
+(DEFUN NOTSOSILLY (A B) 
+            (COND
+               ((EQ A 0) (PLUS B 1))
+               ((EQ B 0) (NOTSOSILLY (MINUS A 1) 1))
+               (T (NOTSOSILLY (MINUS A 1) (NOTSOSILLY A (MINUS B 1))))
+             ))
+(NOTSOSILLY 2 4)
+(NOTSOSILLY 3 5)
+(NOTSOSILLY 0 0)
