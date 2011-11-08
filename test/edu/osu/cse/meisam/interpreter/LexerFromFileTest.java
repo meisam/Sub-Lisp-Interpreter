@@ -48,12 +48,24 @@ public class LexerFromFileTest extends TestCase {
         return directory.list();
     }
 
-    protected Collection getTestFiles() {
+    protected Collection getPassingTestFiles() {
         final String[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
         final Vector testFiles = new Vector(allFiles.length / 2);
 
         for (int i = 0; i < allFiles.length; i++) {
-            if (isTestFile(allFiles[i])) {
+            if (isPassingTestFile(allFiles[i])) {
+                testFiles.add(allFiles[i]);
+            }
+        }
+        return testFiles;
+    }
+
+    protected Collection getFailingTestFiles() {
+        final String[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
+        final Vector testFiles = new Vector(allFiles.length / 2);
+
+        for (int i = 0; i < allFiles.length; i++) {
+            if (isFailingTestFile(allFiles[i])) {
                 testFiles.add(allFiles[i]);
             }
         }
@@ -66,6 +78,16 @@ public class LexerFromFileTest extends TestCase {
 
     private boolean isTestFile(final String fileName) {
         return fileName.endsWith(".input");
+    }
+
+    private boolean isPassingTestFile(final String fileName) {
+        return fileName.startsWith("passing-test")
+                && fileName.endsWith(".input");
+    }
+
+    private boolean isFailingTestFile(final String fileName) {
+        return fileName.startsWith("failing-test-")
+                && fileName.endsWith(".input");
     }
 
     protected String readfromFile(final String fileName) throws IOException {
@@ -84,28 +106,15 @@ public class LexerFromFileTest extends TestCase {
     public void testSmokeListTestFile() {
         String s;
         try {
-            s = readfromFile("testfiles/test1.input");
-            System.out.print(s);
+            s = readfromFile("testfiles/smoke-test.input");
+            System.out.println(s);
         } catch (final IOException e) {
             fail(e.getMessage());
         }
     }
 
-    public void testSmokeReadFile() {
-        try {
-            final Collection testFiles = getTestFiles();
-            for (final Iterator iterator = testFiles.iterator(); iterator
-                    .hasNext();) {
-                final String fileName = (String) iterator.next();
-                System.out.println(fileName);
-            }
-        } catch (final Exception ex) {
-            fail(ex.getMessage());
-        }
-    }
-
-    public void testLexer() {
-        final Collection testFiles = getTestFiles();
+    public void testLexerByPassingTests() {
+        final Collection testFiles = getPassingTestFiles();
         for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
             try {
                 final String fileName = (String) iterator.next();
@@ -119,6 +128,31 @@ public class LexerFromFileTest extends TestCase {
                     printAllTokens(lexer);
                 } catch (final LexerExeption ex) {
                     fail("In " + fileName + ": " + ex.getMessage());
+                }
+
+            } catch (final IOException e) {
+                fail(e.getMessage());
+            }
+        }
+    }
+
+    public void testLexerByFailingTests() {
+        final Collection testFiles = getFailingTestFiles();
+        for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
+            try {
+                final String fileName = (String) iterator.next();
+                String fileContent;
+                fileContent = readfromFile(LexerFromFileTest.TEST_DIR + "/"
+                        + fileName);
+                final InputProvider inputProvider = new StringInputProvider(
+                        fileContent);
+                final Lexer lexer = new Lexer(inputProvider);
+                try {
+                    printAllTokens(lexer);
+                    fail(fileName + " should've fail but it didn't");
+                } catch (final LexerExeption ex) {
+                    // good job, you raised an exception
+                    System.out.println("Faied " + fileName);
                 }
 
             } catch (final IOException e) {
