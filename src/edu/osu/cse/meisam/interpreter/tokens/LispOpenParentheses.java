@@ -27,7 +27,7 @@ public class LispOpenParentheses extends LispToken {
     /**
      * Open parenthesis
      */
-    private static final String OPEN_PARENTHESES = ")";
+    private static final String OPEN_PARENTHESES = "(";
 
     /**
      * Constructs a new Close parenthesis token
