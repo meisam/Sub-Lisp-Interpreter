@@ -187,7 +187,7 @@ public class Lexer {
 
         boolean atLeastOneDigit = false;
         // read the rest of the number
-        while (this.in.hasMore()) {
+        while (this.in.hasMore() && isDigit(this.in.lookaheadChar())) {
             final char nextChar = this.in.nextChar();
             if (isDigit(nextChar)) {
                 buffer.append(nextChar);
@@ -211,14 +211,16 @@ public class Lexer {
     private final String readSymbol() {
         final StringBuffer buffer = new StringBuffer(100);
         while (this.in.hasMore()) {
-            final char nextChar = this.in.nextChar();
-            if (isLetter(nextChar)) {
+            if (isLetter(this.in.lookaheadChar())
+                    || isDigit(this.in.lookaheadChar())) {
+                final char nextChar = this.in.nextChar();
                 buffer.append(nextChar);
-            } else if (isDelimiter(nextChar)) {
+            } else if (isDelimiter((this.in.lookaheadChar()))) {
                 break;
             } else {
                 throw new LexerExeption("Lexing Error: '" + buffer.toString()
-                        + nextChar + "'is not a valid identifier");
+                        + this.in.lookaheadChar()
+                        + "'is not a valid identifier");
             }
         }
         return buffer.toString();
