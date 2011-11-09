@@ -18,6 +18,7 @@
 
 package edu.osu.cse.meisam.interpreter;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 import edu.osu.cse.meisam.interpreter.tokens.LispEOF;
 import edu.osu.cse.meisam.interpreter.tokens.LispToken;
@@ -43,13 +45,16 @@ public class LexerFromFileTest extends TestCase {
 
     private static final String TEST_DIR = "testfiles";
 
-    private String[] getFiles(final String dir) {
+    private static final File SMOKE_TEST_FILE = new File(
+            LexerFromFileTest.TEST_DIR + File.separator + "smoke-test.input");
+
+    private File[] getFiles(final String dir) {
         final File directory = new File(dir);
-        return directory.list();
+        return directory.listFiles();
     }
 
     protected Collection getPassingTestFiles() {
-        final String[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
+        final File[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
         final Vector testFiles = new Vector(allFiles.length / 2);
 
         for (int i = 0; i < allFiles.length; i++) {
@@ -61,7 +66,7 @@ public class LexerFromFileTest extends TestCase {
     }
 
     protected Collection getFailingTestFiles() {
-        final String[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
+        final File[] allFiles = getFiles(LexerFromFileTest.TEST_DIR);
         final Vector testFiles = new Vector(allFiles.length / 2);
 
         for (int i = 0; i < allFiles.length; i++) {
@@ -72,26 +77,26 @@ public class LexerFromFileTest extends TestCase {
         return testFiles;
     }
 
-    private boolean isLexerExpectedFile(final String fileName) {
-        return fileName.endsWith(".lexer");
+    private boolean isLexerExpectedFile(final File fileName) {
+        return fileName.getName().endsWith(".lexer");
     }
 
-    private boolean isTestFile(final String fileName) {
-        return fileName.endsWith(".input");
+    private boolean isTestFile(final File fileName) {
+        return fileName.getName().endsWith(".input");
     }
 
-    private boolean isPassingTestFile(final String fileName) {
-        return fileName.startsWith("passing-test")
-                && fileName.endsWith(".input");
+    private boolean isPassingTestFile(final File fileName) {
+        return fileName.getName().startsWith("passing-test")
+                && fileName.getName().endsWith(".input");
     }
 
-    private boolean isFailingTestFile(final String fileName) {
-        return fileName.startsWith("failing-test-")
-                && fileName.endsWith(".input");
+    private boolean isFailingTestFile(final File fileName) {
+        return fileName.getName().startsWith("failing-test-")
+                && fileName.getName().endsWith(".input");
     }
 
-    protected String readfromFile(final String fileName) throws IOException {
-        final Reader input = new FileReader(fileName);
+    protected String readfromFile(final File file) throws IOException {
+        final Reader input = new FileReader(file);
         final StringBuffer fileContent = new StringBuffer(
                 LexerFromFileTest.DEFAULT_BUFFER_SIZE);
 
@@ -106,7 +111,7 @@ public class LexerFromFileTest extends TestCase {
     public void testSmokeListTestFile() {
         String s;
         try {
-            s = readfromFile("testfiles/smoke-test.input");
+            s = readfromFile(LexerFromFileTest.SMOKE_TEST_FILE);
             System.out.println(s);
         } catch (final IOException e) {
             fail(e.getMessage());
@@ -116,43 +121,73 @@ public class LexerFromFileTest extends TestCase {
     public void testLexerByPassingTests() {
         final Collection testFiles = getPassingTestFiles();
         for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
-            try {
-                final String fileName = (String) iterator.next();
-                String fileContent;
-                fileContent = readfromFile(LexerFromFileTest.TEST_DIR + "/"
-                        + fileName);
-                final InputProvider inputProvider = new StringInputProvider(
-                        fileContent);
-                final Lexer lexer = new Lexer(inputProvider);
-                try {
-                    printAllTokens(lexer);
-                } catch (final LexerExeption ex) {
-                    fail("In " + fileName + ": " + ex.getMessage());
-                }
-
-            } catch (final IOException e) {
-                fail(e.getMessage());
-            }
+            verifyAllTokens(iterator);
         }
+    }
+
+    private void verifyAllTokens(final Iterator iterator) {
+        try {
+            final File testFile = (File) iterator.next();
+            final String fileContent = readfromFile(testFile);
+            final InputProvider inputProvider = new StringInputProvider(
+                    fileContent);
+            final Lexer lexer = new Lexer(inputProvider);
+            try {
+
+                final String pathname = getLexerExpectedOutputFileName(testFile);
+
+                final File lexerExpected = new File(pathname);
+                final BufferedReader reader = new BufferedReader(
+                        new FileReader(lexerExpected));
+                LispToken token = null;
+                int line = 0;
+                do {
+                    token = lexer.nextToken();
+                    if (token instanceof LispEOF) {
+                        break;
+                    }
+                    final String tokenName = reader.readLine();
+                    line++;
+                    Assert.assertEquals(testFile.getName() + ":" + line,
+                            tokenName, token.getClass().getSimpleName());
+
+                    final String tokenLexval = reader.readLine();
+                    line++;
+                    Assert.assertEquals(testFile.getName() + "@ Line " + line,
+                            tokenLexval, token.getLexval());
+                } while (!(token instanceof LispEOF));
+
+            } catch (final LexerExeption ex) {
+                fail("In " + testFile + ": " + ex.getMessage());
+            }
+
+        } catch (final IOException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    private String getLexerExpectedOutputFileName(final File testFile) {
+        final String pathname = testFile.getAbsolutePath().replace("input",
+                "lexer");
+        return pathname;
     }
 
     public void testLexerByFailingTests() {
         final Collection testFiles = getFailingTestFiles();
         for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
             try {
-                final String fileName = (String) iterator.next();
+                final File testFile = (File) iterator.next();
                 String fileContent;
-                fileContent = readfromFile(LexerFromFileTest.TEST_DIR + "/"
-                        + fileName);
+                fileContent = readfromFile(testFile);
                 final InputProvider inputProvider = new StringInputProvider(
                         fileContent);
                 final Lexer lexer = new Lexer(inputProvider);
                 try {
                     printAllTokens(lexer);
-                    fail(fileName + " should've fail but it didn't");
+                    fail(testFile + " should've fail but it didn't");
                 } catch (final LexerExeption ex) {
                     // good job, you raised an exception
-                    System.out.println("Faied " + fileName);
+                    System.out.println("Faied " + testFile);
                 }
 
             } catch (final IOException e) {
