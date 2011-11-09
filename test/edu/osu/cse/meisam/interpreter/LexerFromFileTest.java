@@ -157,7 +157,7 @@ public class LexerFromFileTest extends TestCase {
                             tokenLexval, token.getLexval());
                 } while (!(token instanceof LispEOF));
 
-            } catch (final LexerExeption ex) {
+            } catch (final LexcerExeption ex) {
                 fail("In " + testFile + ": " + ex.getMessage());
             }
 
@@ -185,7 +185,7 @@ public class LexerFromFileTest extends TestCase {
                 try {
                     printAllTokens(lexer);
                     fail(testFile + " should've fail but it didn't");
-                } catch (final LexerExeption ex) {
+                } catch (final LexcerExeption ex) {
                     // good job, you raised an exception
                     System.out.println("Faied " + testFile);
                 }

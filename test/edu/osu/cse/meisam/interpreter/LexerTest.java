@@ -301,7 +301,7 @@ public class LexerTest extends TestCase {
 
         try {
             lexer.nextToken();
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
             Assert.assertTrue(e.getMessage().contains("42A"));
         }
         Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
@@ -313,7 +313,7 @@ public class LexerTest extends TestCase {
 
         try {
             lexer.nextToken();
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
             Assert.assertTrue(e.getMessage().contains("A4"));
         }
     }
@@ -325,7 +325,7 @@ public class LexerTest extends TestCase {
 
         try {
             lexer.nextToken();
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
             Assert.assertTrue(e.getMessage().contains("A4"));
         }
     }
@@ -406,7 +406,7 @@ public class LexerTest extends TestCase {
         try {
             lexer.nextToken();
             Assert.fail("Lexer should have reported error");
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
         }
     }
 
@@ -416,7 +416,7 @@ public class LexerTest extends TestCase {
         try {
             lexer.nextToken();
             Assert.fail("Lexer should have reported error");
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
         }
     }
 
@@ -426,7 +426,7 @@ public class LexerTest extends TestCase {
         try {
             lexer.nextToken();
             Assert.fail("Lexer should have reported error");
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
         }
     }
 
@@ -436,7 +436,7 @@ public class LexerTest extends TestCase {
         try {
             lexer.nextToken();
             Assert.fail("Lexer should have reported error");
-        } catch (final LexerExeption e) {
+        } catch (final LexcerExeption e) {
         }
     }
 

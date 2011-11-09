@@ -81,13 +81,13 @@ public class Lexer {
                 return new LispDot();
             }
 
-            throw new LexerExeption("Unknown Symbol in the input:"
+            throw new LexcerExeption("Unknown Symbol in the input:"
                     + lookaheadChar);
 
-        } catch (final LexerExeption ex) {
+        } catch (final LexcerExeption ex) {
             throw ex;
         } catch (final Exception ex) {
-            throw new LexerExeption("Cannot read the input");
+            throw new LexcerExeption("Cannot read the input");
         }
     }
 
@@ -195,13 +195,13 @@ public class Lexer {
             } else if (isDelimiter(nextChar)) {
                 break;
             } else {
-                throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                         + nextChar + "'is not a valid number");
             }
         }
 
         if (!atLeastOneDigit) {
-            throw new LexerExeption("Expecting to see a number here:"
+            throw new LexcerExeption("Expecting to see a number here:"
                     + buffer.toString());
         }
 
@@ -218,7 +218,7 @@ public class Lexer {
             } else if (isDelimiter((this.in.lookaheadChar()))) {
                 break;
             } else {
-                throw new LexerExeption("Lexing Error: '" + buffer.toString()
+                throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                         + this.in.lookaheadChar()
                         + "'is not a valid identifier");
             }
@@ -233,7 +233,7 @@ public class Lexer {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
-            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+            throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                     + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
@@ -245,7 +245,7 @@ public class Lexer {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
-            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+            throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                     + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
@@ -257,7 +257,7 @@ public class Lexer {
             buffer.append(nextChar);
             return buffer.toString();
         } else {
-            throw new LexerExeption("Lexing Error: '" + buffer.toString()
+            throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                     + this.in.lookaheadChar() + "'is not a valid identifier");
         }
     }
