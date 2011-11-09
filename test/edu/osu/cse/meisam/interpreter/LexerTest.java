@@ -304,7 +304,6 @@ public class LexerTest extends TestCase {
         } catch (final LexcerExeption e) {
             Assert.assertTrue(e.getMessage().contains("42A"));
         }
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
     }
 
     public void testNextTokenInvalidIdNumber() {
