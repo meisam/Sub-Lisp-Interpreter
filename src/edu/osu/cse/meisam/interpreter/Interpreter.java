@@ -17,11 +17,8 @@
  */
 package edu.osu.cse.meisam.interpreter;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.Reader;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -29,10 +26,14 @@ import java.io.Reader;
  */
 public class Interpreter {
 
-    private final Reader in;
+    private final InputProvider in;
+    private final Lexer lexer;
+    private final Parser parser;
 
     public Interpreter(final InputStream in, final PrintStream out) {
-        this.in = new InputStreamReader(new BufferedInputStream(in));
+        this.in = new InputStreamProvider(in);
+        this.lexer = new Lexer(this.in);
+        this.parser = new Parser(this.lexer);
     }
 
     /**
@@ -50,7 +51,7 @@ public class Interpreter {
     }
 
     public void interpret() {
-        throw new RuntimeException("Not implemented yet");
+        this.parser.parse();
     }
 
 }
