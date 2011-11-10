@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispNumericAtom extends LispToken {
+public class LispNumericAtom extends LispAtom {
 
     /**
      * Constructs a number representing the given lexval
