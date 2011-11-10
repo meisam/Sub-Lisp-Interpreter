@@ -22,21 +22,20 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispLiteralAtom extends LispAtom {
+public class CloseParentheses extends Token {
 
     /**
-     * All the keywords in the Lisp
+     * Close parenthesis
      */
-    final static String[] ALL_KEYWORDS = { "DEFUN", "EQ", "ATOM", "NIL", "T",
-            "CAR", "CDR", "CAAR" };
+    private static final String CLOSE_PARENTHESES = ")";
 
     /**
-     * Constructs a new Token
+     * Constructs a new Close parenthesis token
      * 
      * @param lexval
      */
-    public LispLiteralAtom(final String lexval) {
-        super(lexval);
+    public CloseParentheses() {
+        super(CLOSE_PARENTHESES);
     }
 
 }

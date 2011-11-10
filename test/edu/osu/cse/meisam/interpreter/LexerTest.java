@@ -20,13 +20,13 @@ package edu.osu.cse.meisam.interpreter;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import edu.osu.cse.meisam.interpreter.tokens.LispCloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispDot;
-import edu.osu.cse.meisam.interpreter.tokens.LispEOF;
-import edu.osu.cse.meisam.interpreter.tokens.LispLiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.LispNumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.LispOpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispToken;
+import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Dot;
+import edu.osu.cse.meisam.interpreter.tokens.EOF;
+import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
+import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -41,14 +41,14 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNexTokenWithWhiteSpaceInput() {
         final InputProvider inputProvider = new StringInputProvider(" ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNexTokenWithtLongWhiteSpaceInput() {
@@ -56,128 +56,128 @@ public class LexerTest extends TestCase {
                 "   \t\n  \r \n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleDigit() {
         final InputProvider inputProvider = new StringInputProvider("1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumber() {
         final InputProvider inputProvider = new StringInputProvider("000");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("000", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumberEndWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("1234  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumberStartWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("  1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithDoubleId() {
         final InputProvider inputProvider = new StringInputProvider("1234 1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispNumericAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof NumericAtom);
         assertEquals("1", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNegativeDigit() {
         final InputProvider inputProvider = new StringInputProvider("-1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSinglePositiveDigit() {
         final InputProvider inputProvider = new StringInputProvider("+1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithPositiveNumber() {
         final InputProvider inputProvider = new StringInputProvider("+1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithNegativeNumber() {
         final InputProvider inputProvider = new StringInputProvider("-1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSpacePositiveNumber() {
         final InputProvider inputProvider = new StringInputProvider(" +1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSpaceNegativeNumber() {
         final InputProvider inputProvider = new StringInputProvider(" -1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithMultiSpacePositiveNumber() {
@@ -185,11 +185,11 @@ public class LexerTest extends TestCase {
                 " \t\n\r +1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithMultiSpaceNegativeNumber() {
@@ -197,11 +197,11 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1234", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithTwoSignedNumber() {
@@ -209,15 +209,15 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234   \t\n\r  +999");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1234", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispNumericAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof NumericAtom);
         assertEquals("999", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithTwoNumber() {
@@ -225,74 +225,74 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234   \t\n\r  999");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("-1234", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispNumericAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof NumericAtom);
         assertEquals("999", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleLetter() {
         final InputProvider inputProvider = new StringInputProvider("A");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("A", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleId() {
         final InputProvider inputProvider = new StringInputProvider("ABC");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("ABC", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleIdEndWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("A  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("A", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleIdStartWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("  ABC");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("ABC", first.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenWithDoubleNumbers() {
         final InputProvider inputProvider = new StringInputProvider("ABC A");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("ABC", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispLiteralAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof LiteralAtom);
         assertEquals("A", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenInvalidNumberId() {
@@ -333,30 +333,30 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("  A   1  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispLiteralAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof LiteralAtom);
         assertEquals("A", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispNumericAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof NumericAtom);
         assertEquals("1", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenNumberId() {
         final InputProvider inputProvider = new StringInputProvider("  1   A  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LispNumericAtom);
+        final Token first = lexer.nextToken();
+        Assert.assertTrue(first instanceof NumericAtom);
         assertEquals("1", first.getLexval());
 
-        final LispToken second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LispLiteralAtom);
+        final Token second = lexer.nextToken();
+        Assert.assertTrue(second instanceof LiteralAtom);
         assertEquals("A", second.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenIdNumberNTimes() {
@@ -364,39 +364,39 @@ public class LexerTest extends TestCase {
                 "  A   1 AAA 123 CCC BBB 111 000  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispLiteralAtom);
+        Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof LiteralAtom);
         assertEquals("A", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispNumericAtom);
+        Assert.assertTrue(currentToken instanceof NumericAtom);
         assertEquals("1", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispLiteralAtom);
+        Assert.assertTrue(currentToken instanceof LiteralAtom);
         assertEquals("AAA", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispNumericAtom);
+        Assert.assertTrue(currentToken instanceof NumericAtom);
         assertEquals("123", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispLiteralAtom);
+        Assert.assertTrue(currentToken instanceof LiteralAtom);
         assertEquals("CCC", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispLiteralAtom);
+        Assert.assertTrue(currentToken instanceof LiteralAtom);
         assertEquals("BBB", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispNumericAtom);
+        Assert.assertTrue(currentToken instanceof NumericAtom);
         assertEquals("111", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispNumericAtom);
+        Assert.assertTrue(currentToken instanceof NumericAtom);
         assertEquals("000", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenPlusOperation() {
@@ -443,66 +443,66 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("(");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParentheses() {
         final InputProvider inputProvider = new StringInputProvider(")");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesSpace() {
         final InputProvider inputProvider = new StringInputProvider("( ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesSpace() {
         final InputProvider inputProvider = new StringInputProvider(") ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesSpaces() {
         final InputProvider inputProvider = new StringInputProvider("( \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesSpaces() {
         final InputProvider inputProvider = new StringInputProvider(") \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenSpacesOpenParenthesesSpaces() {
@@ -510,11 +510,11 @@ public class LexerTest extends TestCase {
                 " \t\n\r ( \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenSpacesCloseParenthesesSpaces() {
@@ -522,83 +522,83 @@ public class LexerTest extends TestCase {
                 " \t\n\r ) \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesTwo() {
         final InputProvider inputProvider = new StringInputProvider("((");
         final Lexer lexer = new Lexer(inputProvider);
 
-        LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispOpenParentheses);
+        Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesTwo() {
         final InputProvider inputProvider = new StringInputProvider("))");
         final Lexer lexer = new Lexer(inputProvider);
 
-        LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispCloseParentheses);
+        Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenDot() {
         final InputProvider inputProvider = new StringInputProvider(".");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenDotSpace() {
         final InputProvider inputProvider = new StringInputProvider(". ");
         final Lexer lexer = new Lexer(inputProvider);
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenDotMultiSpace() {
         final InputProvider inputProvider = new StringInputProvider(". \t\n");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDot() {
         final InputProvider inputProvider = new StringInputProvider(" \t\n .");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDotMultiSpace() {
@@ -606,11 +606,11 @@ public class LexerTest extends TestCase {
                 " \t\n .  \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        final Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDotMultiSpaceDot() {
@@ -618,14 +618,14 @@ public class LexerTest extends TestCase {
                 " \t\n .  \t\n\r . \t\r\n");
         final Lexer lexer = new Lexer(inputProvider);
 
-        LispToken currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        Token currentToken = lexer.nextToken();
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
         currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LispDot);
+        Assert.assertTrue(currentToken instanceof Dot);
         assertEquals(".", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof LispEOF);
+        Assert.assertTrue(lexer.nextToken() instanceof EOF);
     }
 }

@@ -18,11 +18,11 @@
 
 package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.tokens.LispAtom;
-import edu.osu.cse.meisam.interpreter.tokens.LispCloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispDot;
-import edu.osu.cse.meisam.interpreter.tokens.LispOpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispToken;
+import edu.osu.cse.meisam.interpreter.tokens.Atom;
+import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Dot;
+import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 // <S> ::= <E>
 // <E> ::= atom
@@ -50,7 +50,7 @@ public class Parser {
     /**
      * Current token
      */
-    private LispToken token;
+    private Token token;
 
     /**
      * @param lexer
@@ -72,9 +72,9 @@ public class Parser {
     }
 
     private void parseE() {
-        if (this.token instanceof LispAtom) {
+        if (this.token instanceof Atom) {
             parseAtom();
-        } else if (this.token instanceof LispOpenParentheses) {
+        } else if (this.token instanceof OpenParentheses) {
             parseOpenParentheses();
             parseX();
         } else { // error
@@ -83,10 +83,10 @@ public class Parser {
     }
 
     private void parseX() {
-        if (this.token instanceof LispCloseParentheses) {
+        if (this.token instanceof CloseParentheses) {
             parseCloseParentheses();
-        } else if ((this.token instanceof LispOpenParentheses)
-                || (this.token instanceof LispAtom)) { // head of E
+        } else if ((this.token instanceof OpenParentheses)
+                || (this.token instanceof Atom)) { // head of E
             parseE();
             parseY();
         } else { // error
@@ -95,7 +95,7 @@ public class Parser {
     }
 
     private void parseY() {
-        if (this.token instanceof LispDot) {
+        if (this.token instanceof Dot) {
             parseDot();
             parseE();
             parseCloseParentheses();
@@ -106,8 +106,8 @@ public class Parser {
     }
 
     private void parseR() {
-        if ((this.token instanceof LispAtom)
-                || (this.token instanceof LispOpenParentheses)) {
+        if ((this.token instanceof Atom)
+                || (this.token instanceof OpenParentheses)) {
             parseE();
             parseR();
         } else {
@@ -116,7 +116,7 @@ public class Parser {
     }
 
     private void parseAtom() {
-        if (this.token instanceof LispAtom) {
+        if (this.token instanceof Atom) {
             move();
         } else {
             raiseParserError("Looking for a lisp atom but fouund "
@@ -125,7 +125,7 @@ public class Parser {
     }
 
     private void parseOpenParentheses() {
-        if (this.token instanceof LispOpenParentheses) {
+        if (this.token instanceof OpenParentheses) {
             move();
         } else {
             raiseParserError("Looking for a ( but fouund "
@@ -134,7 +134,7 @@ public class Parser {
     }
 
     private void parseCloseParentheses() {
-        if (this.token instanceof LispCloseParentheses) {
+        if (this.token instanceof CloseParentheses) {
             move();
         } else {
             raiseParserError("Looking for a ) but fouund "
@@ -143,7 +143,7 @@ public class Parser {
     }
 
     private void parseDot() {
-        if (this.token instanceof LispDot) {
+        if (this.token instanceof Dot) {
             move();
         } else {
             raiseParserError("Looking for a . but fouund "

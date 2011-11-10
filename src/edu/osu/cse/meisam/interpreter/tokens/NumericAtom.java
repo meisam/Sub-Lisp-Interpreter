@@ -22,19 +22,15 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispEOF extends LispToken {
+public class NumericAtom extends Atom {
 
     /**
-     * End-of-File symbol. This should never show up anywhere. It is only a
-     * sentinel used for ease of parsing.
+     * Constructs a number representing the given lexval
+     * 
+     * @param lexval
      */
-    private static final String EOF = "$";
-
-    /**
-     * Constructs a new EOF token.
-     */
-    public LispEOF() {
-        super(EOF);
+    public NumericAtom(final String lexval) {
+        super(lexval);
     }
 
 }

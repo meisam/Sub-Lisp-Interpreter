@@ -22,20 +22,19 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispCloseParentheses extends LispToken {
+public class EOF extends Token {
 
     /**
-     * Close parenthesis
+     * End-of-File symbol. This should never show up anywhere. It is only a
+     * sentinel used for ease of parsing.
      */
-    private static final String CLOSE_PARENTHESES = ")";
+    private static final String EOF = "$";
 
     /**
-     * Constructs a new Close parenthesis token
-     * 
-     * @param lexval
+     * Constructs a new EOF token.
      */
-    public LispCloseParentheses() {
-        super(CLOSE_PARENTHESES);
+    public EOF() {
+        super(EOF);
     }
 
 }

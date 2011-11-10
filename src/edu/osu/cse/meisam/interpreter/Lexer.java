@@ -17,13 +17,13 @@
  */
 package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.tokens.LispCloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispDot;
-import edu.osu.cse.meisam.interpreter.tokens.LispEOF;
-import edu.osu.cse.meisam.interpreter.tokens.LispLiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.LispNumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.LispOpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.LispToken;
+import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Dot;
+import edu.osu.cse.meisam.interpreter.tokens.EOF;
+import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
+import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
+import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -45,26 +45,26 @@ public class Lexer {
         return this.in.hasMore();
     }
 
-    public LispToken nextToken() {
+    public Token nextToken() {
         try {
             String buffer = "";
 
             removeWhitespace();
 
             if (!this.in.hasMore()) {
-                return new LispEOF();
+                return new EOF();
             }
 
             final char lookaheadChar = this.in.lookaheadChar();
 
             if (isDigit(lookaheadChar) || isSign(lookaheadChar)) {
                 buffer = readNumber();
-                return new LispNumericAtom(buffer);
+                return new NumericAtom(buffer);
             }
 
             if (isLetter(lookaheadChar)) {
                 buffer = readSymbol();
-                return new LispLiteralAtom(buffer);
+                return new LiteralAtom(buffer);
             }
 
             if (isWhiteSpace(lookaheadChar)) {
@@ -73,17 +73,17 @@ public class Lexer {
 
             if (isOpenParentheses(lookaheadChar)) {
                 buffer = readOpenParentheses();
-                return new LispOpenParentheses();
+                return new OpenParentheses();
             }
 
             if (isCloseParentheses(lookaheadChar)) {
                 buffer = readCloseParentheses();
-                return new LispCloseParentheses();
+                return new CloseParentheses();
             }
 
             if (isDot(lookaheadChar)) {
                 buffer = readDot();
-                return new LispDot();
+                return new Dot();
             }
 
             throw new LexcerExeption("Unknown Symbol in the input:"

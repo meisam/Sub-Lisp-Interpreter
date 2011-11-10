@@ -22,14 +22,20 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispNumericAtom extends LispAtom {
+public class LiteralAtom extends Atom {
 
     /**
-     * Constructs a number representing the given lexval
+     * All the keywords in the Lisp
+     */
+    final static String[] ALL_KEYWORDS = { "DEFUN", "EQ", "ATOM", "NIL", "T",
+            "CAR", "CDR", "CAAR" };
+
+    /**
+     * Constructs a new Token
      * 
      * @param lexval
      */
-    public LispNumericAtom(final String lexval) {
+    public LiteralAtom(final String lexval) {
         super(lexval);
     }
 

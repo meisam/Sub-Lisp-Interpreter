@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispOpenParentheses extends LispToken {
+public class OpenParentheses extends Token {
 
     /**
      * Open parenthesis
@@ -34,7 +34,7 @@ public class LispOpenParentheses extends LispToken {
      * 
      * @param lexval
      */
-    public LispOpenParentheses() {
+    public OpenParentheses() {
         super(OPEN_PARENTHESES);
     }
 

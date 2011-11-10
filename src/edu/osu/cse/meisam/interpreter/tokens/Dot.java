@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LispDot extends LispToken {
+public class Dot extends Token {
 
     /**
      * Dot
@@ -34,7 +34,7 @@ public class LispDot extends LispToken {
      * 
      * @param lexval
      */
-    public LispDot() {
+    public Dot() {
         super(DOT);
     }
 

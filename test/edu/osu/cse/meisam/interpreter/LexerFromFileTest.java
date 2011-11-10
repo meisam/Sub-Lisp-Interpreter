@@ -29,8 +29,8 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import edu.osu.cse.meisam.interpreter.tokens.LispEOF;
-import edu.osu.cse.meisam.interpreter.tokens.LispToken;
+import edu.osu.cse.meisam.interpreter.tokens.EOF;
+import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
  * This class provides a framework for testing the program by reading the input
@@ -139,11 +139,11 @@ public class LexerFromFileTest extends TestCase {
                 final File lexerExpected = new File(pathname);
                 final BufferedReader reader = new BufferedReader(
                         new FileReader(lexerExpected));
-                LispToken token = null;
+                Token token = null;
                 int line = 0;
                 do {
                     token = lexer.nextToken();
-                    if (token instanceof LispEOF) {
+                    if (token instanceof EOF) {
                         break;
                     }
                     final String tokenName = reader.readLine();
@@ -155,7 +155,7 @@ public class LexerFromFileTest extends TestCase {
                     line++;
                     Assert.assertEquals(testFile.getName() + "@ Line " + line,
                             tokenLexval, token.getLexval());
-                } while (!(token instanceof LispEOF));
+                } while (!(token instanceof EOF));
 
             } catch (final LexcerExeption ex) {
                 fail("In " + testFile + ": " + ex.getMessage());
@@ -197,12 +197,12 @@ public class LexerFromFileTest extends TestCase {
     }
 
     private void printAllTokens(final Lexer lexer) {
-        LispToken token = null;
+        Token token = null;
         do {
             token = lexer.nextToken();
             System.out.println(token.getClass().getSimpleName() + " "
                     + token.getLexval());
-        } while (!(token instanceof LispEOF));
+        } while (!(token instanceof EOF));
     }
 
 }
