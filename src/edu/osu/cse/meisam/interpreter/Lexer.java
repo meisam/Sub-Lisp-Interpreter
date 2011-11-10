@@ -40,6 +40,11 @@ public class Lexer {
         this.in = inputProvider;
     }
 
+    public boolean hasMoreTokens() {
+        removeWhitespace();
+        return this.in.hasMore();
+    }
+
     public LispToken nextToken() {
         try {
             String buffer = "";
