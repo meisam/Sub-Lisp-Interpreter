@@ -24,16 +24,33 @@ import edu.osu.cse.meisam.interpreter.tokens.LispDot;
 import edu.osu.cse.meisam.interpreter.tokens.LispOpenParentheses;
 import edu.osu.cse.meisam.interpreter.tokens.LispToken;
 
+// <S> ::= <E>
+// <E> ::= atom
+// <E> ::= ( <X>
+// <X> ::= <E> <Y>
+// <X> ::= ) 
+// <Y> ::= . <E> )
+// <Y> ::= <R> )
+// <R> ::= NIL
+// <R> ::= <E> <R>
+
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
 public class Parser {
 
+    private static final String DEFAULT_ERROR_MESSAGE = "Input is not a valid lisp program";
+
     /**
      * 
      */
     private final Lexer lexer;
+
+    /**
+     * Current token
+     */
+    private LispToken token;
 
     /**
      * @param lexer
@@ -44,70 +61,98 @@ public class Parser {
 
     public void parse() {
         while (this.lexer.hasMoreTokens()) {
-            final LispToken token = this.lexer.nextToken();
-            parseE(token);
+            this.token = this.lexer.nextToken();
+            parseE();
         }
     }
 
-    private void parseE(LispToken token) {
-        if (token instanceof LispAtom) {
-            parseAtom(token);
-        } else if (token instanceof LispOpenParentheses) {
-            consume(token);
-            token = this.lexer.nextToken();
-            parseX(token);
-        } else { // it should be another Expresion
-            parseE(token);
-            parseY(token);
+    private void move() {
+        System.out.println("moving on " + this.token.getLexval());
+        this.token = this.lexer.nextToken();
+    }
+
+    private void parseE() {
+        if (this.token instanceof LispAtom) {
+            parseAtom();
+        } else if (this.token instanceof LispOpenParentheses) {
+            parseOpenParentheses();
+            parseX();
+        } else { // error
+            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private void parseX(final LispToken token) {
-        if (token instanceof LispCloseParentheses) {
-            consume(token);
+    private void parseX() {
+        if (this.token instanceof LispCloseParentheses) {
+            parseCloseParentheses();
+        } else if ((this.token instanceof LispOpenParentheses)
+                || (this.token instanceof LispAtom)) { // head of E
+            parseE();
+            parseY();
+        } else { // error
+            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
+        }
+    }
+
+    private void parseY() {
+        if (this.token instanceof LispDot) {
+            parseDot();
+            parseE();
+            parseCloseParentheses();
         } else {
-            parseE(token);
-            parseY(token);
+            parseR();
+            parseCloseParentheses();
         }
     }
 
-    private void parseY(LispToken token) {
-        if (token instanceof LispDot) {
-            consume(token);
-            token = this.lexer.nextToken();
-            parseE(token);
-            token = this.lexer.nextToken();
-            if (!(token instanceof LispCloseParentheses)) {
-                throw new ParserException("Expecting to see ), but seeing "
-                        + token.getLexval());
-            }
-            consume(token);
-        } else {
-            parseR(token);
-            token = this.lexer.nextToken();
-            if (!(token instanceof LispCloseParentheses)) {
-                throw new ParserException("Expecting to see ), but seeing "
-                        + token.getLexval());
-            }
-        }
-    }
-
-    private void parseR(final LispToken token) {
-        if ((token instanceof LispAtom)
-                || (token instanceof LispOpenParentheses)) {
-            parseE(token);
-            parseR(token);
+    private void parseR() {
+        if ((this.token instanceof LispAtom)
+                || (this.token instanceof LispOpenParentheses)) {
+            parseE();
+            parseR();
         } else {
             // do nothing
         }
     }
 
-    private void parseAtom(final LispToken token) {
-        consume(token);
-        this.lexer.nextToken();
+    private void parseAtom() {
+        if (this.token instanceof LispAtom) {
+            move();
+        } else {
+            raiseParserError("Looking for a lisp atom but fouund "
+                    + this.token.getClass().getSimpleName());
+        }
     }
 
-    private void consume(final LispToken token) {
-        System.out.println(token.getClass().getSimpleName());
+    private void parseOpenParentheses() {
+        if (this.token instanceof LispOpenParentheses) {
+            move();
+        } else {
+            raiseParserError("Looking for a ( but fouund "
+                    + this.token.getClass().getSimpleName());
+        }
     }
+
+    private void parseCloseParentheses() {
+        if (this.token instanceof LispCloseParentheses) {
+            move();
+        } else {
+            raiseParserError("Looking for a ) but fouund "
+                    + this.token.getClass().getSimpleName());
+        }
+    }
+
+    private void parseDot() {
+        if (this.token instanceof LispDot) {
+            move();
+        } else {
+            raiseParserError("Looking for a . but fouund "
+                    + this.token.getClass().getSimpleName());
+        }
+    }
+
+    private void raiseParserError(final String msg) {
+        throw new ParserException(msg);
+    }
+
 }
