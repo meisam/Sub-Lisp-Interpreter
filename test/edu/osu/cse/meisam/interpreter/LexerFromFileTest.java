@@ -45,8 +45,11 @@ public class LexerFromFileTest extends TestCase {
 
     private static final String TEST_DIR = "testfiles";
 
-    private static final File SMOKE_TEST_FILE = new File(
-            LexerFromFileTest.TEST_DIR + File.separator + "smoke-test.input");
+    private static final String SMOKE_TEST_FILE_NAME = "smoke-test.input";
+
+    private static final File SMOKE_TEST_FILE_PATH = new File(
+            LexerFromFileTest.TEST_DIR + File.separator
+                    + LexerFromFileTest.SMOKE_TEST_FILE_NAME);
 
     private File[] getFiles(final String dir) {
         final File directory = new File(dir);
@@ -111,8 +114,9 @@ public class LexerFromFileTest extends TestCase {
     public void testSmokeListTestFile() {
         String s;
         try {
-            s = readfromFile(LexerFromFileTest.SMOKE_TEST_FILE);
-            System.out.println(s);
+            s = readfromFile(LexerFromFileTest.SMOKE_TEST_FILE_PATH);
+            // the value inside the file should be exactly the name of the file
+            Assert.assertEquals(LexerFromFileTest.SMOKE_TEST_FILE_NAME, s);
         } catch (final IOException e) {
             fail(e.getMessage());
         }
@@ -183,11 +187,10 @@ public class LexerFromFileTest extends TestCase {
                         fileContent);
                 final Lexer lexer = new Lexer(inputProvider);
                 try {
-                    printAllTokens(lexer);
+                    passOverAllTokens(lexer);
                     fail(testFile + " should've fail but it didn't");
                 } catch (final LexcerExeption ex) {
                     // good job, you raised an exception
-                    System.out.println("Faied " + testFile);
                 }
 
             } catch (final IOException e) {
@@ -196,12 +199,10 @@ public class LexerFromFileTest extends TestCase {
         }
     }
 
-    private void printAllTokens(final Lexer lexer) {
+    private void passOverAllTokens(final Lexer lexer) {
         Token token = null;
         do {
             token = lexer.nextToken();
-            System.out.println(token.getClass().getSimpleName() + " "
-                    + token.getLexval());
         } while (!(token instanceof EOF));
     }
 
