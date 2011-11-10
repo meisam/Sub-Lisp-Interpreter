@@ -1,0 +1,3 @@
+(defun f (x) (plus x y))
+(f 5)
+
