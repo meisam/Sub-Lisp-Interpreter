@@ -259,8 +259,15 @@ public class Lexer {
         final StringBuffer buffer = new StringBuffer(100);
         final char nextChar = this.in.nextChar();
         if (isDot(nextChar)) {
-            buffer.append(nextChar);
-            return buffer.toString();
+            if (!this.in.hasMore()
+                    || (this.in.hasMore() && isDelimiter(this.in
+                            .lookaheadChar()))) {
+                buffer.append(nextChar);
+                return buffer.toString();
+            } else {
+                throw new LexcerExeption(
+                        "Lexing Error: DOT should be followed by whitespace or parentheses");
+            }
         } else {
             throw new LexcerExeption("Lexing Error: '" + buffer.toString()
                     + this.in.lookaheadChar() + "'is not a valid identifier");
