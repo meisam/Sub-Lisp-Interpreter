@@ -68,6 +68,10 @@ public class Parser {
         return this.parseTree;
     }
 
+    private void move() {
+        this.token = this.lexer.nextToken();
+    }
+
     public void parse() {
         this.parseTree = null;
         while (this.lexer.hasMoreTokens()) {
@@ -80,11 +84,6 @@ public class Parser {
                         newParseTree);
             }
         }
-    }
-
-    private void move() {
-        System.out.println("moving on " + this.token.getLexval());
-        this.token = this.lexer.nextToken();
     }
 
     private ParseTree parseE() {
