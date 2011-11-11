@@ -31,6 +31,10 @@ import edu.osu.cse.meisam.interpreter.tokens.Token;
  */
 public class Lexer {
 
+    private static final int MAX_INPUT_SIZE = 1000;
+
+    private int tokenCounter;
+
     private final InputProvider in;
 
     /**
@@ -38,6 +42,7 @@ public class Lexer {
      */
     public Lexer(final InputProvider inputProvider) {
         this.in = inputProvider;
+        this.tokenCounter = 0;
     }
 
     public boolean hasMoreTokens() {
@@ -46,6 +51,10 @@ public class Lexer {
     }
 
     public Token nextToken() {
+        if (this.tokenCounter++ > Lexer.MAX_INPUT_SIZE) {
+            throw new LexcerExeption(
+                    "Input is too large to be processed, use a smaller input");
+        }
         try {
             String buffer = "";
 
