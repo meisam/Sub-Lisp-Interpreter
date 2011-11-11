@@ -18,7 +18,6 @@
 
 package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -37,18 +36,11 @@ public class ParseTree {
     private final ParseTree rightTree;
 
     /**
-     * 
-     */
-    private final Token token;
-
-    /**
      * @param token
      * @param leftTree
      * @param rightTree
      */
-    public ParseTree(final Token token, final ParseTree leftTree,
-            final ParseTree rightTree) {
-        this.token = token;
+    public ParseTree(final ParseTree leftTree, final ParseTree rightTree) {
         this.leftTree = leftTree;
         this.rightTree = rightTree;
     }
@@ -56,15 +48,8 @@ public class ParseTree {
     /**
      * @param token
      */
-    public ParseTree(final Token token) {
-        this(token, null, null);
-    }
-
-    /**
-     * @return the token
-     */
-    public Token getToken() {
-        return token;
+    public ParseTree() {
+        this(null, null);
     }
 
     /**
