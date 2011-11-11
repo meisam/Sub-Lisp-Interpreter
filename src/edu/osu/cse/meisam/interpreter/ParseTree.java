@@ -61,6 +61,13 @@ public class ParseTree {
     }
 
     /**
+     * @return the token
+     */
+    public Token getToken() {
+        return token;
+    }
+
+    /**
      * @return the leftTree
      */
     public ParseTree getLeftTree() {
