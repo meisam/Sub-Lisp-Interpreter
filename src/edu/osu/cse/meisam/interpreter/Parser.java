@@ -52,6 +52,8 @@ public class Parser {
      */
     private Token token;
 
+    private ParseTree parseTree;
+
     /**
      * @param lexer
      */
@@ -59,10 +61,24 @@ public class Parser {
         this.lexer = lexer;
     }
 
+    /**
+     * @return the parseTree
+     */
+    public ParseTree getParseTree() {
+        return this.parseTree;
+    }
+
     public void parse() {
+        this.parseTree = null;
         while (this.lexer.hasMoreTokens()) {
             this.token = this.lexer.nextToken();
-            final ParseTree parseTree = parseE();
+            final ParseTree newParseTree = parseE();
+            if (this.parseTree == null) {
+                this.parseTree = newParseTree;
+            } else {
+                this.parseTree = new ParseTree(null, getParseTree(),
+                        newParseTree);
+            }
         }
     }
 
