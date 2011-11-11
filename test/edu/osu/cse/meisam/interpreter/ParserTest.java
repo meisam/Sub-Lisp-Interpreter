@@ -43,18 +43,22 @@ public class ParserTest extends TestCase {
         if (parseTree == null) {
             return;
         }
+        System.out.print("(");
         traverseParseTree(parseTree.getLeftTree());
+        System.out.print("<");
         traverseNode(parseTree.getToken());
+        System.out.print(">");
         traverseParseTree(parseTree.getRightTree());
+        System.out.print(")");
 
     }
 
     private void traverseNode(final Token token) {
         if (token != null) {
-            System.out.println(token.getClass().getSimpleName()
+            System.out.print(token.getClass().getSimpleName()
                     + token.getLexval());
         } else {
-            System.out.println("Null token");
+            System.out.print("Null token");
         }
 
     }
