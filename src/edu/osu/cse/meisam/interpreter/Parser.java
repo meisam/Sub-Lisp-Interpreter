@@ -62,7 +62,7 @@ public class Parser {
     public void parse() {
         while (this.lexer.hasMoreTokens()) {
             this.token = this.lexer.nextToken();
-            parseE();
+            final ParseTree parseTree = parseE();
         }
     }
 
@@ -71,55 +71,62 @@ public class Parser {
         this.token = this.lexer.nextToken();
     }
 
-    private void parseE() {
+    private ParseTree parseE() {
         if (this.token instanceof Atom) {
-            parseAtom();
+            return parseAtom();
         } else if (this.token instanceof OpenParentheses) {
             parseOpenParentheses();
-            parseX();
+            return parseX();
         } else { // error
-            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
+            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private void parseX() {
+    private ParseTree parseX() {
         if (this.token instanceof CloseParentheses) {
             parseCloseParentheses();
+            return null;
         } else if ((this.token instanceof OpenParentheses)
                 || (this.token instanceof Atom)) { // head of E
-            parseE();
-            parseY();
+            final ParseTree leftParseTree = parseE();
+            final ParseTree rightParseTree = parseY();
+            return new ParseTree(this.token, leftParseTree, rightParseTree);
         } else { // error
-            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
+            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private void parseY() {
+    private ParseTree parseY() {
         if (this.token instanceof Dot) {
             parseDot();
-            parseE();
+            final ParseTree parseTree = parseE();
             parseCloseParentheses();
+            return parseTree;
         } else {
-            parseR();
+            final ParseTree parseTree = parseR();
             parseCloseParentheses();
+            return parseTree;
         }
     }
 
-    private void parseR() {
+    private ParseTree parseR() {
         if ((this.token instanceof Atom)
                 || (this.token instanceof OpenParentheses)) {
-            parseE();
-            parseR();
+            final ParseTree leftParseTree = parseE();
+            final ParseTree rightParseTree = parseR();
+            return new ParseTree(this.token, leftParseTree, rightParseTree);
         } else {
-            // do nothing
+            return null;
         }
     }
 
-    private void parseAtom() {
+    private ParseTree parseAtom() {
         if (this.token instanceof Atom) {
+            final Token currentToken = this.token;
             move();
+            return new ParseTree(currentToken, null, null);
         } else {
-            raiseParserError("Looking for a lisp atom but fouund "
+            return raiseParserError("Looking for a lisp atom but fouund "
                     + this.token.getClass().getSimpleName());
         }
     }
@@ -151,7 +158,7 @@ public class Parser {
         }
     }
 
-    private void raiseParserError(final String msg) {
+    private ParseTree raiseParserError(final String msg) {
         throw new ParserException(msg);
     }
 
