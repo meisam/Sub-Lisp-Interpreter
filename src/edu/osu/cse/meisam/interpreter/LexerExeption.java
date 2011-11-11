@@ -21,7 +21,7 @@ package edu.osu.cse.meisam.interpreter;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LexcerExeption extends RuntimeException {
+public class LexerExeption extends RuntimeException {
 
     /**
      * 
@@ -31,7 +31,7 @@ public class LexcerExeption extends RuntimeException {
     /**
      * @param msg
      */
-    public LexcerExeption(final String msg) {
+    public LexerExeption(final String msg) {
         super(msg);
     }
 

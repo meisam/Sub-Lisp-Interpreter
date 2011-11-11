@@ -161,7 +161,7 @@ public class LexerFromFileTest extends TestCase {
                             tokenLexval, token.getLexval());
                 } while (!(token instanceof EOF));
 
-            } catch (final LexcerExeption ex) {
+            } catch (final LexerExeption ex) {
                 fail("In " + testFile + ": " + ex.getMessage());
             }
 
@@ -189,7 +189,7 @@ public class LexerFromFileTest extends TestCase {
                 try {
                     passOverAllTokens(lexer);
                     fail(testFile + " should've fail but it didn't");
-                } catch (final LexcerExeption ex) {
+                } catch (final LexerExeption ex) {
                     // good job, you raised an exception
                 }
 

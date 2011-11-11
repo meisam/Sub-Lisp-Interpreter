@@ -44,7 +44,7 @@ public class InputStreamProvider implements InputProvider {
         try {
             return this.in.ready();
         } catch (final IOException e) {
-            throw new LexcerExeption("Cannot read from the input");
+            throw new LexerExeption("Cannot read from the input");
         }
     }
 
@@ -57,11 +57,11 @@ public class InputStreamProvider implements InputProvider {
         try {
             final int nextChar = this.in.read();
             if (nextChar == -1) {
-                throw new LexcerExeption("Trying to read from the end of input");
+                throw new LexerExeption("Trying to read from the end of input");
             }
             return (char) nextChar;
         } catch (final IOException e) {
-            throw new LexcerExeption("Cannot read from the input");
+            throw new LexerExeption("Cannot read from the input");
         }
     }
 
@@ -74,12 +74,12 @@ public class InputStreamProvider implements InputProvider {
         try {
             final int nextChar = this.in.read();
             if (nextChar == -1) {
-                throw new LexcerExeption("Trying to read from the end of input");
+                throw new LexerExeption("Trying to read from the end of input");
             }
             this.in.unread(nextChar); // push it back
             return (char) nextChar;
         } catch (final IOException e) {
-            throw new LexcerExeption("Cannot read from the input");
+            throw new LexerExeption("Cannot read from the input");
         }
     }
 
