@@ -36,7 +36,7 @@ public class ParserTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
         final Parser parser = new Parser(lexer);
 
-        parser.parse();
+        parser.parseNextSExpresion();
 
         final ParseTree parseTree = parser.getParseTree();
         Assert.assertNotNull(parseTree);
@@ -84,7 +84,7 @@ public class ParserTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
         final Parser parser = new Parser(lexer);
 
-        parser.parse();
+        parser.parseNextSExpresion();
         final ParseTree actualParseTree = parser.getParseTree();
 
         final ParseTree expectedParseTree = new InternalNode( //
@@ -108,7 +108,7 @@ public class ParserTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
         final Parser parser = new Parser(lexer);
 
-        parser.parse();
+        parser.parseNextSExpresion();
         final ParseTree actualParseTree = parser.getParseTree();
 
         final ParseTree expectedParseTree = new InternalNode(//

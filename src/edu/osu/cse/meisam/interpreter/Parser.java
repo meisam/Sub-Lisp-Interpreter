@@ -72,18 +72,14 @@ public class Parser {
         this.token = this.lexer.nextToken();
     }
 
-    public void parse() {
+    public boolean hasMoreSExpression() {
+        return this.lexer.hasMoreTokens();
+    }
+
+    public void parseNextSExpresion() {
         this.parseTree = null;
-        while (this.lexer.hasMoreTokens()) {
-            this.token = this.lexer.nextToken();
-            final ParseTree newParseTree = parseE();
-            if (this.parseTree == null) {
-                this.parseTree = newParseTree;
-            } else {
-                this.parseTree = new InternalNode(getParseTree(), newParseTree,
-                        false);
-            }
-        }
+        this.token = this.lexer.nextToken();
+        this.parseTree = parseE();
     }
 
     private ParseTree parseE() {
