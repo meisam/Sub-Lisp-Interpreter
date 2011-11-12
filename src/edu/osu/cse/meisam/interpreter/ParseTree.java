@@ -18,7 +18,6 @@
 
 package edu.osu.cse.meisam.interpreter;
 
-
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
@@ -28,56 +27,21 @@ public class ParseTree {
     /**
      * 
      */
-    private final ParseTree leftTree;
+    private boolean dotedParent = false;
 
     /**
-     * 
+     * @return the dotedParent
      */
-    private final ParseTree rightTree;
-
-    /**
-     * @param token
-     * @param leftTree
-     * @param rightTree
-     */
-    public ParseTree(final ParseTree leftTree, final ParseTree rightTree) {
-        this.leftTree = leftTree;
-        this.rightTree = rightTree;
+    public boolean hasDotedParent() {
+        return this.dotedParent;
     }
 
     /**
-     * @param token
+     * @param dotedParent
+     *            the dotedParent to set
      */
-    public ParseTree() {
-        this(null, null);
-    }
-
-    /**
-     * @return the leftTree
-     */
-    public ParseTree getLeftTree() {
-        return this.leftTree;
-    }
-
-    /**
-     * @return the rightTree
-     */
-    public ParseTree getRightTree() {
-        return this.rightTree;
-    }
-
-    /**
-     * @return tru leftTree is NOT null
-     */
-    public boolean hasLeftTree() {
-        return this.leftTree != null;
-    }
-
-    /**
-     * @return true if rightTree is NOT null
-     */
-    public boolean hasRightTree() {
-        return this.rightTree != null;
+    public void setParentDoted() {
+        this.dotedParent = true;
     }
 
 }

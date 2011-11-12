@@ -8,8 +8,6 @@ import edu.osu.cse.meisam.interpreter.tokens.Token;
  */
 public class LeafNode extends ParseTree {
 
-    public final static LeafNode NILL_LEAF = new LeafNode(null);
-
     /**
      * 
      */
@@ -29,22 +27,9 @@ public class LeafNode extends ParseTree {
         return this.token;
     }
 
-    public ParseTree getLeftTree() {
-        // TODO Auto-generated method stub
-        return super.getLeftTree();
-    }
-
-    public ParseTree getRightTree() {
-        // TODO Auto-generated method stub
-        return super.getRightTree();
-    }
-
-    public boolean hasLeftTree() {
-        return false;
-    }
-
-    public boolean hasRightTree() {
-        return false;
+    public String toString() {
+        return this.token.getClass().getSimpleName() + "["
+                + this.token.getLexval() + "]";
     }
 
 }
