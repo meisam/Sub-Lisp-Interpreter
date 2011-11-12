@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class ParseTree {
+public abstract class ParseTree {
 
     /**
      * 
