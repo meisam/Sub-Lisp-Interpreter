@@ -80,7 +80,8 @@ public class Parser {
             if (this.parseTree == null) {
                 this.parseTree = newParseTree;
             } else {
-                this.parseTree = new ParseTree(getParseTree(), newParseTree);
+                this.parseTree = new InternalNode(getParseTree(), newParseTree,
+                        false);
             }
         }
     }
@@ -90,24 +91,31 @@ public class Parser {
             return parseAtom();
         } else if (this.token instanceof OpenParentheses) {
             parseOpenParentheses();
-            final ParseTree x = parseX();
+            final InternalNode x = parseX();
             final ParseTree leftParseTree = x.getLeftTree();
             final ParseTree rightParseTree = x.getRightTree();
-            return new ParseTree(leftParseTree, rightParseTree);
+
+            final boolean shouldbeDoted = ((rightParseTree != null) && rightParseTree
+                    .hasDotedParent());
+            return new InternalNode(leftParseTree, rightParseTree,
+                    shouldbeDoted);
         } else { // error
             return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private ParseTree parseX() {
+    private InternalNode parseX() {
         if (this.token instanceof CloseParentheses) {
             parseCloseParentheses();
-            return LeafNode.NILL_LEAF;
+            return InternalNode.NILL_LEAF;
         } else if ((this.token instanceof OpenParentheses)
                 || (this.token instanceof Atom)) { // head of E
             final ParseTree leftParseTree = parseE();
             final ParseTree rightParseTree = parseY();
-            return new ParseTree(leftParseTree, rightParseTree);
+            final boolean shouldbeDoted = (rightParseTree != null)
+                    && (rightParseTree.hasDotedParent());
+            return new InternalNode(leftParseTree, rightParseTree,
+                    shouldbeDoted);
         } else { // error
             return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
@@ -117,23 +125,25 @@ public class Parser {
         if (this.token instanceof Dot) {
             parseDot();
             final ParseTree parseTree = parseE();
+            parseTree.setParentDoted(); // vitally important
             parseCloseParentheses();
             return parseTree;
         } else {
-            final ParseTree parseTree = parseR();
+            final InternalNode parseTree = parseR();
             parseCloseParentheses();
             return parseTree;
         }
     }
 
-    private ParseTree parseR() {
+    private InternalNode parseR() {
         if ((this.token instanceof Atom)
                 || (this.token instanceof OpenParentheses)) {
             final ParseTree leftParseTree = parseE();
             final ParseTree rightParseTree = parseR();
-            return new ParseTree(leftParseTree, rightParseTree);
+            return new InternalNode(leftParseTree, rightParseTree,
+                    rightParseTree.hasDotedParent());
         } else {
-            return null;
+            return InternalNode.NILL_LEAF;
         }
     }
 
@@ -181,7 +191,7 @@ public class Parser {
         }
     }
 
-    private ParseTree raiseParserError(final String msg) {
+    private InternalNode raiseParserError(final String msg) {
         throw new ParserException(msg);
     }
 
