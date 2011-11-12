@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class Dot extends Token {
+public final class Dot extends Token {
 
     /**
      * Dot
@@ -35,7 +35,28 @@ public class Dot extends Token {
      * @param lexval
      */
     public Dot() {
-        super(DOT);
+        super(Dot.DOT);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return (obj instanceof Dot);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 0;
     }
 
 }

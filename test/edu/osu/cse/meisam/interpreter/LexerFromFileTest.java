@@ -108,6 +108,7 @@ public class LexerFromFileTest extends TestCase {
         while (-1 != (n = input.read(buffer))) {
             fileContent.append(buffer, 0, n);
         }
+        input.close();
         return fileContent.toString();
     }
 
@@ -160,6 +161,8 @@ public class LexerFromFileTest extends TestCase {
                     Assert.assertEquals(testFile.getName() + "@ Line " + line,
                             tokenLexval, token.getLexval());
                 } while (!(token instanceof EOF));
+
+                reader.close();
 
             } catch (final LexerExeption ex) {
                 fail("In " + testFile + ": " + ex.getMessage());

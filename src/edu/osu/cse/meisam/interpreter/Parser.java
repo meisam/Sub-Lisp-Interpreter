@@ -52,6 +52,8 @@ public class Parser {
      */
     private Token token;
 
+    private ParseTree parseTree;
+
     /**
      * @param lexer
      */
@@ -59,99 +61,137 @@ public class Parser {
         this.lexer = lexer;
     }
 
-    public void parse() {
-        while (this.lexer.hasMoreTokens()) {
-            this.token = this.lexer.nextToken();
-            parseE();
-        }
+    /**
+     * @return the parseTree
+     */
+    public ParseTree getParseTree() {
+        return this.parseTree;
     }
 
     private void move() {
-        System.out.println("moving on " + this.token.getLexval());
         this.token = this.lexer.nextToken();
     }
 
-    private void parseE() {
+    public void parse() {
+        this.parseTree = null;
+        while (this.lexer.hasMoreTokens()) {
+            this.token = this.lexer.nextToken();
+            final ParseTree newParseTree = parseE();
+            if (this.parseTree == null) {
+                this.parseTree = newParseTree;
+            } else {
+                this.parseTree = new InternalNode(getParseTree(), newParseTree,
+                        false);
+            }
+        }
+    }
+
+    private ParseTree parseE() {
         if (this.token instanceof Atom) {
-            parseAtom();
+            return parseAtom();
         } else if (this.token instanceof OpenParentheses) {
             parseOpenParentheses();
-            parseX();
+            final InternalNode x = parseX();
+            final ParseTree leftParseTree = x.getLeftTree();
+            final ParseTree rightParseTree = x.getRightTree();
+
+            final boolean shouldbeDoted = ((rightParseTree != null) && rightParseTree
+                    .hasDotedParent());
+            return new InternalNode(leftParseTree, rightParseTree,
+                    shouldbeDoted);
         } else { // error
-            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
+            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private void parseX() {
+    private InternalNode parseX() {
         if (this.token instanceof CloseParentheses) {
             parseCloseParentheses();
+            return InternalNode.NILL_LEAF;
         } else if ((this.token instanceof OpenParentheses)
                 || (this.token instanceof Atom)) { // head of E
-            parseE();
-            parseY();
+            final ParseTree leftParseTree = parseE();
+            final ParseTree rightParseTree = parseY();
+            final boolean shouldbeDoted = (rightParseTree != null)
+                    && (rightParseTree.hasDotedParent());
+            return new InternalNode(leftParseTree, rightParseTree,
+                    shouldbeDoted);
         } else { // error
-            raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
+            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE);
         }
     }
 
-    private void parseY() {
+    private ParseTree parseY() {
         if (this.token instanceof Dot) {
             parseDot();
-            parseE();
+            final ParseTree parseTree = parseE();
+            parseTree.setParentDoted(); // vitally important
             parseCloseParentheses();
+            return parseTree;
         } else {
-            parseR();
+            final InternalNode parseTree = parseR();
             parseCloseParentheses();
+            return parseTree;
         }
     }
 
-    private void parseR() {
+    private InternalNode parseR() {
         if ((this.token instanceof Atom)
                 || (this.token instanceof OpenParentheses)) {
-            parseE();
-            parseR();
+            final ParseTree leftParseTree = parseE();
+            final ParseTree rightParseTree = parseR();
+            return new InternalNode(leftParseTree, rightParseTree,
+                    rightParseTree.hasDotedParent());
         } else {
-            // do nothing
+            return InternalNode.NILL_LEAF;
         }
     }
 
-    private void parseAtom() {
+    private ParseTree parseAtom() {
         if (this.token instanceof Atom) {
+            final Token currentToken = this.token;
             move();
+            return new LeafNode(currentToken);
         } else {
-            raiseParserError("Looking for a lisp atom but fouund "
+            return raiseParserError("Looking for a lisp atom but fouund "
                     + this.token.getClass().getSimpleName());
         }
     }
 
-    private void parseOpenParentheses() {
+    private ParseTree parseOpenParentheses() {
         if (this.token instanceof OpenParentheses) {
+            final Token currentToken = this.token;
             move();
+            return new LeafNode(currentToken);
         } else {
-            raiseParserError("Looking for a ( but fouund "
+            return raiseParserError("Looking for a ( but fouund "
                     + this.token.getClass().getSimpleName());
         }
     }
 
-    private void parseCloseParentheses() {
+    private ParseTree parseCloseParentheses() {
         if (this.token instanceof CloseParentheses) {
+            final Token currentToken = this.token;
             move();
+            return new LeafNode(currentToken);
         } else {
-            raiseParserError("Looking for a ) but fouund "
+            return raiseParserError("Looking for a ) but fouund "
                     + this.token.getClass().getSimpleName());
         }
     }
 
-    private void parseDot() {
+    private ParseTree parseDot() {
         if (this.token instanceof Dot) {
+            final Token currentToken = this.token;
             move();
+            return new LeafNode(currentToken);
         } else {
-            raiseParserError("Looking for a . but fouund "
+            return raiseParserError("Looking for a . but fouund "
                     + this.token.getClass().getSimpleName());
         }
     }
 
-    private void raiseParserError(final String msg) {
+    private InternalNode raiseParserError(final String msg) {
         throw new ParserException(msg);
     }
 

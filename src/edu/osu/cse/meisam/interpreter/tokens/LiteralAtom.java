@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LiteralAtom extends Atom {
+public final class LiteralAtom extends Atom {
 
     /**
      * All the keywords in the Lisp
@@ -39,4 +39,36 @@ public class LiteralAtom extends Atom {
         super(lexval);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof LiteralAtom)) {
+            return false;
+        }
+        final LiteralAtom literalAtom = (LiteralAtom) obj;
+        if ((getLexval() == null) && (literalAtom.getLexval() == null)) {
+            return true;
+        }
+        return (getLexval() != null)
+                && (getLexval().equals(literalAtom.getLexval()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        if (getLexval() == null) {
+            return 0;
+        } else {
+            return getLexval().hashCode();
+        }
+    }
 }
