@@ -18,7 +18,10 @@
 
 package edu.osu.cse.meisam.interpreter;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
+import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
 import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
@@ -36,30 +39,84 @@ public class ParserTest extends TestCase {
         parser.parse();
 
         final ParseTree parseTree = parser.getParseTree();
-        traverseParseTree(parseTree);
+        Assert.assertNotNull(parseTree);
+
+        Assert.assertTrue(parseTree instanceof InternalNode);
+        final InternalNode internalNode = (InternalNode) parseTree;
+
+        final ParseTree leftTree = internalNode.getLeftTree();
+        Assert.assertNotNull(leftTree);
+        Assert.assertTrue(leftTree instanceof LeafNode);
+        final Token token = ((LeafNode) leftTree).getToken();
+        Assert.assertNotNull(token);
+        Assert.assertEquals("PLUS", token.getLexval());
+
+        final ParseTree rightTree = internalNode.getRightTree();
+        Assert.assertNotNull(rightTree);
+        Assert.assertTrue(rightTree instanceof InternalNode);
+
+        final ParseTree leftTree_5 = ((InternalNode) rightTree).getLeftTree();
+        Assert.assertTrue(leftTree_5 instanceof LeafNode);
+        final Token token_5 = ((LeafNode) leftTree_5).getToken();
+        Assert.assertTrue(token_5 instanceof NumericAtom);
+        Assert.assertEquals(token_5.getLexval(), "5");
+
+        final ParseTree rightTree_4 = ((InternalNode) rightTree).getRightTree();
+        Assert.assertNotNull(rightTree_4);
+        Assert.assertTrue(rightTree_4 instanceof InternalNode);
+
+        final ParseTree leftTree_4 = ((InternalNode) rightTree_4).getLeftTree();
+        Assert.assertTrue(leftTree_4 instanceof LeafNode);
+        final Token token_4 = ((LeafNode) leftTree_4).getToken();
+        Assert.assertTrue(token_4 instanceof NumericAtom);
+        Assert.assertEquals(token_4.getLexval(), "4");
+
+        final ParseTree rightTree_nill = ((InternalNode) rightTree_4)
+                .getRightTree();
+        Assert.assertNotNull(rightTree_nill);
+        Assert.assertEquals(InternalNode.NILL_LEAF, rightTree_nill);
+
     }
 
-    private void traverseParseTree(final ParseTree parseTree) {
-        if (parseTree == null) {
-            return;
-        }
-        System.out.print("(");
-        traverseParseTree(parseTree.getLeftTree());
-        System.out.print("<");
-        traverseNode(parseTree.getToken());
-        System.out.print(">");
-        traverseParseTree(parseTree.getRightTree());
-        System.out.print(")");
+    public void testSmoke2Parser() {
+        final String input = "(ConS 5 (4 3))";
+        final InputProvider inputProvider = new StringInputProvider(input);
+        final Lexer lexer = new Lexer(inputProvider);
+        final Parser parser = new Parser(lexer);
+
+        parser.parse();
+        final ParseTree actualParseTree = parser.getParseTree();
+
+        final ParseTree expectedParseTree = new InternalNode( //
+                new LeafNode(new LiteralAtom("cons")), //
+                new InternalNode( //
+                        new LeafNode(new NumericAtom("5")),//
+                        new InternalNode(//
+                                new LeafNode(new NumericAtom("4")),//
+                                new LeafNode(new NumericAtom("3")),//
+                                false),//
+                        false), //
+                false//
+        );
+        assertEquals(expectedParseTree, actualParseTree);
 
     }
 
-    private void traverseNode(final Token token) {
-        if (token != null) {
-            System.out.print(token.getClass().getSimpleName()
-                    + token.getLexval());
-        } else {
-            System.out.print("Null token");
-        }
+    public void testSmokeParserDot() {
+        final String input = "(4 . 3)";
+        final InputProvider inputProvider = new StringInputProvider(input);
+        final Lexer lexer = new Lexer(inputProvider);
+        final Parser parser = new Parser(lexer);
 
+        parser.parse();
+        final ParseTree actualParseTree = parser.getParseTree();
+
+        final ParseTree expectedParseTree = new InternalNode(//
+                new LeafNode(new NumericAtom("4")), //
+                new LeafNode(new NumericAtom("3")), //
+                true //
+        );
+        assertEquals(expectedParseTree, actualParseTree);
     }
+
 }
