@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class CloseParentheses extends Token {
+public final class CloseParentheses extends Token {
 
     /**
      * Close parenthesis
@@ -35,7 +35,28 @@ public class CloseParentheses extends Token {
      * @param lexval
      */
     public CloseParentheses() {
-        super(CLOSE_PARENTHESES);
+        super(CloseParentheses.CLOSE_PARENTHESES);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return obj instanceof CloseParentheses;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 0;
     }
 
 }

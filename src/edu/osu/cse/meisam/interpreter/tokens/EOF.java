@@ -22,19 +22,40 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class EOF extends Token {
+public final class EOF extends Token {
 
     /**
      * End-of-File symbol. This should never show up anywhere. It is only a
      * sentinel used for ease of parsing.
      */
-    private static final String EOF = "$";
+    private static final String EOF_MARK = "$";
 
     /**
      * Constructs a new EOF token.
      */
     public EOF() {
-        super(EOF);
+        super(EOF.EOF_MARK);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return obj instanceof EOF;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 0;
     }
 
 }

@@ -106,4 +106,49 @@ public class InternalNode extends ParseTree {
             return "< >";
         }
     }
+
+    public int hashCode() {
+        final int leftHash = getLeftTree() == null ? 0 : getLeftTree()
+                .hashCode();
+        final int rightHash = getRightTree() == null ? 0 : getRightTree()
+                .hashCode();
+        if (this.isDoted) {
+            return leftHash + rightHash;
+        } else {
+            return ~(leftHash + rightHash); // bitwise NOT
+        }
+    }
+
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof InternalNode) {
+            final InternalNode node = (InternalNode) obj;
+            if (this.isDoted != node.isDoted()) {
+                return false;
+            }
+
+            boolean leftTreesEqual;
+            if ((getLeftTree() == null) || (node.getRightTree() == null)) {
+                leftTreesEqual = true;
+            } else {
+                leftTreesEqual = ((getLeftTree() != null) && (getLeftTree()
+                        .equals(node.getLeftTree())));
+            }
+
+            boolean rightTreesEqual;
+            if ((getLeftTree() == null) || (node.getRightTree() == null)) {
+                rightTreesEqual = true;
+            } else {
+                rightTreesEqual = ((getLeftTree() != null) && (getLeftTree()
+                        .equals(node.getLeftTree())));
+            }
+
+            return leftTreesEqual && rightTreesEqual;
+
+        }
+        return false;
+    }
+
 }
