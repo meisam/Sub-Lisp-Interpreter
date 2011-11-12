@@ -42,7 +42,9 @@ public class InputStreamProvider implements InputProvider {
      */
     public boolean hasMore() {
         try {
-            return this.in.ready();
+            final int read = this.in.read();
+            this.in.unread(read);
+            return read != -1;
         } catch (final IOException e) {
             throw new LexerExeption("Cannot read from the input");
         }
