@@ -45,7 +45,7 @@ public class Interpreter {
                     System.out);
             interpreter.interpret();
         } catch (final Exception ex) {
-            System.err.println("Error: " + ex.getMessage());
+            System.out.println("Error: " + ex.getMessage());
         }
 
     }
