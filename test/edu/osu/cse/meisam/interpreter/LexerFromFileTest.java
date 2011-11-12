@@ -61,7 +61,7 @@ public class LexerFromFileTest extends TestCase {
         final Vector testFiles = new Vector(allFiles.length / 2);
 
         for (int i = 0; i < allFiles.length; i++) {
-            if (isPassingTestFile(allFiles[i])) {
+            if (isLexerPassingTestFile(allFiles[i])) {
                 testFiles.add(allFiles[i]);
             }
         }
@@ -73,7 +73,7 @@ public class LexerFromFileTest extends TestCase {
         final Vector testFiles = new Vector(allFiles.length / 2);
 
         for (int i = 0; i < allFiles.length; i++) {
-            if (isFailingTestFile(allFiles[i])) {
+            if (isLexerFailingTestFile(allFiles[i])) {
                 testFiles.add(allFiles[i]);
             }
         }
@@ -88,14 +88,14 @@ public class LexerFromFileTest extends TestCase {
         return fileName.getName().endsWith(".input");
     }
 
-    private boolean isPassingTestFile(final File fileName) {
-        return fileName.getName().startsWith("passing-test")
-                && fileName.getName().endsWith(".input");
+    private boolean isLexerPassingTestFile(final File fileName) {
+        return fileName.getName().startsWith("pass-lex-")
+                && isTestFile(fileName);
     }
 
-    private boolean isFailingTestFile(final File fileName) {
-        return fileName.getName().startsWith("failing-test-")
-                && fileName.getName().endsWith(".input");
+    private boolean isLexerFailingTestFile(final File fileName) {
+        return fileName.getName().startsWith("fail-lex-")
+                && isTestFile(fileName);
     }
 
     protected String readfromFile(final File file) throws IOException {
