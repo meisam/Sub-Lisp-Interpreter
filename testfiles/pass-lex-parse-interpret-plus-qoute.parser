@@ -1,0 +1,16 @@
+LeafNode
+LiteralAtom[PLUS]
+InternalNode
+< >
+LeafNode
+NumericAtom[5]
+InternalNode
+< >
+LeafNode
+NumericAtom[6]
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+NumericAtom[5]

@@ -51,7 +51,7 @@ public class Interpreter {
     }
 
     public void interpret() {
-        this.parser.parse();
+        this.parser.parseNextSExpresion();
     }
 
 }

@@ -22,7 +22,7 @@ package edu.osu.cse.meisam.interpreter.tokens;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class NumericAtom extends Atom {
+public final class NumericAtom extends Atom {
 
     /**
      * Constructs a number representing the given lexval
@@ -33,4 +33,36 @@ public class NumericAtom extends Atom {
         super(lexval);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof NumericAtom)) {
+            return false;
+        }
+        final NumericAtom numericAtom = (NumericAtom) obj;
+        if ((getLexval() == null) && (numericAtom.getLexval() == null)) {
+            return true;
+        }
+        return (getLexval() != null)
+                && (getLexval().equals(numericAtom.getLexval()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        if (getLexval() == null) {
+            return 0;
+        } else {
+            return getLexval().hashCode();
+        }
+    }
 }

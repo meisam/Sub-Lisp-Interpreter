@@ -1,0 +1,26 @@
+LeafNode
+LiteralAtom[CAR]
+InternalNode
+< >
+LeafNode
+LiteralAtom[QUOTE]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+<.>
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
