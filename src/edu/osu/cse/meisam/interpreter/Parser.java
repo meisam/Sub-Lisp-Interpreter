@@ -59,6 +59,7 @@ public class Parser {
      */
     public Parser(final Lexer lexer) {
         this.lexer = lexer;
+        this.parseTree = null;
     }
 
     /**
@@ -77,8 +78,9 @@ public class Parser {
     }
 
     public void parseNextSExpresion() {
-        this.parseTree = null;
-        this.token = this.lexer.nextToken();
+        if (this.parseTree == null) {
+            this.token = this.lexer.nextToken();
+        }
         this.parseTree = parseE();
     }
 
