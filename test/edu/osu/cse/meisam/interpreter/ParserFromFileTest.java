@@ -41,8 +41,7 @@ public class ParserFromFileTest extends TestStub {
 
     private boolean isParserFailingTestFile(final File fileName) {
         return isTestFile(fileName)
-                && (fileName.getName().startsWith("pass-lex-fail-parse-") || fileName
-                        .getName().startsWith("fail-lex-"));
+                && (fileName.getName().startsWith("pass-lex-fail-parse-"));
     }
 
     private Collection getParserPassingTestFiles() {
@@ -57,15 +56,51 @@ public class ParserFromFileTest extends TestStub {
         return testFiles;
     }
 
+    private Collection getParserFailingTestFiles() {
+        final File[] allFiles = getFiles(TestStub.TEST_DIR);
+        final Vector testFiles = new Vector(allFiles.length / 2);
+
+        for (int i = 0; i < allFiles.length; i++) {
+            if (isParserFailingTestFile(allFiles[i])) {
+                testFiles.add(allFiles[i]);
+            }
+        }
+        return testFiles;
+    }
+
     public void testParserByPassingTests() {
         final Collection testFiles = getParserPassingTestFiles();
         for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
             final File testFile = (File) iterator.next();
-            verifyAllTokens(testFile);
+            verifyAllNodes(testFile);
         }
     }
 
-    private void verifyAllTokens(final File testFile) {
+    public void testParserByFailingTests() {
+        final Collection testFiles = getParserFailingTestFiles();
+        for (final Iterator iterator = testFiles.iterator(); iterator.hasNext();) {
+            final File testFile = (File) iterator.next();
+            try {
+                final String fileContent = readfromFile(testFile);
+                final InputProvider inputProvider = new StringInputProvider(
+                        fileContent);
+                final Lexer lexer = new Lexer(inputProvider);
+                final Parser parser = new Parser(lexer);
+
+                try {
+                    parser.parseNextSExpresion();
+                    Assert.fail(testFile + " should've faild, but it didn't ");
+                } catch (final ParserException e) {
+                    // good job
+                }
+            } catch (final IOException e) {
+                fail("When testing " + testFile + ", " + e.getMessage());
+            }
+
+        }
+    }
+
+    private void verifyAllNodes(final File testFile) {
         try {
             final String fileContent = readfromFile(testFile);
             final InputProvider inputProvider = new StringInputProvider(
@@ -89,13 +124,13 @@ public class ParserFromFileTest extends TestStub {
                     final String nodeType = reader.readLine();
                     line++;
                     Assert.assertEquals(testFile.getName() + ":" + line,
-                            nodeType, infixOrderNodes[i].getClass()
-                                    .getSimpleName());
+                            infixOrderNodes[i].getClass().getSimpleName(),
+                            nodeType);
 
                     final String nodeVal = reader.readLine();
                     line++;
                     Assert.assertEquals(testFile.getName() + "@ Line " + line,
-                            nodeVal, infixOrderNodes[i].toString());
+                            infixOrderNodes[i].toString(), nodeVal);
                 }
                 reader.close();
 
@@ -104,7 +139,7 @@ public class ParserFromFileTest extends TestStub {
             }
 
         } catch (final IOException e) {
-            fail(e.getMessage());
+            fail("When testing " + testFile + ", " + e.getMessage());
         }
     }
 
