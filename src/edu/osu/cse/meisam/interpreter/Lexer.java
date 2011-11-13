@@ -45,11 +45,6 @@ public class Lexer {
         this.tokenCounter = 0;
     }
 
-    public boolean hasMoreTokens() {
-        removeWhitespace();
-        return this.in.hasMore();
-    }
-
     public Token nextToken() {
         if (this.tokenCounter++ > Lexer.MAX_INPUT_SIZE) {
             throw new LexerExeption(
