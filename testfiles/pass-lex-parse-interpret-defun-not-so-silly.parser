@@ -1,0 +1,174 @@
+LeafNode
+LiteralAtom[DEFUN]
+InternalNode
+< >
+LeafNode
+LiteralAtom[NOTSOSILLY]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[COND]
+InternalNode
+< >
+LeafNode
+LiteralAtom[EQ]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+NumericAtom[0]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[PLUS]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+LeafNode
+NumericAtom[1]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[EQ]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+LeafNode
+NumericAtom[0]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[NOTSOSILLY]
+InternalNode
+< >
+LeafNode
+LiteralAtom[MINUS]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+NumericAtom[1]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+NumericAtom[1]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[T]
+InternalNode
+< >
+LeafNode
+LiteralAtom[NOTSOSILLY]
+InternalNode
+< >
+LeafNode
+LiteralAtom[MINUS]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+NumericAtom[1]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[NOTSOSILLY]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+LiteralAtom[MINUS]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+LeafNode
+NumericAtom[1]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >

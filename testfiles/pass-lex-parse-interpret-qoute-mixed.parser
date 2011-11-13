@@ -1,0 +1,24 @@
+LeafNode
+LiteralAtom[QUOTE]
+InternalNode
+< >
+LeafNode
+NumericAtom[4]
+InternalNode
+<.>
+LeafNode
+LiteralAtom[A]
+InternalNode
+<.>
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >

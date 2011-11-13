@@ -1,0 +1,38 @@
+LeafNode
+LiteralAtom[DEFUN]
+InternalNode
+< >
+LeafNode
+LiteralAtom[SILLY]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+LeafNode
+LiteralAtom[PLUS]
+InternalNode
+< >
+LeafNode
+LiteralAtom[A]
+InternalNode
+< >
+LeafNode
+LiteralAtom[B]
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
+InternalNode
+< >
