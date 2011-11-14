@@ -166,8 +166,9 @@ public class Interpreter {
     }
 
     private SExpression applyT(final ParseTree params) {
-        System.out.println("Interpreter.enclosing_method()");
-        return evaluate(params);
+        assertTrue("parameters to t should be null",
+                params == InternalNode.NILL_LEAF);
+        return BooleanAtomExpression.T;
     }
 
     private SExpression applyNil(final ParseTree params) {
@@ -260,7 +261,17 @@ public class Interpreter {
         final Token token = leafNode.getToken();
         if (token instanceof NumericAtom) {
             return new NumericAtomExpression(token.getLexval());
-        } else {
+        } else if (token instanceof LiteralAtom) {
+            final LiteralAtom literalAtom = (LiteralAtom) token;
+            if (literalAtom.getLexval().equals("T")) {
+                return BooleanAtomExpression.T;
+            } else if (literalAtom.getLexval().equals("NIL")) {
+                return BooleanAtomExpression.NIL;
+            }
+
+            return new NumericAtomExpression(token.getLexval());
+        }
+        {
             this.out.println("Evaluating some leafnode");
         }
         return null;
