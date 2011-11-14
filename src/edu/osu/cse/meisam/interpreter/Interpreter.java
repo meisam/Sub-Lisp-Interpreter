@@ -57,8 +57,7 @@ public class Interpreter {
     public void interpret() {
         try {
             do {
-                this.parser.parseNextSExpresion();
-                final ParseTree parseTree = this.parser.getParseTree();
+                final ParseTree parseTree = this.parser.parseNextSExpresion();
                 if (parseTree == null) {
                     break;
                 }

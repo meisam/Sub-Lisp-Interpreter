@@ -37,6 +37,8 @@ public class Lexer {
 
     private final InputProvider in;
 
+    private Token currentToken;
+
     /**
      * 
      */
@@ -45,7 +47,14 @@ public class Lexer {
         this.tokenCounter = 0;
     }
 
-    public Token nextToken() {
+    public Token currentToken() {
+        if (this.currentToken == null) {
+            move();
+        }
+        return this.currentToken;
+    }
+
+    public void move() {
         if (this.tokenCounter++ > Lexer.MAX_INPUT_SIZE) {
             throw new LexerExeption(
                     "Input is too large to be processed, use a smaller input");
@@ -56,19 +65,22 @@ public class Lexer {
             removeWhitespace();
 
             if (!this.in.hasMore()) {
-                return new EOF();
+                this.currentToken = new EOF();
+                return;
             }
 
             final char lookaheadChar = this.in.lookaheadChar();
 
             if (isDigit(lookaheadChar) || isSign(lookaheadChar)) {
                 buffer = readNumber();
-                return new NumericAtom(buffer);
+                this.currentToken = new NumericAtom(buffer);
+                return;
             }
 
             if (isLetter(lookaheadChar)) {
                 buffer = readSymbol();
-                return new LiteralAtom(buffer);
+                this.currentToken = new LiteralAtom(buffer);
+                return;
             }
 
             if (isWhiteSpace(lookaheadChar)) {
@@ -77,17 +89,20 @@ public class Lexer {
 
             if (isOpenParentheses(lookaheadChar)) {
                 buffer = readOpenParentheses();
-                return new OpenParentheses();
+                this.currentToken = new OpenParentheses();
+                return;
             }
 
             if (isCloseParentheses(lookaheadChar)) {
                 buffer = readCloseParentheses();
-                return new CloseParentheses();
+                this.currentToken = new CloseParentheses();
+                return;
             }
 
             if (isDot(lookaheadChar)) {
                 buffer = readDot();
-                return new Dot();
+                this.currentToken = new Dot();
+                return;
             }
 
             throw new LexerExeption("Unknown Symbol in the input:"

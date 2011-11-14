@@ -35,20 +35,22 @@ import edu.osu.cse.meisam.interpreter.tokens.Token;
 public class LexerTest extends TestCase {
 
     /**
-     * Test method for {@link edu.osu.cse.meisam.interpreter.Lexer#nextToken()}.
+     * Test method for
+     * {@link edu.osu.cse.meisam.interpreter.Lexer#currentToken()}.
      */
     public void testNexTokenWithEmptyInput() {
         final InputProvider inputProvider = new StringInputProvider("");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNexTokenWithWhiteSpaceInput() {
         final InputProvider inputProvider = new StringInputProvider(" ");
         final Lexer lexer = new Lexer(inputProvider);
-
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNexTokenWithtLongWhiteSpaceInput() {
@@ -56,128 +58,144 @@ public class LexerTest extends TestCase {
                 "   \t\n  \r \n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleDigit() {
         final InputProvider inputProvider = new StringInputProvider("1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumber() {
         final InputProvider inputProvider = new StringInputProvider("000");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("000", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("000", lexer.currentToken().getLexval());
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumberEndWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("1234  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNumberStartWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("  1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithDoubleId() {
         final InputProvider inputProvider = new StringInputProvider("1234 1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof NumericAtom);
-        assertEquals("1", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleNegativeDigit() {
         final InputProvider inputProvider = new StringInputProvider("-1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSinglePositiveDigit() {
         final InputProvider inputProvider = new StringInputProvider("+1");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithPositiveNumber() {
         final InputProvider inputProvider = new StringInputProvider("+1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithNegativeNumber() {
         final InputProvider inputProvider = new StringInputProvider("-1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSpacePositiveNumber() {
         final InputProvider inputProvider = new StringInputProvider(" +1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSpaceNegativeNumber() {
         final InputProvider inputProvider = new StringInputProvider(" -1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithMultiSpacePositiveNumber() {
@@ -185,11 +203,12 @@ public class LexerTest extends TestCase {
                 " \t\n\r +1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithMultiSpaceNegativeNumber() {
@@ -197,11 +216,12 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1234", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithTwoSignedNumber() {
@@ -209,15 +229,16 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234   \t\n\r  +999");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1234", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof NumericAtom);
-        assertEquals("999", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("999", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithTwoNumber() {
@@ -225,74 +246,80 @@ public class LexerTest extends TestCase {
                 " \t\n\r -1234   \t\n\r  999");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("-1234", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("-1234", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof NumericAtom);
-        assertEquals("999", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("999", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleLetter() {
         final InputProvider inputProvider = new StringInputProvider("A");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("A", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleId() {
         final InputProvider inputProvider = new StringInputProvider("ABC");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("ABC", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("ABC", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleIdEndWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("A  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("A", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithSingleIdStartWhiteSpace() {
         final InputProvider inputProvider = new StringInputProvider("  ABC");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("ABC", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("ABC", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenWithDoubleNumbers() {
         final InputProvider inputProvider = new StringInputProvider("ABC A");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("ABC", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("ABC", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LiteralAtom);
-        assertEquals("A", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenInvalidNumberId() {
@@ -300,7 +327,7 @@ public class LexerTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
 
         try {
-            lexer.nextToken();
+            lexer.move();
         } catch (final LexerExeption e) {
             Assert.assertTrue(e.getMessage().contains("42A"));
         }
@@ -311,7 +338,7 @@ public class LexerTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
 
         try {
-            lexer.nextToken();
+            lexer.move();
         } catch (final LexerExeption e) {
             Assert.assertTrue(e.getMessage().contains("A4"));
         }
@@ -323,7 +350,7 @@ public class LexerTest extends TestCase {
         final Lexer lexer = new Lexer(inputProvider);
 
         try {
-            lexer.nextToken();
+            lexer.move();
         } catch (final LexerExeption e) {
             Assert.assertTrue(e.getMessage().contains("A4"));
         }
@@ -333,30 +360,32 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("  A   1  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof LiteralAtom);
-        assertEquals("A", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof NumericAtom);
-        assertEquals("1", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenNumberId() {
         final InputProvider inputProvider = new StringInputProvider("  1   A  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token first = lexer.nextToken();
-        Assert.assertTrue(first instanceof NumericAtom);
-        assertEquals("1", first.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
 
-        final Token second = lexer.nextToken();
-        Assert.assertTrue(second instanceof LiteralAtom);
-        assertEquals("A", second.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenIdNumberNTimes() {
@@ -364,46 +393,48 @@ public class LexerTest extends TestCase {
                 "  A   1 AAA 123 CCC BBB 111 000  ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LiteralAtom);
-        assertEquals("A", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("A", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof NumericAtom);
-        assertEquals("1", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("1", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LiteralAtom);
-        assertEquals("AAA", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("AAA", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof NumericAtom);
-        assertEquals("123", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("123", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LiteralAtom);
-        assertEquals("CCC", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("CCC", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof LiteralAtom);
-        assertEquals("BBB", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof LiteralAtom);
+        assertEquals("BBB", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof NumericAtom);
-        assertEquals("111", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("111", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof NumericAtom);
-        assertEquals("000", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof NumericAtom);
+        assertEquals("000", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenPlusOperation() {
         final InputProvider inputProvider = new StringInputProvider("+");
         final Lexer lexer = new Lexer(inputProvider);
         try {
-            lexer.nextToken();
+            lexer.move();
+            lexer.currentToken();
             Assert.fail("Lexer should have reported error");
         } catch (final LexerExeption e) {
         }
@@ -413,7 +444,8 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("+ ");
         final Lexer lexer = new Lexer(inputProvider);
         try {
-            lexer.nextToken();
+            lexer.move();
+            lexer.currentToken();
             Assert.fail("Lexer should have reported error");
         } catch (final LexerExeption e) {
         }
@@ -423,7 +455,8 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("+ \n\r\t");
         final Lexer lexer = new Lexer(inputProvider);
         try {
-            lexer.nextToken();
+            lexer.move();
+            lexer.currentToken();
             Assert.fail("Lexer should have reported error");
         } catch (final LexerExeption e) {
         }
@@ -433,7 +466,8 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider(" +");
         final Lexer lexer = new Lexer(inputProvider);
         try {
-            lexer.nextToken();
+            lexer.move();
+            lexer.currentToken();
             Assert.fail("Lexer should have reported error");
         } catch (final LexerExeption e) {
         }
@@ -443,66 +477,72 @@ public class LexerTest extends TestCase {
         final InputProvider inputProvider = new StringInputProvider("(");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof OpenParentheses);
-        assertEquals("(", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof OpenParentheses);
+        assertEquals("(", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParentheses() {
         final InputProvider inputProvider = new StringInputProvider(")");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof CloseParentheses);
-        assertEquals(")", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof CloseParentheses);
+        assertEquals(")", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesSpace() {
         final InputProvider inputProvider = new StringInputProvider("( ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof OpenParentheses);
-        assertEquals("(", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof OpenParentheses);
+        assertEquals("(", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesSpace() {
         final InputProvider inputProvider = new StringInputProvider(") ");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof CloseParentheses);
-        assertEquals(")", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof CloseParentheses);
+        assertEquals(")", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesSpaces() {
         final InputProvider inputProvider = new StringInputProvider("( \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof OpenParentheses);
-        assertEquals("(", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof OpenParentheses);
+        assertEquals("(", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesSpaces() {
         final InputProvider inputProvider = new StringInputProvider(") \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof CloseParentheses);
-        assertEquals(")", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof CloseParentheses);
+        assertEquals(")", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenSpacesOpenParenthesesSpaces() {
@@ -510,11 +550,12 @@ public class LexerTest extends TestCase {
                 " \t\n\r ( \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof OpenParentheses);
-        assertEquals("(", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof OpenParentheses);
+        assertEquals("(", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenSpacesCloseParenthesesSpaces() {
@@ -522,83 +563,96 @@ public class LexerTest extends TestCase {
                 " \t\n\r ) \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof CloseParentheses);
-        assertEquals(")", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof CloseParentheses);
+        assertEquals(")", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenOpenParenthesesTwo() {
         final InputProvider inputProvider = new StringInputProvider("((");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Token currentToken = lexer.nextToken();
+        lexer.move();
+        Token currentToken = lexer.currentToken();
         Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        currentToken = lexer.nextToken();
+        lexer.move();
+        currentToken = lexer.currentToken();
         Assert.assertTrue(currentToken instanceof OpenParentheses);
         assertEquals("(", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenCloseParenthesesTwo() {
         final InputProvider inputProvider = new StringInputProvider("))");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Token currentToken = lexer.nextToken();
+        lexer.move();
+        Token currentToken = lexer.currentToken();
         Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        currentToken = lexer.nextToken();
+        lexer.move();
+        currentToken = lexer.currentToken();
         Assert.assertTrue(currentToken instanceof CloseParentheses);
         assertEquals(")", currentToken.getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenDot() {
         final InputProvider inputProvider = new StringInputProvider(".");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenDotSpace() {
         final InputProvider inputProvider = new StringInputProvider(". ");
         final Lexer lexer = new Lexer(inputProvider);
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
+
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenDotMultiSpace() {
         final InputProvider inputProvider = new StringInputProvider(". \t\n");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDot() {
         final InputProvider inputProvider = new StringInputProvider(" \t\n .");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDotMultiSpace() {
@@ -606,11 +660,12 @@ public class LexerTest extends TestCase {
                 " \t\n .  \t\n\r");
         final Lexer lexer = new Lexer(inputProvider);
 
-        final Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 
     public void testNextTokenMultiSpaceDotMultiSpaceDot() {
@@ -618,14 +673,15 @@ public class LexerTest extends TestCase {
                 " \t\n .  \t\n\r . \t\r\n");
         final Lexer lexer = new Lexer(inputProvider);
 
-        Token currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        currentToken = lexer.nextToken();
-        Assert.assertTrue(currentToken instanceof Dot);
-        assertEquals(".", currentToken.getLexval());
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof Dot);
+        assertEquals(".", lexer.currentToken().getLexval());
 
-        Assert.assertTrue(lexer.nextToken() instanceof EOF);
+        lexer.move();
+        Assert.assertTrue(lexer.currentToken() instanceof EOF);
     }
 }

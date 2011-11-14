@@ -21,6 +21,7 @@ package edu.osu.cse.meisam.interpreter;
 import edu.osu.cse.meisam.interpreter.tokens.Atom;
 import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
 import edu.osu.cse.meisam.interpreter.tokens.Dot;
+import edu.osu.cse.meisam.interpreter.tokens.EOF;
 import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
 import edu.osu.cse.meisam.interpreter.tokens.Token;
 
@@ -48,46 +49,21 @@ public class Parser {
     private final Lexer lexer;
 
     /**
-     * Current token
-     */
-    private Token token;
-
-    private ParseTree parseTree;
-
-    /**
      * @param lexer
      */
     public Parser(final Lexer lexer) {
         this.lexer = lexer;
-        this.parseTree = null;
+        this.lexer.move();
     }
 
-    /**
-     * @return the parseTree
-     */
-    public ParseTree getParseTree() {
-        return this.parseTree;
-    }
-
-    private void move() {
-        this.token = this.lexer.nextToken();
-    }
-
-    public boolean hasMoreSExpression() {
-        return this.lexer.hasMoreTokens();
-    }
-
-    public void parseNextSExpresion() {
-        if (this.parseTree == null) {
-            this.token = this.lexer.nextToken();
-        }
-        this.parseTree = parseE();
+    public ParseTree parseNextSExpresion() {
+        return parseE();
     }
 
     private ParseTree parseE() {
-        if (this.token instanceof Atom) {
+        if (this.lexer.currentToken() instanceof Atom) {
             return parseAtom();
-        } else if (this.token instanceof OpenParentheses) {
+        } else if (this.lexer.currentToken() instanceof OpenParentheses) {
             parseOpenParentheses();
             final InternalNode x = parseX();
             final ParseTree leftParseTree = x.getLeftTree();
@@ -97,18 +73,20 @@ public class Parser {
                     .hasDotedParent());
             return new InternalNode(leftParseTree, rightParseTree,
                     shouldbeDoted);
-        } else { // error
-            return raiseParserError("an Atom or an OpenParentheses", this.token
-                    .getClass().getSimpleName());
+        } else if (this.lexer.currentToken() instanceof EOF) {
+            return null;
+        } else {// error
+            return raiseParserError("an Atom or an OpenParentheses", this.lexer
+                    .currentToken().getClass().getSimpleName());
         }
     }
 
     private InternalNode parseX() {
-        if (this.token instanceof CloseParentheses) {
+        if (this.lexer.currentToken() instanceof CloseParentheses) {
             parseCloseParentheses();
             return InternalNode.NILL_LEAF;
-        } else if ((this.token instanceof OpenParentheses)
-                || (this.token instanceof Atom)) { // head of E
+        } else if ((this.lexer.currentToken() instanceof OpenParentheses)
+                || (this.lexer.currentToken() instanceof Atom)) { // head of E
             final ParseTree leftParseTree = parseE();
             final ParseTree rightParseTree = parseY();
             final boolean shouldbeDoted = (rightParseTree != null)
@@ -118,86 +96,86 @@ public class Parser {
         } else { // error
             return raiseParserError(
                     "a CloseParentheses or an OpenParentheses or an Atom",
-                    this.token.getClass().getSimpleName());
+                    this.lexer.currentToken().getClass().getSimpleName());
         }
     }
 
     private ParseTree parseY() {
-        if (this.token instanceof Dot) {
+        if (this.lexer.currentToken() instanceof Dot) {
             parseDot();
             final ParseTree parseTree = parseE();
             parseTree.setParentDoted(); // vitally important
             parseCloseParentheses();
             return parseTree;
-        } else if ((this.token instanceof OpenParentheses)
-                || (this.token instanceof CloseParentheses)
-                || (this.token instanceof Atom)) {
+        } else if ((this.lexer.currentToken() instanceof OpenParentheses)
+                || (this.lexer.currentToken() instanceof CloseParentheses)
+                || (this.lexer.currentToken() instanceof Atom)) {
             final InternalNode parseTree = parseR();
             parseCloseParentheses();
             return parseTree;
         } else {
             return raiseParserError(
                     "a Dot or a CloseParentheses or an OpenParentheses or an Atom",
-                    this.token.getClass().getSimpleName());
+                    this.lexer.currentToken().getClass().getSimpleName());
         }
     }
 
     private InternalNode parseR() {
-        if ((this.token instanceof Atom)
-                || (this.token instanceof OpenParentheses)) {
+        if ((this.lexer.currentToken() instanceof Atom)
+                || (this.lexer.currentToken() instanceof OpenParentheses)) {
             final ParseTree leftParseTree = parseE();
             final ParseTree rightParseTree = parseR();
             return new InternalNode(leftParseTree, rightParseTree,
                     rightParseTree.hasDotedParent());
-        } else if (this.token instanceof CloseParentheses) {
+        } else if (this.lexer.currentToken() instanceof CloseParentheses) {
             return InternalNode.NILL_LEAF;
         } else {
-            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE, this.token
-                    .getClass().getSimpleName());
+            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE, this.lexer
+                    .currentToken().getClass().getSimpleName());
         }
     }
 
     private ParseTree parseAtom() {
-        if (this.token instanceof Atom) {
-            final Token currentToken = this.token;
-            move();
+        if (this.lexer.currentToken() instanceof Atom) {
+            final Token currentToken = this.lexer.currentToken();
+            this.lexer.move();
             return new LeafNode(currentToken);
         } else {
-            return raiseParserError("an Atom", this.token.getClass()
-                    .getSimpleName());
+            return raiseParserError("an Atom", this.lexer.currentToken()
+                    .getClass().getSimpleName());
         }
     }
 
     private ParseTree parseOpenParentheses() {
-        if (this.token instanceof OpenParentheses) {
-            final Token currentToken = this.token;
-            move();
+        if (this.lexer.currentToken() instanceof OpenParentheses) {
+            final Token currentToken = this.lexer.currentToken();
+            this.lexer.move();
             return new LeafNode(currentToken);
         } else {
-            return raiseParserError("an OpenParentheses", this.token.getClass()
-                    .getSimpleName());
+            return raiseParserError("an OpenParentheses", this.lexer
+                    .currentToken().getClass().getSimpleName());
         }
     }
 
     private ParseTree parseCloseParentheses() {
-        if (this.token instanceof CloseParentheses) {
-            final Token currentToken = this.token;
-            move();
+        if (this.lexer.currentToken() instanceof CloseParentheses) {
+            final Token currentToken = this.lexer.currentToken();
+            this.lexer.move();
             return new LeafNode(currentToken);
         } else {
-            return raiseParserError("a CloseParentheses", this.token.getClass()
-                    .getSimpleName());
+            return raiseParserError("a CloseParentheses", this.lexer
+                    .currentToken().getClass().getSimpleName());
         }
     }
 
     private ParseTree parseDot() {
-        if (this.token instanceof Dot) {
-            final Token currentToken = this.token;
-            move();
+        if (this.lexer.currentToken() instanceof Dot) {
+            final Token currentToken = this.lexer.currentToken();
+            this.lexer.move();
             return new LeafNode(currentToken);
         } else {
-            return raiseParserError("a Dot", this.token.getClass()
-                    .getSimpleName());
+            return raiseParserError("a Dot", this.lexer.currentToken()
+                    .getClass().getSimpleName());
         }
     }
 

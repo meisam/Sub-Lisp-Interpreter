@@ -88,7 +88,14 @@ public class ParserFromFileTest extends TestStub {
                 final Parser parser = new Parser(lexer);
 
                 try {
-                    parser.parseNextSExpresion();
+                    ParseTree sExpresion = null;
+                    sExpresion = parser.parseNextSExpresion();
+                    Assert.assertFalse(testFile
+                            + " should've faild, but it didn't ",
+                            sExpresion == null);
+                    do {
+                        sExpresion = parser.parseNextSExpresion();
+                    } while (sExpresion != null);
                     Assert.fail(testFile + " should've faild, but it didn't ");
                 } catch (final ParserException e) {
                     // good job
@@ -108,8 +115,7 @@ public class ParserFromFileTest extends TestStub {
             final Lexer lexer = new Lexer(inputProvider);
             final Parser parser = new Parser(lexer);
 
-            parser.parseNextSExpresion();
-            final ParseTree parseTree = parser.getParseTree();
+            final ParseTree parseTree = parser.parseNextSExpresion();
 
             final ParseTree[] infixOrderNodes = infixOrder(parseTree);
             try {
