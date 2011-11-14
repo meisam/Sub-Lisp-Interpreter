@@ -17,8 +17,10 @@
  */
 package edu.osu.cse.meisam.interpreter;
 
-import java.io.InputStream;
 import java.io.PrintStream;
+
+import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
+import edu.osu.cse.meisam.interpreter.tokens.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -29,9 +31,11 @@ public class Interpreter {
     private final InputProvider in;
     private final Lexer lexer;
     private final Parser parser;
+    private final PrintStream out;
 
-    public Interpreter(final InputStream in, final PrintStream out) {
-        this.in = new InputStreamProvider(in);
+    public Interpreter(final InputProvider in, final PrintStream out) {
+        this.out = out;
+        this.in = in;
         this.lexer = new Lexer(this.in);
         this.parser = new Parser(this.lexer);
     }
@@ -41,8 +45,8 @@ public class Interpreter {
      */
     public static void main(final String[] args) {
         try {
-            final Interpreter interpreter = new Interpreter(System.in,
-                    System.out);
+            final Interpreter interpreter = new Interpreter(
+                    new InputStreamProvider(System.in), System.out);
             interpreter.interpret();
         } catch (final Exception ex) {
             System.out.println("Error: " + ex.getMessage());
@@ -51,7 +55,43 @@ public class Interpreter {
     }
 
     public void interpret() {
-        this.parser.parseNextSExpresion();
+        try {
+            do {
+                final ParseTree parseTree = this.parser.parseNextSExpresion();
+                if (parseTree == null) {
+                    break;
+                }
+                evaluate(parseTree);
+            } while (true);
+        } catch (final Exception e) {
+            this.out.append("ERROR: " + e.getMessage());
+        }
+    }
+
+    private void evaluate(final ParseTree parseTree) {
+        if (parseTree instanceof LeafNode) {
+            evaluateNode((LeafNode) parseTree);
+        } else if (parseTree instanceof InternalNode) {
+            final InternalNode internalNode = (InternalNode) parseTree;
+            if (internalNode.getLeftTree() != null) {
+                evaluate(internalNode.getLeftTree());
+            }
+            if (internalNode.getRightTree() != null) {
+                evaluate(internalNode.getRightTree());
+            }
+            if ((internalNode.getLeftTree() == null)
+                    && (internalNode.getRightTree() == null)) {
+                System.out.println("NIL");
+            }
+        }
+    }
+
+    private void evaluateNode(final LeafNode leafNode) {
+        final Token token = leafNode.getToken();
+        if (token instanceof NumericAtom) {
+            System.out.println(token.getLexval());
+        }
+
     }
 
 }
