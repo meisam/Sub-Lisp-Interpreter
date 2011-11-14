@@ -88,7 +88,8 @@ public class LexerFromFileTest extends TestStub {
                 Token token = null;
                 int line = 0;
                 do {
-                    token = lexer.nextToken();
+                    lexer.move();
+                    token = lexer.currentToken();
                     if (token instanceof EOF) {
                         break;
                     }
@@ -170,7 +171,8 @@ public class LexerFromFileTest extends TestStub {
     private void passOverAllTokens(final Lexer lexer) {
         Token token = null;
         do {
-            token = lexer.nextToken();
+            token = lexer.currentToken();
+            lexer.move();
         } while (!(token instanceof EOF));
     }
 
