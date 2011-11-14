@@ -20,8 +20,8 @@ package edu.osu.cse.meisam.interpreter;
 import java.io.PrintStream;
 
 import edu.osu.cse.meisam.interpreter.esxpression.BinaryExpression;
+import edu.osu.cse.meisam.interpreter.esxpression.BooleanAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.LeafExpression;
-import edu.osu.cse.meisam.interpreter.esxpression.NilAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.NumericAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.SExpression;
 import edu.osu.cse.meisam.interpreter.tokens.Atom;
@@ -165,148 +165,91 @@ public class Interpreter {
         return null;
     }
 
-    private SExpression applyT(final ParseTree rightTree) {
+    private SExpression applyT(final ParseTree params) {
         System.out.println("Interpreter.enclosing_method()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyNil(final ParseTree rightTree) {
+    private SExpression applyNil(final ParseTree params) {
         System.out.println("Interpreter.applyNil()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyCar(final ParseTree rightTree) {
+    private SExpression applyCar(final ParseTree params) {
         System.out.println("Interpreter.applyCar()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyCdr(final ParseTree rightTree) {
+    private SExpression applyCdr(final ParseTree params) {
         System.out.println("Interpreter.applyCdr()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyCons(final ParseTree rightTree) {
+    private SExpression applyCons(final ParseTree params) {
         System.out.println("Interpreter.applyCons()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyAtom(final ParseTree rightTree) {
+    private SExpression applyAtom(final ParseTree params) {
         System.out.println("Interpreter.applyAtom()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyEq(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyEq()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyEq(final ParseTree params) {
+        return applyAritmeticOperation(params, "EQ");
     }
 
-    private SExpression applyNull(final ParseTree rightTree) {
+    private SExpression applyNull(final ParseTree params) {
         System.out.println("Interpreter.applyNull()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyInt(final ParseTree rightTree) {
+    private SExpression applyInt(final ParseTree params) {
         System.out.println("Interpreter.applyInt()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
     private SExpression applyPlus(final ParseTree params) {
-        assertTrue("Looking for a list of two ints in front of PLUS",
-                params instanceof InternalNode);
-
-        final InternalNode paramsTree = (InternalNode) params;
-        final ParseTree firstParam = paramsTree.getLeftTree();
-        assertTrue("list of parameters to plus has less that two elements",
-                firstParam != InternalNode.NILL_LEAF);
-
-        final ParseTree tailParams = paramsTree.getRightTree();
-        assertTrue("Parameters to the plus are invalid",
-                tailParams instanceof InternalNode);
-        final InternalNode tailParamTree = (InternalNode) tailParams;
-
-        final ParseTree secondParam = tailParamTree.getLeftTree();
-        assertTrue("list of parameters to plus has less that two elements",
-                secondParam != InternalNode.NILL_LEAF);
-
-        final ParseTree nilParamTree = tailParamTree.getRightTree();
-        assertTrue("list of parameters to plus has more than two elements",
-                nilParamTree == InternalNode.NILL_LEAF);
-
-        final SExpression evaluatedFirstParam = evaluate(firstParam);
-        final SExpression evaluatedSecondParam = evaluate(secondParam);
-
-        assertTrue("First param should evaluate to a number",
-                evaluatedFirstParam instanceof NumericAtomExpression);
-        assertTrue("Second param should evaluate to a number",
-                evaluatedSecondParam instanceof NumericAtomExpression);
-
-        final NumericAtomExpression firstNumber = (NumericAtomExpression) evaluatedFirstParam;
-        final NumericAtomExpression secondNumber = (NumericAtomExpression) evaluatedSecondParam;
-        return new NumericAtomExpression(firstNumber.getVal()
-                + secondNumber.getVal());
+        return applyAritmeticOperation(params, "PLUS");
     }
 
-    private SExpression applyMinus(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyMinus()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyMinus(final ParseTree params) {
+        return applyAritmeticOperation(params, "MINUS");
     }
 
-    private SExpression applyTimes(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyTimes()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyTimes(final ParseTree params) {
+        return applyAritmeticOperation(params, "TIMES");
     }
 
-    private SExpression applyQoutient(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyQoutient()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyQoutient(final ParseTree params) {
+        return applyAritmeticOperation(params, "QUOTIENT");
     }
 
-    private SExpression applyRemainder(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyRemainder()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyRemainder(final ParseTree params) {
+        return applyAritmeticOperation(params, "REMAINDER");
     }
 
-    private SExpression applyLess(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyLess()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyLess(final ParseTree params) {
+        return applyAritmeticOperation(params, "LESS");
     }
 
-    private SExpression applyGreater(final ParseTree rightTree) {
-        System.out.println("Interpreter.applyGreater()");
-        evaluate(rightTree);
-        return null;
+    private SExpression applyGreater(final ParseTree params) {
+        return applyAritmeticOperation(params, "GREATER");
     }
 
-    private SExpression applyCond(final ParseTree rightTree) {
+    private SExpression applyCond(final ParseTree params) {
         System.out.println("Interpreter.applyCond()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyQuote(final ParseTree rightTree) {
+    private SExpression applyQuote(final ParseTree params) {
         System.out.println("Interpreter.applyQuote()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
-    private SExpression applyDefun(final ParseTree rightTree) {
+    private SExpression applyDefun(final ParseTree params) {
         System.out.println("Interpreter.applyDefun()");
-        evaluate(rightTree);
-        return null;
+        return evaluate(params);
     }
 
     /**
@@ -321,6 +264,75 @@ public class Interpreter {
             this.out.println("Evaluating some leafnode");
         }
         return null;
+    }
+
+    private SExpression applyAritmeticOperation(final ParseTree params,
+            final String operationName) {
+        assertTrue("Looking for a list of two ints in front of "
+                + operationName, params instanceof InternalNode);
+
+        final InternalNode paramsTree = (InternalNode) params;
+        final ParseTree firstParam = paramsTree.getLeftTree();
+        assertTrue("list of parameters to " + operationName
+                + " has less that two elements",
+                firstParam != InternalNode.NILL_LEAF);
+
+        final ParseTree tailParams = paramsTree.getRightTree();
+        assertTrue("Parameters to " + operationName + " are invalid",
+                tailParams instanceof InternalNode);
+        final InternalNode tailParamTree = (InternalNode) tailParams;
+
+        final ParseTree secondParam = tailParamTree.getLeftTree();
+        assertTrue("list of parameters to " + operationName
+                + " has more that two elements",
+                secondParam != InternalNode.NILL_LEAF);
+
+        final ParseTree nilParamTree = tailParamTree.getRightTree();
+        assertTrue("list of parameters to " + operationName
+                + " has more than two elements",
+                nilParamTree == InternalNode.NILL_LEAF);
+
+        final SExpression evaluatedFirstParam = evaluate(firstParam);
+        final SExpression evaluatedSecondParam = evaluate(secondParam);
+
+        assertTrue("First param of " + operationName
+                + " should evaluate to a number in ",
+                evaluatedFirstParam instanceof NumericAtomExpression);
+        assertTrue("Second param of " + operationName
+                + " should evaluate to a number",
+                evaluatedSecondParam instanceof NumericAtomExpression);
+
+        final NumericAtomExpression firstNumber = (NumericAtomExpression) evaluatedFirstParam;
+        final NumericAtomExpression secondNumber = (NumericAtomExpression) evaluatedSecondParam;
+
+        if (operationName.equals("PLUS")) {
+            return new NumericAtomExpression(firstNumber.getVal()
+                    + secondNumber.getVal());
+        } else if (operationName.equals("MINUS")) {
+            return new NumericAtomExpression(firstNumber.getVal()
+                    - secondNumber.getVal());
+        } else if (operationName.equals("TIMES")) {
+            return new NumericAtomExpression(firstNumber.getVal()
+                    * secondNumber.getVal());
+        } else if (operationName.equals("QUOTIENT")) {
+            return new NumericAtomExpression(firstNumber.getVal()
+                    / secondNumber.getVal());
+        } else if (operationName.equals("REMAINDER")) {
+            return new NumericAtomExpression(firstNumber.getVal()
+                    % secondNumber.getVal());
+        } else if (operationName.equals("EQ")) {
+            return firstNumber.getVal() == secondNumber.getVal() ? BooleanAtomExpression.T
+                    : BooleanAtomExpression.NIL;
+        } else if (operationName.equals("LESS")) {
+            return firstNumber.getVal() < secondNumber.getVal() ? BooleanAtomExpression.T
+                    : BooleanAtomExpression.NIL;
+        } else if (operationName.equals("GREATER")) {
+            return firstNumber.getVal() > secondNumber.getVal() ? BooleanAtomExpression.T
+                    : BooleanAtomExpression.NIL;
+        } else {
+            return raiseInterpreterException(operationName
+                    + " is not a know Operation");
+        }
     }
 
     /**
@@ -364,14 +376,14 @@ public class Interpreter {
 
     private void prettyPrintList(final SExpression expression) {
         this.out.print("(");
-        if (expression instanceof NilAtomExpression) {
+        if (expression == BooleanAtomExpression.NIL) {
             this.out.print(")");
         } else if (expression instanceof BinaryExpression) {
             BinaryExpression list = null;
             do {
                 list = (BinaryExpression) expression;
                 this.out.print(list.getHead());
-                if (list.getTail() instanceof NilAtomExpression) {
+                if (list.getTail() == BooleanAtomExpression.NIL) {
                     break;
                 }
                 list = (BinaryExpression) list.getTail();
