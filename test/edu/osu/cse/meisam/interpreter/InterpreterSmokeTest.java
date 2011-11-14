@@ -17,7 +17,13 @@ public class InterpreterSmokeTest extends TestCase {
         interpreter.interpret();
     }
 
-    public void testInterpret() {
+    public void testPlusExpresion() {
+        final StringInputProvider in = new StringInputProvider("(Plus 3 4)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+    }
+
+    public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);
         interpreter.interpret();

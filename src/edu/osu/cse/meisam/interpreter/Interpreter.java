@@ -112,7 +112,8 @@ public class Interpreter {
         AssertTrue("leafnode is null", leafNode != null);
         final Token token = leafNode.getToken();
         AssertTrue("token in the leaf node is null", token != null);
-        AssertTrue(token + "is not an Atom", token instanceof LiteralAtom);
+        AssertTrue(token.getLexval() + " is not a LiteralAtom",
+                token instanceof LiteralAtom);
         final Atom atom = (LiteralAtom) token;
         final String lexval = atom.getLexval();
         if (lexval.equals("T")) {

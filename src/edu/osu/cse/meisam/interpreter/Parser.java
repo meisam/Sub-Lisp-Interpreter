@@ -41,8 +41,6 @@ import edu.osu.cse.meisam.interpreter.tokens.Token;
  */
 public class Parser {
 
-    private static final String DEFAULT_ERROR_MESSAGE = "Input is not a valid lisp program";
-
     /**
      * 
      */
@@ -130,7 +128,7 @@ public class Parser {
         } else if (this.lexer.currentToken() instanceof CloseParentheses) {
             return InternalNode.NILL_LEAF;
         } else {
-            return raiseParserError(Parser.DEFAULT_ERROR_MESSAGE, this.lexer
+            return raiseParserError("an Atom or a CloseParentheses", this.lexer
                     .currentToken().getClass().getSimpleName());
         }
     }
