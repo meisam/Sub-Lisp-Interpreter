@@ -50,7 +50,7 @@ public class BinaryExpression extends SExpression {
      */
     public boolean isList() {
         return (this.head instanceof LeafExpression)
-                && ((this.tail instanceof NilAtomExpression) || ((this.tail instanceof BinaryExpression) && ((BinaryExpression) this.tail)
+                && ((this.tail == BooleanAtomExpression.NIL) || ((this.tail instanceof BinaryExpression) && ((BinaryExpression) this.tail)
                         .isList()));
     }
 
