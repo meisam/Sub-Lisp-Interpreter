@@ -137,6 +137,15 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
+    public void testCondExpresion() {
+        System.out.println("InterpreterSmokeTest.testCondExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(COND ((LESS 4 3) 2) ((LESS 5 7) 9))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);
