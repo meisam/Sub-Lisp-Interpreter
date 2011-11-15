@@ -166,9 +166,7 @@ public class Interpreter {
     }
 
     private SExpression applyT(final ParseTree params) {
-        assertTrue("parameters to t should be null",
-                params == InternalNode.NILL_LEAF);
-        return BooleanAtomExpression.T;
+        return raiseInterpreterException("cannot apply T");
     }
 
     private SExpression applyNil(final ParseTree params) {
@@ -177,13 +175,25 @@ public class Interpreter {
     }
 
     private SExpression applyCar(final ParseTree params) {
-        System.out.println("Interpreter.applyCar()");
-        return evaluate(params);
+        assertTrue("CAR cannot be applied on ATOMS",
+                params instanceof InternalNode);
+        final InternalNode paramTree = (InternalNode) params;
+        assertTrue("CAR cannot be applied to empty list",
+                paramTree == InternalNode.NILL_LEAF);
+        assertTrue("CAR cannot be applied on a null tree",
+                paramTree.getLeftTree() != null);
+        return evaluate(paramTree.getLeftTree());
     }
 
     private SExpression applyCdr(final ParseTree params) {
-        System.out.println("Interpreter.applyCdr()");
-        return evaluate(params);
+        assertTrue("CDR cannot be applied on ATOMS",
+                params instanceof InternalNode);
+        final InternalNode paramTree = (InternalNode) params;
+        assertTrue("CDR cannot be applied to empty list",
+                paramTree == InternalNode.NILL_LEAF);
+        assertTrue("CDR cannot be applied on a null tree",
+                paramTree.getRightTree() != null);
+        return evaluate(paramTree.getRightTree());
     }
 
     private SExpression applyCons(final ParseTree params) {
