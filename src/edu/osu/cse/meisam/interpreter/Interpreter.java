@@ -170,8 +170,7 @@ public class Interpreter {
     }
 
     private SExpression applyNil(final ParseTree params) {
-        System.out.println("Interpreter.applyNil()");
-        return evaluate(params);
+        return raiseInterpreterException("cannot apply NIL");
     }
 
     private SExpression applyCar(final ParseTree params) {// FIXME
