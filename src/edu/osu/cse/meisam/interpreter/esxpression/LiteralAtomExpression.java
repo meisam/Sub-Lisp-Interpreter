@@ -42,7 +42,7 @@ public class LiteralAtomExpression extends LeafExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "LiteralAtomExpression [val=" + this.val + "]";
+        return this.val;
     }
 
     /**

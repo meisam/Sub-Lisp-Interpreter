@@ -189,8 +189,15 @@ public class Interpreter {
     }
 
     private SExpression applyCons(final ParseTree params) {
-        System.out.println("Interpreter.applyCons()");
-        return evaluate(params);
+        final ParseTree[] allParams = getAllParams(params, "CONS");
+        assertTrue("CONS needs two parameters", allParams.length == 2);
+        final ParseTree firstParam = allParams[0];
+        final ParseTree secondParam = allParams[1];
+
+        final SExpression evaluateFirst = evaluate(firstParam);
+        final SExpression evaluateSecond = evaluate(secondParam);
+
+        return new BinaryExpression(evaluateFirst, evaluateSecond);
     }
 
     private SExpression applyAtom(final ParseTree params) {

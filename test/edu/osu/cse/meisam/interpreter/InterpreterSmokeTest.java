@@ -178,6 +178,15 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
+    public void testConsExpresion() {
+        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(Cons 3 (Cons 5 7))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);

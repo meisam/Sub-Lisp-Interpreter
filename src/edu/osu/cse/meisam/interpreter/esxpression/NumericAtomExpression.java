@@ -61,14 +61,14 @@ public class NumericAtomExpression extends LeafExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "NumericAtomExpression [val=" + this.getVal() + "]";
+        return Integer.toString(this.val);
     }
 
     /**
      * @return the val
      */
     public int getVal() {
-        return val;
+        return this.val;
     }
 
 }

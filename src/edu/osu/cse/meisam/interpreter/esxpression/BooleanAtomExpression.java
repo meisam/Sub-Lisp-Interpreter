@@ -18,7 +18,6 @@
 
 package edu.osu.cse.meisam.interpreter.esxpression;
 
-
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
@@ -55,7 +54,11 @@ public class BooleanAtomExpression extends LeafExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "BooleanAtomExpression [val=" + this.val + "]";
+        if (this.val) {
+            return "T";
+        } else {
+            return "NIL";
+        }
     }
 
 }
