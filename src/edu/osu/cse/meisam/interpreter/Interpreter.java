@@ -18,6 +18,8 @@
 package edu.osu.cse.meisam.interpreter;
 
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.Vector;
 
 import edu.osu.cse.meisam.interpreter.esxpression.BinaryExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.BooleanAtomExpression;
@@ -257,8 +259,21 @@ public class Interpreter {
     }
 
     private SExpression applyCond(final ParseTree params) {
-        System.out.println("Interpreter.applyCond()");
-        return evaluate(params);
+        final ParseTree[] allParams = getAllParams(params, "COND");
+        assertParamsInPair(allParams, "COND");
+        for (int i = 0; i < allParams.length; i++) {
+            final ParseTree[] pairParams = getAllParams(allParams[i], "COND");
+            assertTrue("Parameters for COND are malformed",
+                    pairParams.length == 2);
+            final ParseTree conditionParam = pairParams[0];
+            final ParseTree bodyParam = pairParams[1];
+
+            final SExpression conditionResult = evaluate(conditionParam);
+            if (conditionResult == BooleanAtomExpression.T) {
+                return evaluate(bodyParam);
+            }
+        }
+        return raiseInterpreterException("None of the conditions in the COND satisfied");
     }
 
     private SExpression applyQuote(final ParseTree params) {
@@ -423,6 +438,90 @@ public class Interpreter {
         assertTrue(string + " cannot be applied on a null tree",
                 paramTree instanceof InternalNode);
         return (InternalNode) paramTree;
+    }
+
+    /**
+     * @param params
+     * @param string
+     * @return
+     */
+    private ParseTree[] getAllParams(final ParseTree params, final String string) {
+        if ((params instanceof LeafNode) || (params == InternalNode.NILL_LEAF)) {
+            raiseInterpreterException("No valid list of parameters for "
+                    + string);
+            return null; // never happens, raising exception in the prev. line
+        }
+
+        final Vector allParams = new Vector();
+        ParseTree currentParam = params;
+
+        while ((currentParam != InternalNode.NILL_LEAF)
+                && (currentParam instanceof InternalNode)) {
+            final InternalNode paramTree = (InternalNode) currentParam;
+            assertTrue("Parameters cannot be null",
+                    paramTree.getLeftTree() != null);
+            allParams.add(paramTree.getLeftTree());
+            currentParam = paramTree.getRightTree();
+        }
+
+        int i = 0;
+        final Iterator iterator = allParams.iterator();
+        final ParseTree[] allParamsArray = new ParseTree[allParams.size()];
+
+        while (iterator.hasNext()) {
+            allParamsArray[i] = (ParseTree) iterator.next();
+            i++;
+        }
+
+        return allParamsArray;
+    }
+
+    /**
+     * @param params
+     * @param string
+     */
+    private void assertParamsInPair(final ParseTree[] params,
+            final String string) {
+        for (int i = 0; i < params.length; i++) {
+            assertTrue("Invalid parameters for " + string, params[i] != null);
+            assertPair(string, params[i]);
+        }
+    }
+
+    /**
+     * @param string
+     * @param parseTree
+     */
+    private void assertPair(final String functionName, final ParseTree pair) {
+        if (pair == InternalNode.NILL_LEAF) {
+            raiseInterpreterException("Parameters for " + functionName
+                    + " should be pairs");
+        }
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                pair instanceof InternalNode);
+        final InternalNode paramTree = (InternalNode) pair;
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                paramTree.getLeftTree() != InternalNode.NILL_LEAF);
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                paramTree.getRightTree() != InternalNode.NILL_LEAF);
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                paramTree.getRightTree() instanceof InternalNode);
+
+        final InternalNode secondParam = (InternalNode) paramTree
+                .getRightTree();
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                secondParam.getLeftTree() != InternalNode.NILL_LEAF);
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                secondParam.getRightTree() == InternalNode.NILL_LEAF);
+
+        assertTrue("Parameters for " + functionName + " should be pairs",
+                secondParam.getRightTree() instanceof InternalNode);
     }
 
     /**
