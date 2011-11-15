@@ -94,14 +94,6 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
-    public void testNilExpresion() {
-        System.out.println("InterpreterSmokeTest.testTExpresion()");
-        final StringInputProvider in = new StringInputProvider("NIL");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
-    }
-
     public void testComplicatedExpresion() {
         System.out.println("InterpreterSmokeTest.testComplicatedExpresion()");
         final StringInputProvider in = new StringInputProvider(
@@ -123,6 +115,23 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println("InterpreterSmokeTest.testNullExpresion()");
         final StringInputProvider in = new StringInputProvider(
                 "(NULL (GREATER 4 1))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testIntExpresion() {
+        System.out.println("InterpreterSmokeTest.testIntExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(Int (PLUS 4 1))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testNilExpresion() {
+        System.out.println("InterpreterSmokeTest.testNilExpresion()");
+        final StringInputProvider in = new StringInputProvider("NIL");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
