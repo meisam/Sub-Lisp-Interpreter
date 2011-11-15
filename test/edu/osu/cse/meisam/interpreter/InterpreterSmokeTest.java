@@ -119,6 +119,15 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
+    public void testNullExpresion() {
+        System.out.println("InterpreterSmokeTest.testNullExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(NULL (GREATER 4 1))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);
