@@ -45,4 +45,11 @@ public class LiteralAtomExpression extends LeafExpression {
         return "LiteralAtomExpression [val=" + this.val + "]";
     }
 
+    /**
+     * @return the val
+     */
+    public String getVal() {
+        return this.val;
+    }
+
 }

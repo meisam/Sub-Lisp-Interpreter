@@ -63,8 +63,32 @@ public class InterpreterSmokeTest extends TestCase {
     }
 
     public void testEqExpresion() {
-        System.out.println("InterpreterSmokeTest.testTimesExpresion()");
+        System.out.println("InterpreterSmokeTest.testEqExpresion()");
         final StringInputProvider in = new StringInputProvider("(EQ 3 4)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testEqExpresion2() {
+        System.out.println("InterpreterSmokeTest2.testEqExpresion()");
+        final StringInputProvider in = new StringInputProvider("(EQ a b)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testEqExpresion3() {
+        System.out.println("InterpreterSmokeTest3.testEqExpresion()");
+        final StringInputProvider in = new StringInputProvider("(EQ a a)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testEqExpresion4() {
+        System.out.println("InterpreterSmokeTest4.testEqExpresion()");
+        final StringInputProvider in = new StringInputProvider("(EQ T T)");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
@@ -141,6 +165,14 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println("InterpreterSmokeTest.testCondExpresion()");
         final StringInputProvider in = new StringInputProvider(
                 "(COND ((LESS 4 3) 2) ((LESS 5 7) 9))");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testQouteExpresion() {
+        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
+        final StringInputProvider in = new StringInputProvider("(Quote (1 2)");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();

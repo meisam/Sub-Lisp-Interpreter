@@ -207,7 +207,48 @@ public class Interpreter {
     }
 
     private SExpression applyEq(final ParseTree params) {
-        return applyAritmeticOperation(params, "EQ");
+        final String operationName = "EQ";
+        assertTrue("Looking for a list of two ints in front of "
+                + operationName, params instanceof InternalNode);
+
+        final InternalNode paramsTree = (InternalNode) params;
+        final ParseTree firstParam = paramsTree.getLeftTree();
+        assertTrue("list of parameters to " + operationName
+                + " has less that two elements",
+                firstParam != InternalNode.NILL_LEAF);
+
+        final ParseTree tailParams = paramsTree.getRightTree();
+        assertTrue("Parameters to " + operationName + " are invalid",
+                tailParams instanceof InternalNode);
+        final InternalNode tailParamTree = (InternalNode) tailParams;
+
+        final ParseTree secondParam = tailParamTree.getLeftTree();
+        assertTrue("list of parameters to " + operationName
+                + " has more that two elements",
+                secondParam != InternalNode.NILL_LEAF);
+
+        final ParseTree nilParamTree = tailParamTree.getRightTree();
+        assertTrue("list of parameters to " + operationName
+                + " has more than two elements",
+                nilParamTree == InternalNode.NILL_LEAF);
+
+        if ((firstParam == InternalNode.NILL_LEAF)
+                && (secondParam == InternalNode.NILL_LEAF)) {
+            return BooleanAtomExpression.T;
+
+        } else if ((firstParam instanceof LeafNode)
+                && (secondParam instanceof LeafNode)) {
+
+            final LeafNode firstToken = (LeafNode) firstParam;
+            final Token secondToken = ((LeafNode) secondParam).getToken();
+
+            assertTrue("Invalid Arguments for EQ",
+                    ((firstToken != null) && (secondToken != null)));
+            return firstToken.getToken().equals(secondToken) ? BooleanAtomExpression.T
+                    : BooleanAtomExpression.NIL;
+        }
+
+        return BooleanAtomExpression.NIL;
     }
 
     private SExpression applyNull(final ParseTree params) {
@@ -277,8 +318,33 @@ public class Interpreter {
     }
 
     private SExpression applyQuote(final ParseTree params) {
-        System.out.println("Interpreter.applyQuote()");
-        return evaluate(params);
+        final ParseTree[] functionParams = getAllParams(params, "QUOTE");
+        assertTrue("QUOTE expects to exactly one parameter",
+                functionParams.length == 1);
+        assertTrue("QUOTE expects to exactly one parameter",
+                functionParams[0] != null);
+        if (functionParams[0] instanceof LeafNode) {
+            final LeafNode leafNode = castAsLeafNode(params, "QUOTE");
+            return evaluate(leafNode);
+        }
+
+        return recursiveQuote(functionParams[0]);
+    }
+
+    private SExpression recursiveQuote(final ParseTree parseTree) {
+        if (parseTree == InternalNode.NILL_LEAF) {
+            return BooleanAtomExpression.NIL;
+        } else if (parseTree instanceof LeafNode) {
+            return evaluate(parseTree);
+        } else if (parseTree instanceof InternalNode) {
+            final InternalNode internalNode = castAsTree(parseTree, "QUOTE");
+            final SExpression leftTreeQuote = recursiveQuote(internalNode
+                    .getLeftTree());
+            final SExpression rightTreeQuote = recursiveQuote(internalNode
+                    .getRightTree());
+            return new BinaryExpression(leftTreeQuote, rightTreeQuote);
+        }
+        return raiseInterpreterException("Invalid arguments for QUOTE");
     }
 
     private SExpression applyDefun(final ParseTree params) {
@@ -424,6 +490,20 @@ public class Interpreter {
         assertTrue("Invalid S-Expression as parameter to " + string,
                 firstParamTree.getRightTree() != null);
         return firstParamTree.getRightTree();
+    }
+
+    /**
+     * @param paramTree
+     * @param string
+     * @return
+     */
+    private LeafNode castAsLeafNode(final ParseTree paramTree,
+            final String string) {
+        assertTrue(string + " cannot be applied on a null tree",
+                paramTree != InternalNode.NILL_LEAF);
+        assertTrue(string + " cannot be applied on a null tree",
+                paramTree instanceof LeafNode);
+        return (LeafNode) paramTree;
     }
 
     /**
