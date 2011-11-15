@@ -174,26 +174,18 @@ public class Interpreter {
         return evaluate(params);
     }
 
-    private SExpression applyCar(final ParseTree params) {
-        assertTrue("CAR cannot be applied on ATOMS",
-                params instanceof InternalNode);
-        final InternalNode paramTree = (InternalNode) params;
-        assertTrue("CAR cannot be applied to empty list",
-                paramTree == InternalNode.NILL_LEAF);
-        assertTrue("CAR cannot be applied on a null tree",
-                paramTree.getLeftTree() != null);
-        return evaluate(paramTree.getLeftTree());
+    private SExpression applyCar(final ParseTree params) {// FIXME
+        final ParseTree firstParam = extractOnlyParameter(params, "CAR");
+        final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
+        final ParseTree head = getLeftChild(firstParamTree, "CAR");
+        return evaluate(head);
     }
 
-    private SExpression applyCdr(final ParseTree params) {
-        assertTrue("CDR cannot be applied on ATOMS",
-                params instanceof InternalNode);
-        final InternalNode paramTree = (InternalNode) params;
-        assertTrue("CDR cannot be applied to empty list",
-                paramTree == InternalNode.NILL_LEAF);
-        assertTrue("CDR cannot be applied on a null tree",
-                paramTree.getRightTree() != null);
-        return evaluate(paramTree.getRightTree());
+    private SExpression applyCdr(final ParseTree params) { // FIXME
+        final ParseTree firstParam = extractOnlyParameter(params, "CAR");
+        final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
+        final ParseTree tail = getRightChild(firstParamTree, "CAR");
+        return evaluate(tail);
     }
 
     private SExpression applyCons(final ParseTree params) {
@@ -202,8 +194,16 @@ public class Interpreter {
     }
 
     private SExpression applyAtom(final ParseTree params) {
-        System.out.println("Interpreter.applyAtom()");
-        return evaluate(params);
+        final ParseTree paramTree = extractOnlyParameter(params, "ATOM");
+        if (paramTree == InternalNode.NILL_LEAF) {
+            return BooleanAtomExpression.T;
+        } else if (paramTree instanceof LeafNode) {
+            return BooleanAtomExpression.T;
+        } else if (paramTree instanceof InternalNode) {
+            return BooleanAtomExpression.NIL;
+        } else {
+            return raiseInterpreterException("Expression of front of ATOM");
+        }
     }
 
     private SExpression applyEq(final ParseTree params) {
@@ -354,6 +354,67 @@ public class Interpreter {
             return raiseInterpreterException(operationName
                     + " is not a know Operation");
         }
+    }
+
+    /**
+     * @param params
+     * @param functionName
+     * @return
+     */
+    private ParseTree extractOnlyParameter(final ParseTree params,
+            final String functionName) {
+        if (params == InternalNode.NILL_LEAF) {
+            raiseInterpreterException("Exactly one parameter is required for "
+                    + functionName);
+            return null; // never happens 'cause of raising error in the
+                         // previous line
+        }
+        assertTrue("Exactly one parameter is required for " + functionName,
+                params instanceof InternalNode);
+        final InternalNode paramTree = (InternalNode) params;
+        assertTrue("Exactly one parameter is required for " + functionName,
+                paramTree.getRightTree() == InternalNode.NILL_LEAF);
+        assertTrue("Exactly one parameter is required for " + functionName,
+                paramTree.getLeftTree() != InternalNode.NILL_LEAF);
+        return paramTree.getLeftTree();
+    }
+
+    /**
+     * @param firstParamTree
+     * @param string
+     * @return
+     */
+    private ParseTree getLeftChild(final InternalNode firstParamTree,
+            final String string) {
+        assertTrue("Invalid S-Expression as parameter to " + string,
+                firstParamTree.getLeftTree() != null);
+        return firstParamTree.getLeftTree();
+    }
+
+    /**
+     * @param firstParamTree
+     * @param string
+     * @return
+     */
+    private ParseTree getRightChild(final InternalNode firstParamTree,
+            final String string) {
+        assertTrue("Invalid S-Expression as parameter to " + string,
+                firstParamTree.getRightTree() != null);
+        return firstParamTree.getRightTree();
+    }
+
+    /**
+     * @param paramTree
+     * @param string
+     * @return
+     */
+    private InternalNode castAsTree(final ParseTree paramTree,
+            final String string) {
+        assertTrue(string + " cannot be applied on a null tree",
+                paramTree != InternalNode.NILL_LEAF);
+        assertTrue(string + " cannot be applied on a null tree",
+                paramTree instanceof InternalNode);
+        return (InternalNode) paramTree;
     }
 
     /**
