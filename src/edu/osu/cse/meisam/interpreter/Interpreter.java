@@ -107,8 +107,7 @@ public class Interpreter {
     }
 
     private SExpression evaluateNil() {
-        System.out.println("evaluating Nill");
-        return null;// FIXME
+        return BooleanAtomExpression.NIL;// FIXME
     }
 
     /**
@@ -220,8 +219,13 @@ public class Interpreter {
     }
 
     private SExpression applyInt(final ParseTree params) {
-        System.out.println("Interpreter.applyInt()");
-        return evaluate(params);
+        final ParseTree paramTree = extractOnlyParameter(params, "INT");
+        final SExpression result = evaluate(paramTree);
+        if (result instanceof NumericAtomExpression) {
+            return BooleanAtomExpression.T;
+        } else {
+            return BooleanAtomExpression.NIL;
+        }
     }
 
     private SExpression applyPlus(final ParseTree params) {
