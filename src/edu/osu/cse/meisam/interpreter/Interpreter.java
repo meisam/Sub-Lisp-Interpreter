@@ -210,8 +210,13 @@ public class Interpreter {
     }
 
     private SExpression applyNull(final ParseTree params) {
-        System.out.println("Interpreter.applyNull()");
-        return evaluate(params);
+        final ParseTree paramTree = extractOnlyParameter(params, "NULL");
+        final SExpression result = evaluate(paramTree);
+        if (result == BooleanAtomExpression.NIL) {
+            return BooleanAtomExpression.T;
+        } else {
+            return BooleanAtomExpression.NIL;
+        }
     }
 
     private SExpression applyInt(final ParseTree params) {
