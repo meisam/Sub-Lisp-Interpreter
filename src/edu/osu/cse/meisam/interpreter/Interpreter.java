@@ -149,7 +149,7 @@ public class Interpreter {
         } else if (lexval.equals("TIMES")) {
             return applyTimes(rightTree);
         } else if (lexval.equals("QUOTIENT")) {
-            return applyQoutient(rightTree);
+            return applyQuotient(rightTree);
         } else if (lexval.equals("REMAINDER")) {
             return applyRemainder(rightTree);
         } else if (lexval.equals("LESS")) {
@@ -242,7 +242,7 @@ public class Interpreter {
         return applyAritmeticOperation(params, "TIMES");
     }
 
-    private SExpression applyQoutient(final ParseTree params) {
+    private SExpression applyQuotient(final ParseTree params) {
         return applyAritmeticOperation(params, "QUOTIENT");
     }
 
