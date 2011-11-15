@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import edu.osu.cse.meisam.interpreter.esxpression.BinaryExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.BooleanAtomExpression;
+import edu.osu.cse.meisam.interpreter.esxpression.DefunAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.LeafExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.NumericAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.SExpression;
@@ -36,6 +37,10 @@ import edu.osu.cse.meisam.interpreter.tokens.Token;
  * 
  */
 public class Interpreter {
+
+    private static String[] reservedWord = { "T", "NIL", "CAR", "CDR", "CONS",
+            "ATOM", "EQ", "NULL", "INT", "PLUS", "MINUS", "TIMES", "QUOTIENT",
+            "REMAINDER", "LESS", "GREATER", "COND", "QUOTE", "DEFUN" };
 
     private final InputProvider in;
     private final Lexer lexer;
@@ -355,8 +360,61 @@ public class Interpreter {
     }
 
     private SExpression applyDefun(final ParseTree params) {
-        System.out.println("Interpreter.applyDefun()");
-        return evaluate(params);
+        final ParseTree[] allParams = getAllParams(params, "DEFUN");
+        assertTrue("DEFUN should have a parameters list and a body",
+                allParams.length == 3);
+        final ParseTree formalsList = allParams[0];
+        final ParseTree functionName = allParams[1];
+        validateName(functionName);
+        final ParseTree body = allParams[2];
+        final ParseTree[] allFormalParams = enumerate(formalsList);
+        validateFormalsList(allFormalParams);
+        // functionList.add(functionName, params, )
+        return new DefunAtomExpression(functionName.toString());
+    }
+
+    private void validateName(final ParseTree functionName) {
+        assertTrue("Invalid name ", functionName != null);
+        assertTrue("Invalid name ", functionName instanceof LeafNode);
+        final LeafNode castAsLeafNode = castAsLeafNode(functionName, "DEFUN");
+        for (int i = 0; i < Interpreter.reservedWord.length; i++) {
+            assertTrue("Invalid function name",
+                    Interpreter.reservedWord[i].equals(castAsLeafNode
+                            .getToken().getLexval()));
+        }
+    }
+
+    private void validateFormalsList(final ParseTree[] allFormalParams) {
+        for (int i = 0; i < allFormalParams.length; i++) {
+            validateName(allFormalParams[i]);
+
+            for (int j = i + 1; j < allFormalParams.length; j++) {
+                chechDuplicateNames(allFormalParams[i], allFormalParams[j]);
+            }
+        }
+
+    }
+
+    private void chechDuplicateNames(final ParseTree firstParam,
+            final ParseTree secondParam) {
+        assertTrue("Duplicate name in parameters list ", firstParam != null);
+        assertTrue("Duplicate name in parameters list ", secondParam != null);
+        assertTrue("Duplicate name in parameters list ",
+                firstParam instanceof LeafNode);
+        assertTrue("Duplicate name in parameters list ",
+                secondParam instanceof LeafNode);
+
+        final LeafNode firstParamCasted = castAsLeafNode(firstParam, "DEFUN");
+        final LeafNode secondParamCasted = castAsLeafNode(firstParam, "DEFUN");
+        assertTrue(
+                "Duplicate name in parameters list",
+                !firstParamCasted.getToken().getLexval()
+                        .equals(secondParamCasted.getToken().getLexval()));
+    }
+
+    private ParseTree[] enumerate(final ParseTree formalsList) {
+        final InternalNode dumy = new InternalNode(null, formalsList, false);
+        return getAllParams(dumy, "DEFUN");
     }
 
     /**
