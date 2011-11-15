@@ -111,6 +111,14 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
+    public void testAtomExpresion() {
+        System.out.println("InterpreterSmokeTest.testAtomExpresion()");
+        final StringInputProvider in = new StringInputProvider("(ATOM 5)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);
