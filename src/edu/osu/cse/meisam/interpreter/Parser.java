@@ -18,12 +18,13 @@
 
 package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.tokens.Atom;
-import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Dot;
-import edu.osu.cse.meisam.interpreter.tokens.EOF;
-import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.Atom;
+import edu.osu.cse.meisam.interpreter.lexer.CloseParentheses;
+import edu.osu.cse.meisam.interpreter.lexer.Dot;
+import edu.osu.cse.meisam.interpreter.lexer.EOF;
+import edu.osu.cse.meisam.interpreter.lexer.Lexer;
+import edu.osu.cse.meisam.interpreter.lexer.OpenParentheses;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 // <S> ::= <E>
 // <E> ::= atom

@@ -20,9 +20,10 @@ package edu.osu.cse.meisam.interpreter;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.Lexer;
+import edu.osu.cse.meisam.interpreter.lexer.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.lexer.NumericAtom;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>

@@ -16,42 +16,46 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
- * This class should never be instantiated directly (that's why it is define
- * abstract)
- * 
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public abstract class Token {
+public final class EOF extends Token {
 
     /**
-     * The lexval for this Token
+     * End-of-File symbol. This should never show up anywhere. It is only a
+     * sentinel used for ease of parsing.
      */
-    private final String lexval;
+    private static final String EOF_MARK = "$";
 
     /**
-     * Constructs a new token for the given lexval. <br>
-     * According to the specifications of this sub-lisp language, The scanner
-     * should be completely case-insensitive. To make the output uniform, the
-     * scanner should translate every letter to upper case; the parser/evaluator
-     * should work only with upper-case letters
-     * 
-     * @param lexval
+     * Constructs a new EOF token.
      */
-    protected Token(final String lexval) {
-        this.lexval = lexval.toUpperCase();
+    public EOF() {
+        super(EOF.EOF_MARK);
     }
 
-    /**
-     * Returns the lexval of this symbol
+    /*
+     * (non-Javadoc)
      * 
-     * @return the lexval
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public String getLexval() {
-        return this.lexval;
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return obj instanceof EOF;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 0;
     }
 
 }

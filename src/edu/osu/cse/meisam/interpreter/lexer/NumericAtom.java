@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>

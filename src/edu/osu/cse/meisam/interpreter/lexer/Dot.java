@@ -15,24 +15,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package edu.osu.cse.meisam.interpreter;
+
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class LexerExeption extends RuntimeException {
+public final class Dot extends Token {
 
     /**
+     * Dot
+     */
+    private static final String DOT = ".";
+
+    /**
+     * Constructs a new Close parenthesis token
      * 
+     * @param lexval
      */
-    private static final long serialVersionUID = -3418059174552437275L;
+    public Dot() {
+        super(Dot.DOT);
+    }
 
-    /**
-     * @param msg
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
      */
-    public LexerExeption(final String msg) {
-        super(msg);
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        return (obj instanceof Dot);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return 0;
     }
 
 }

@@ -15,15 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package edu.osu.cse.meisam.interpreter;
+package edu.osu.cse.meisam.interpreter.lexer;
 
-import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Dot;
-import edu.osu.cse.meisam.interpreter.tokens.EOF;
-import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.InputProvider;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>

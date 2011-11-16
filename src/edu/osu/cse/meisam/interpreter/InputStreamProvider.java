@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
+import edu.osu.cse.meisam.interpreter.lexer.LexerExeption;
+
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 

@@ -16,26 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public final class CloseParentheses extends Token {
+public final class OpenParentheses extends Token {
 
     /**
-     * Close parenthesis
+     * Open parenthesis
      */
-    private static final String CLOSE_PARENTHESES = ")";
+    private static final String OPEN_PARENTHESES = "(";
 
     /**
      * Constructs a new Close parenthesis token
      * 
      * @param lexval
      */
-    public CloseParentheses() {
-        super(CloseParentheses.CLOSE_PARENTHESES);
+    public OpenParentheses() {
+        super(OpenParentheses.OPEN_PARENTHESES);
     }
 
     /*
@@ -47,7 +47,7 @@ public final class CloseParentheses extends Token {
         if (obj == null) {
             return false;
         }
-        return obj instanceof CloseParentheses;
+        return obj instanceof OpenParentheses;
     }
 
     /*

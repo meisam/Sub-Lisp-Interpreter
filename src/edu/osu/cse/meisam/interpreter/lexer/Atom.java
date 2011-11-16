@@ -16,47 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public final class Dot extends Token {
+public abstract class Atom extends Token {
 
     /**
-     * Dot
-     */
-    private static final String DOT = ".";
-
-    /**
-     * Constructs a new Close parenthesis token
+     * Constructs a symbol representing the given lexval
      * 
      * @param lexval
      */
-    public Dot() {
-        super(Dot.DOT);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        return (obj instanceof Dot);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        return 0;
+    protected Atom(final String lexval) {
+        super(lexval);
     }
 
 }

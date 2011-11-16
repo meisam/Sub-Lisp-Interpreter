@@ -15,47 +15,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public final class EOF extends Token {
+public class LexerExeption extends RuntimeException {
 
     /**
-     * End-of-File symbol. This should never show up anywhere. It is only a
-     * sentinel used for ease of parsing.
+     * 
      */
-    private static final String EOF_MARK = "$";
+    private static final long serialVersionUID = -3418059174552437275L;
 
     /**
-     * Constructs a new EOF token.
+     * @param msg
      */
-    public EOF() {
-        super(EOF.EOF_MARK);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        return obj instanceof EOF;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        return 0;
+    public LexerExeption(final String msg) {
+        super(msg);
     }
 
 }

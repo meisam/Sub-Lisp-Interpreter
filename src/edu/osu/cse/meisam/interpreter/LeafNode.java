@@ -1,6 +1,6 @@
 package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>

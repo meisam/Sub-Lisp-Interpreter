@@ -28,10 +28,11 @@ import edu.osu.cse.meisam.interpreter.esxpression.LeafExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.NumericAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.SExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.ValuedAtomExpression;
-import edu.osu.cse.meisam.interpreter.tokens.Atom;
-import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.Atom;
+import edu.osu.cse.meisam.interpreter.lexer.Lexer;
+import edu.osu.cse.meisam.interpreter.lexer.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.lexer.NumericAtom;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>

@@ -27,8 +27,10 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import junit.framework.Assert;
-import edu.osu.cse.meisam.interpreter.tokens.EOF;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.EOF;
+import edu.osu.cse.meisam.interpreter.lexer.Lexer;
+import edu.osu.cse.meisam.interpreter.lexer.LexerExeption;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 /**
  * This class provides a framework for testing the program by reading the input

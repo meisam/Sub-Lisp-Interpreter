@@ -20,13 +20,15 @@ package edu.osu.cse.meisam.interpreter;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import edu.osu.cse.meisam.interpreter.tokens.CloseParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Dot;
-import edu.osu.cse.meisam.interpreter.tokens.EOF;
-import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
-import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
-import edu.osu.cse.meisam.interpreter.tokens.OpenParentheses;
-import edu.osu.cse.meisam.interpreter.tokens.Token;
+import edu.osu.cse.meisam.interpreter.lexer.CloseParentheses;
+import edu.osu.cse.meisam.interpreter.lexer.Dot;
+import edu.osu.cse.meisam.interpreter.lexer.EOF;
+import edu.osu.cse.meisam.interpreter.lexer.Lexer;
+import edu.osu.cse.meisam.interpreter.lexer.LexerExeption;
+import edu.osu.cse.meisam.interpreter.lexer.LiteralAtom;
+import edu.osu.cse.meisam.interpreter.lexer.NumericAtom;
+import edu.osu.cse.meisam.interpreter.lexer.OpenParentheses;
+import edu.osu.cse.meisam.interpreter.lexer.Token;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
@@ -36,7 +38,7 @@ public class LexerTest extends TestCase {
 
     /**
      * Test method for
-     * {@link edu.osu.cse.meisam.interpreter.Lexer#currentToken()}.
+     * {@link edu.osu.cse.meisam.interpreter.lexer.Lexer#currentToken()}.
      */
     public void testNexTokenWithEmptyInput() {
         final InputProvider inputProvider = new StringInputProvider("");

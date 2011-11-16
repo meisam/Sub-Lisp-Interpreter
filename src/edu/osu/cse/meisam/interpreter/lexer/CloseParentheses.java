@@ -16,27 +16,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.tokens;
+package edu.osu.cse.meisam.interpreter.lexer;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public final class LiteralAtom extends Atom {
+public final class CloseParentheses extends Token {
 
     /**
-     * All the keywords in the Lisp
+     * Close parenthesis
      */
-    final static String[] ALL_KEYWORDS = { "DEFUN", "EQ", "ATOM", "NIL", "T",
-            "CAR", "CDR", "CAAR" };
+    private static final String CLOSE_PARENTHESES = ")";
 
     /**
-     * Constructs a new Token
+     * Constructs a new Close parenthesis token
      * 
      * @param lexval
      */
-    public LiteralAtom(final String lexval) {
-        super(lexval);
+    public CloseParentheses() {
+        super(CloseParentheses.CLOSE_PARENTHESES);
     }
 
     /*
@@ -48,15 +47,7 @@ public final class LiteralAtom extends Atom {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof LiteralAtom)) {
-            return false;
-        }
-        final LiteralAtom literalAtom = (LiteralAtom) obj;
-        if ((getLexval() == null) && (literalAtom.getLexval() == null)) {
-            return true;
-        }
-        return (getLexval() != null)
-                && (getLexval().equals(literalAtom.getLexval()));
+        return obj instanceof CloseParentheses;
     }
 
     /*
@@ -65,10 +56,7 @@ public final class LiteralAtom extends Atom {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        if (getLexval() == null) {
-            return 0;
-        } else {
-            return getLexval().hashCode();
-        }
+        return 0;
     }
+
 }
