@@ -85,13 +85,13 @@ public class Interpreter {
             final SExpression evaluatedExpression = evaluate(parseTree,
                     initialBindings);
             prettyPrint(evaluatedExpression);
+            System.out.println();
         } while (true);
     }
 
     /**
      * @param parseTree
      * @param bindings
-     *            TODO
      */
     private SExpression evaluate(final ParseTree parseTree,
             final ParameterBindings bindings) {
@@ -126,7 +126,6 @@ public class Interpreter {
      * @param leafNode
      * @param rightTree
      * @param bindings
-     *            TODO
      */
     private SExpression apply(final LeafNode leafNode,
             final ParseTree rightTree, final ParameterBindings bindings) {
@@ -176,12 +175,12 @@ public class Interpreter {
         } else if (lexval.equals("DEFUN")) {
             return applyDefun(rightTree);
         } else {
-            return applyFuntion(token.getLexval(), rightTree);
+            return applyFuntion(token.getLexval(), rightTree, bindings);
         }
     }
 
     private SExpression applyFuntion(final String functionName,
-            final ParseTree paramsTree) {
+            final ParseTree paramsTree, final ParameterBindings bindings) {
         final FunctionDefinition functionDefinitions = this.functionList
                 .lookup(functionName);
         final ParseTree[] actualParams = getAllParams(paramsTree, functionName);
@@ -193,7 +192,8 @@ public class Interpreter {
 
         final ParameterBindings parameterBindings = new ParameterBindings();
         for (int i = 0; i < actualParams.length; i++) {
-            final SExpression evaluatedParam = evaluate(actualParams[i], null);
+            final SExpression evaluatedParam = evaluate(actualParams[i],
+                    bindings);
             parameterBindings.addBinding(
                     formalParams[i].getToken().getLexval(), evaluatedParam);
         }
@@ -212,19 +212,23 @@ public class Interpreter {
     }
 
     private SExpression applyCar(final ParseTree params,
-            final ParameterBindings bindings) {// FIXME
+            final ParameterBindings bindings) {
         final ParseTree firstParam = extractOnlyParameter(params, "CAR");
         final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
-        final ParseTree head = getLeftChild(firstParamTree, "CAR");
-        return evaluate(head, bindings);
+        final SExpression evaluatedParam = evaluate(firstParamTree, bindings);
+        assertTrue("CAR cannot operate on Atoms",
+                evaluatedParam instanceof BinaryExpression);
+        return ((BinaryExpression) evaluatedParam).getHead();
     }
 
     private SExpression applyCdr(final ParseTree params,
-            final ParameterBindings bindings) { // FIXME
+            final ParameterBindings bindings) {
         final ParseTree firstParam = extractOnlyParameter(params, "CAR");
         final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
-        final ParseTree tail = getRightChild(firstParamTree, "CAR");
-        return evaluate(tail, bindings);
+        final SExpression evaluatedParam = evaluate(firstParamTree, bindings);
+        assertTrue("CDR cannot operate on Atoms",
+                evaluatedParam instanceof BinaryExpression);
+        return ((BinaryExpression) evaluatedParam).getTail();
     }
 
     private SExpression applyCons(final ParseTree params,
@@ -481,7 +485,6 @@ public class Interpreter {
     /**
      * @param leafNode
      * @param bindings
-     *            TODO
      * @return
      */
     private SExpression evaluateNode(final LeafNode leafNode,

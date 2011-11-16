@@ -103,12 +103,16 @@ public class InterpreterFromFileTest extends TestStub {
             final String fileContent = readfromFile(testFile);
             final InputProvider inputProvider = new StringInputProvider(
                     fileContent);
-            final Lexer lexer = new Lexer(inputProvider);
-            final Parser parser = new Parser(lexer);
 
-            final ParseTree parseTree = parser.parseNextSExpresion();
+            final Interpreter interpreter = new Interpreter(inputProvider,
+                    System.out);
 
-            // TODO
+            try {
+                interpreter.interpret();
+            } catch (final Exception e) {
+                fail("When testing " + testFile + ", " + e.getMessage());
+            }
+
         } catch (final IOException e) {
             fail("When testing " + testFile + ", " + e.getMessage());
         }
