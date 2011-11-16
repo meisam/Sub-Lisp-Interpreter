@@ -19,7 +19,10 @@
 package edu.osu.cse.meisam.interpreter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
@@ -31,6 +34,24 @@ import junit.framework.Assert;
  * 
  */
 public class InterpreterFromFileTest extends TestStub {
+
+    public void testInterpreter() {
+        try {
+            System.out.println("InterpreterSmokeTest.testNumericAtom()");
+            InputStream in;
+            in = new FileInputStream(
+                    "testfiles/pass-lex-parse-interpret-single-numeric.input");
+            System.setIn(in);
+            final InputProvider inputProvider = new InputStreamProvider(
+                    System.in);
+            final Interpreter interpreter = new Interpreter(inputProvider,
+                    System.out);
+            interpreter.interpret();
+            System.out.println();
+        } catch (final FileNotFoundException e) {
+            fail(e.getMessage());
+        }
+    }
 
     private boolean isInterPreterPassingTestFile(final File fileName) {
         return fileName.getName().startsWith("pass-lex-parse-interpret")
