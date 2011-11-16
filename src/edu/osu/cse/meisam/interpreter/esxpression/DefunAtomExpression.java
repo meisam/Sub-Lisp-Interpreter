@@ -22,13 +22,18 @@ package edu.osu.cse.meisam.interpreter.esxpression;
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public class NilAtomExpression extends BooleanAtomExpression {
+public class DefunAtomExpression extends LeafExpression {
+
+    /**
+     * 
+     */
+    private final String val;
 
     /**
      * @param val
      */
-    public NilAtomExpression() {
-        super(false);
+    public DefunAtomExpression(final String val) {
+        this.val = val;
     }
 
     /*
@@ -37,6 +42,14 @@ public class NilAtomExpression extends BooleanAtomExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "NilAtomExpression []";
+        return this.val;
     }
+
+    /**
+     * @return the val
+     */
+    public String getVal() {
+        return this.val;
+    }
+
 }

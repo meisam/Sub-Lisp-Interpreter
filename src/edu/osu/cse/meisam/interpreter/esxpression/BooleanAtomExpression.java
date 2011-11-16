@@ -18,8 +18,6 @@
 
 package edu.osu.cse.meisam.interpreter.esxpression;
 
-import edu.osu.cse.meisam.interpreter.InterPreterException;
-
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
@@ -29,12 +27,14 @@ public class BooleanAtomExpression extends LeafExpression {
     /**
      * 
      */
-    private final static String TRUE = "T";
+    public final static BooleanAtomExpression T = new BooleanAtomExpression(
+            true);
 
     /**
      * 
      */
-    private final static String FALSE = "NIL";
+    public final static BooleanAtomExpression NIL = new BooleanAtomExpression(
+            false);
 
     /**
      * 
@@ -44,18 +44,8 @@ public class BooleanAtomExpression extends LeafExpression {
     /**
      * @param val
      */
-    public BooleanAtomExpression(final boolean val) {
+    private BooleanAtomExpression(final boolean val) {
         this.val = val;
-    }
-
-    public BooleanAtomExpression(final String string) {
-        if (BooleanAtomExpression.TRUE.equals(string)) {
-            this.val = true;
-        } else if (BooleanAtomExpression.FALSE.equals(string)) {
-            this.val = false;
-        }
-        throw new InterPreterException(string
-                + " is an invalid value for a boolean atom");
     }
 
     /*
@@ -64,7 +54,11 @@ public class BooleanAtomExpression extends LeafExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "BooleanAtomExpression [val=" + this.val + "]";
+        if (this.val) {
+            return "T";
+        } else {
+            return "NIL";
+        }
     }
 
 }

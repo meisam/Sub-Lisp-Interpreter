@@ -18,41 +18,22 @@
 
 package edu.osu.cse.meisam.interpreter.esxpression;
 
-import edu.osu.cse.meisam.interpreter.InterPreterException;
-
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-/**
- * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
- * 
- */
-public class NumericAtomExpression extends LeafExpression {
+public class ValuedAtomExpression extends LeafExpression {
 
     /**
      * 
      */
-    private final int val;
+    private final String val;
 
     /**
      * @param val
      */
-    public NumericAtomExpression(final int val) {
+    public ValuedAtomExpression(final String val) {
         this.val = val;
-
-    }
-
-    /**
-     * @param lexval
-     */
-    public NumericAtomExpression(final String lexval) {
-        try {
-            this.val = Integer.parseInt(lexval);
-        } catch (final NumberFormatException e) {
-            throw new InterPreterException(lexval
-                    + " cannot be parsed into an integer number.");
-        }
     }
 
     /*
@@ -61,13 +42,13 @@ public class NumericAtomExpression extends LeafExpression {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return Integer.toString(this.val);
+        return this.val;
     }
 
     /**
      * @return the val
      */
-    public int getVal() {
+    public String getVal() {
         return this.val;
     }
 

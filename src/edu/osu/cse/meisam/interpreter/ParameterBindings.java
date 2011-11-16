@@ -16,59 +16,48 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter.esxpression;
+package edu.osu.cse.meisam.interpreter;
 
-import edu.osu.cse.meisam.interpreter.InterPreterException;
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.osu.cse.meisam.interpreter.esxpression.SExpression;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-/**
- * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
- * 
- */
-public class NumericAtomExpression extends LeafExpression {
+public class ParameterBindings {
+
+    private static final int INITIAL_SIZE = 100;
 
     /**
      * 
      */
-    private final int val;
+    private final Map bindings;
 
     /**
-     * @param val
+     * 
      */
-    public NumericAtomExpression(final int val) {
-        this.val = val;
-
+    public ParameterBindings() {
+        this.bindings = new HashMap(ParameterBindings.INITIAL_SIZE);
     }
 
     /**
-     * @param lexval
+     * @param actualParam
+     * @param value
      */
-    public NumericAtomExpression(final String lexval) {
-        try {
-            this.val = Integer.parseInt(lexval);
-        } catch (final NumberFormatException e) {
-            throw new InterPreterException(lexval
-                    + " cannot be parsed into an integer number.");
+    public void addBinding(final String actualParam, final SExpression value) {
+        this.bindings.put(actualParam, value);
+    }
+
+    public SExpression lookup(final String actualParamName) {
+        final SExpression boundedVal = (SExpression) this.bindings
+                .get(actualParamName);
+        if (boundedVal == null) {
+            throw new InterPreterException("No binding found for "
+                    + actualParamName);
         }
+        return boundedVal;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-        return Integer.toString(this.val);
-    }
-
-    /**
-     * @return the val
-     */
-    public int getVal() {
-        return this.val;
-    }
-
 }
