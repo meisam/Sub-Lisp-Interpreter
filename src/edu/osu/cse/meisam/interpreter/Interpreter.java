@@ -28,6 +28,7 @@ import edu.osu.cse.meisam.interpreter.esxpression.DefunAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.LeafExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.NumericAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.SExpression;
+import edu.osu.cse.meisam.interpreter.esxpression.ValuedAtomExpression;
 import edu.osu.cse.meisam.interpreter.tokens.Atom;
 import edu.osu.cse.meisam.interpreter.tokens.LiteralAtom;
 import edu.osu.cse.meisam.interpreter.tokens.NumericAtom;
@@ -388,11 +389,24 @@ public class Interpreter {
         assertTrue("QUOTE expects to exactly one parameter",
                 functionParams[0] != null);
         if (functionParams[0] instanceof LeafNode) {
-            final LeafNode leafNode = castAsLeafNode(params, "QUOTE");
-            return evaluate(leafNode, bindings);
+            return returnQuotedAtom(functionParams[0]);
+        } else if (functionParams[0] instanceof InternalNode) {
+            return recursiveQuote(functionParams[0], bindings);
+        } else {
+            return raiseInterpreterException("Unknown structure for the QUOTE function");
         }
+    }
 
-        return recursiveQuote(functionParams[0], bindings);
+    private SExpression returnQuotedAtom(final ParseTree functionParams) {
+        final LeafNode leafNode = castAsLeafNode(functionParams, "QUOTE");
+        final Token token = leafNode.getToken();
+        if (token instanceof LiteralAtom) {
+            return new ValuedAtomExpression(token.getLexval());
+        } else if (token instanceof NumericAtom) {
+            return new NumericAtomExpression(token.getLexval());
+        } else {
+            return raiseInterpreterException("Unknown structure for the QUOTE function");
+        }
     }
 
     private SExpression recursiveQuote(final ParseTree parseTree,
@@ -400,7 +414,7 @@ public class Interpreter {
         if (parseTree == InternalNode.NILL_LEAF) {
             return BooleanAtomExpression.NIL;
         } else if (parseTree instanceof LeafNode) {
-            return evaluate(parseTree, bindings);
+            return returnQuotedAtom(parseTree);
         } else if (parseTree instanceof InternalNode) {
             final InternalNode internalNode = castAsTree(parseTree, "QUOTE");
             final SExpression leftTreeQuote = recursiveQuote(
@@ -789,7 +803,7 @@ public class Interpreter {
         } else if (expression instanceof BinaryExpression) {
             final BinaryExpression binaryExpression = (BinaryExpression) expression;
             if (binaryExpression.isList()) {
-                prettyPrintList(expression);
+                prettyPrintList(binaryExpression);
             } else {
                 this.out.print("(");
                 prettyPrint(binaryExpression.getHead());
@@ -804,23 +818,20 @@ public class Interpreter {
         }
     }
 
-    private void prettyPrintList(final SExpression expression) {
+    private void prettyPrintList(final BinaryExpression expression) {
         this.out.print("(");
-        if (expression == BooleanAtomExpression.NIL) {
-            this.out.print(")");
-        } else if (expression instanceof BinaryExpression) {
-            BinaryExpression list = null;
-            do {
-                list = (BinaryExpression) expression;
-                this.out.print(list.getHead());
-                if (list.getTail() == BooleanAtomExpression.NIL) {
-                    break;
-                }
-                list = (BinaryExpression) list.getTail();
-            } while (true);
-        }
-        final BinaryExpression list = (BinaryExpression) expression;
-        this.out.print(list.getHead());
+        BinaryExpression list = null;
+        list = expression;
+        do {
+            this.out.print(list.getHead());
+            if ((list.getTail() == BooleanAtomExpression.NIL)
+                    || (list.getTail() == null)) {
+                break;
+            }
+            this.out.print(" ");
+            list = (BinaryExpression) list.getTail();
+        } while (true);
+        this.out.print(")");
 
     }
 }
