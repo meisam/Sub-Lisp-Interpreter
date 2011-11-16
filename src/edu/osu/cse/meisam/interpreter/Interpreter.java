@@ -76,20 +76,16 @@ public class Interpreter {
      * 
      */
     public void interpret() {
-        try {
-            do {
-                final ParseTree parseTree = this.parser.parseNextSExpresion();
-                if (parseTree == null) {
-                    break;
-                }
-                final ParameterBindings initialBindings = new ParameterBindings();
-                final SExpression evaluatedExpression = evaluate(parseTree,
-                        initialBindings);
-                prettyPrint(evaluatedExpression);
-            } while (true);
-        } catch (final Exception e) {
-            this.out.append("ERROR: " + e.getMessage());
-        }
+        do {
+            final ParseTree parseTree = this.parser.parseNextSExpresion();
+            if (parseTree == null) {
+                break;
+            }
+            final ParameterBindings initialBindings = new ParameterBindings();
+            final SExpression evaluatedExpression = evaluate(parseTree,
+                    initialBindings);
+            prettyPrint(evaluatedExpression);
+        } while (true);
     }
 
     /**
