@@ -28,6 +28,10 @@ import java.util.Vector;
 
 import edu.osu.cse.meisam.interpreter.lexer.Lexer;
 import edu.osu.cse.meisam.interpreter.lexer.LexerExeption;
+import edu.osu.cse.meisam.interpreter.parser.InternalNode;
+import edu.osu.cse.meisam.interpreter.parser.ParseTree;
+import edu.osu.cse.meisam.interpreter.parser.Parser;
+import edu.osu.cse.meisam.interpreter.parser.ParserException;
 
 import junit.framework.Assert;
 

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter;
+package edu.osu.cse.meisam.interpreter.parser;
 
 import edu.osu.cse.meisam.interpreter.lexer.Atom;
 import edu.osu.cse.meisam.interpreter.lexer.CloseParentheses;

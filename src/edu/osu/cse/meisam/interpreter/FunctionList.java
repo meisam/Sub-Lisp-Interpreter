@@ -21,6 +21,9 @@ package edu.osu.cse.meisam.interpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.osu.cse.meisam.interpreter.parser.LeafNode;
+import edu.osu.cse.meisam.interpreter.parser.ParseTree;
+
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 

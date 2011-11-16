@@ -1,4 +1,4 @@
-package edu.osu.cse.meisam.interpreter;
+package edu.osu.cse.meisam.interpreter.parser;
 
 import edu.osu.cse.meisam.interpreter.lexer.Token;
 

@@ -16,32 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package edu.osu.cse.meisam.interpreter;
+package edu.osu.cse.meisam.interpreter.parser;
 
 /**
  * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
  * 
  */
-public abstract class ParseTree {
+public class ParserException extends RuntimeException {
 
     /**
      * 
      */
-    private boolean dotedParent = false;
+    private static final long serialVersionUID = 3599438200455827351L;
 
-    /**
-     * @return the dotedParent
-     */
-    public boolean hasDotedParent() {
-        return this.dotedParent;
-    }
-
-    /**
-     * @param dotedParent
-     *            the dotedParent to set
-     */
-    public void setParentDoted() {
-        this.dotedParent = true;
+    public ParserException(final String msg) {
+        super(msg);
     }
 
 }
