@@ -72,7 +72,8 @@ public class InterpreterSmokeTest extends TestCase {
 
     public void testEqExpresion2() {
         System.out.println("InterpreterSmokeTest2.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ a b)");
+        final StringInputProvider in = new StringInputProvider(
+                "(EQ (quote a) (quote b))");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
@@ -80,7 +81,8 @@ public class InterpreterSmokeTest extends TestCase {
 
     public void testEqExpresion3() {
         System.out.println("InterpreterSmokeTest3.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ a a)");
+        final StringInputProvider in = new StringInputProvider(
+                "(EQ (quote a) (quote a))");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
@@ -89,6 +91,14 @@ public class InterpreterSmokeTest extends TestCase {
     public void testEqExpresion4() {
         System.out.println("InterpreterSmokeTest4.testEqExpresion()");
         final StringInputProvider in = new StringInputProvider("(EQ T T)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testEqExpresion5() {
+        System.out.println("InterpreterSmokeTest5.testEqExpresion()");
+        final StringInputProvider in = new StringInputProvider("(EQ 5 5)");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
@@ -170,16 +180,16 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
-    public void testQouteExpresion() {
-        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
+    public void testQuoteExpresion() {
+        System.out.println("InterpreterSmokeTest.testQuoteExpresion()");
         final StringInputProvider in = new StringInputProvider("(Quote (1 2))");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
     }
 
-    public void testQouteAtomExpresion() {
-        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
+    public void testQuoteAtomExpresion() {
+        System.out.println("InterpreterSmokeTest.testQuoteExpresion()");
         final StringInputProvider in = new StringInputProvider("(Quote 1)");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
@@ -208,6 +218,26 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println("InterpreterSmokeTest.testDefunExpresion()");
         final StringInputProvider in = new StringInputProvider(
                 "(Defun x (a b) (PLUS a 4)) (x 6 7)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
+    public void testDefineRecursiveExpresion() {
+        System.out
+                .println("InterpreterSmokeTest.testDefineRecursiveExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(DEFUN NOTSOSILLY (A B)                                              "
+                        + "    (COND                                                            "
+                        + "            ((EQ A 0) (PLUS B 1))                                    "
+                        + "            ((EQ B 0) (NOTSOSILLY (MINUS A 1) 1))                    "
+                        + "            (T (NOTSOSILLY (MINUS A 1) (NOTSOSILLY A (MINUS B 1))))  "
+                        + "          ))                                                         "
+                        // +
+                        // "(NOTSOSILLY 2 4)                                                     "
+                        // +
+                        // "(NOTSOSILLY 3 5)                                                     "
+                        + "(NOTSOSILLY 1 1)                                                     ");
         final Interpreter interpreter = new Interpreter(in, System.out);
         interpreter.interpret();
         System.out.println();
