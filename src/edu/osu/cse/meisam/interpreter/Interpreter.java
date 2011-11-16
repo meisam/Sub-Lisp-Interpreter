@@ -717,11 +717,11 @@ public class Interpreter {
                 && (currentParam instanceof InternalNode)) {
             final InternalNode paramTree = (InternalNode) currentParam;
 
+            assertTrue("Formal parameters should be leaf nodes ",
+                    paramTree.getLeftTree() instanceof LeafNode);
             final LeafNode formalParam = castAsLeafNode(
                     paramTree.getLeftTree(), string);
             assertTrue("Formal parameters cannot be null", formalParam != null);
-            assertTrue("Formal parameters should be leaf nodes ",
-                    formalParam instanceof LeafNode);
             allParams.add(formalParam);
             currentParam = paramTree.getRightTree();
         }

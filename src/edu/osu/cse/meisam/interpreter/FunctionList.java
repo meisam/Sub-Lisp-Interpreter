@@ -61,7 +61,7 @@ public class FunctionList {
      * @author Meisam Fathi Salmi <fathi@cse.ohio-state.edu>
      * 
      */
-    class FunctionDefinition {
+    static class FunctionDefinition {
 
         /**
          * 
