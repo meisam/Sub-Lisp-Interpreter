@@ -61,4 +61,29 @@ public class BooleanAtomExpression extends LeafExpression {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return this.val ? 0 : 1;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof BooleanAtomExpression) {
+            final boolean otherVal = ((BooleanAtomExpression) obj).val;
+            return this.val == otherVal;
+        }
+        return false;
+    }
+
 }
