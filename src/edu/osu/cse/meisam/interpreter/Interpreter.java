@@ -21,6 +21,7 @@ import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Vector;
 
+import edu.osu.cse.meisam.interpreter.FunctionList.FunctionDefinition;
 import edu.osu.cse.meisam.interpreter.esxpression.BinaryExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.BooleanAtomExpression;
 import edu.osu.cse.meisam.interpreter.esxpression.DefunAtomExpression;
@@ -46,10 +47,12 @@ public class Interpreter {
     private final Lexer lexer;
     private final Parser parser;
     private final PrintStream out;
+    private final FunctionList functionList;
 
     public Interpreter(final InputProvider in, final PrintStream out) {
         this.out = out;
         this.in = in;
+        this.functionList = new FunctionList();
         this.lexer = new Lexer(this.in);
         this.parser = new Parser(this.lexer);
     }
@@ -78,7 +81,9 @@ public class Interpreter {
                 if (parseTree == null) {
                     break;
                 }
-                final SExpression evaluatedExpression = evaluate(parseTree);
+                final ParameterBindings initialBindings = new ParameterBindings();
+                final SExpression evaluatedExpression = evaluate(parseTree,
+                        initialBindings);
                 prettyPrint(evaluatedExpression);
             } while (true);
         } catch (final Exception e) {
@@ -88,17 +93,20 @@ public class Interpreter {
 
     /**
      * @param parseTree
+     * @param bindings
+     *            TODO
      */
-    private SExpression evaluate(final ParseTree parseTree) {
+    private SExpression evaluate(final ParseTree parseTree,
+            final ParameterBindings bindings) {
         if (parseTree instanceof LeafNode) {
-            return evaluateNode((LeafNode) parseTree);
+            return evaluateNode((LeafNode) parseTree, bindings);
         } else if (parseTree instanceof InternalNode) {
             final InternalNode internalNode = (InternalNode) parseTree;
             final ParseTree leftTree = internalNode.getLeftTree();
             final ParseTree rightTree = internalNode.getRightTree();
             if (leftTree != null) {
                 if (leftTree instanceof LeafNode) {
-                    return apply((LeafNode) leftTree, rightTree);
+                    return apply((LeafNode) leftTree, rightTree, bindings);
                 } else {
                     return raiseInterpreterException("Expecting to see an atom");
                 }
@@ -120,8 +128,11 @@ public class Interpreter {
     /**
      * @param leafNode
      * @param rightTree
+     * @param bindings
+     *            TODO
      */
-    private SExpression apply(final LeafNode leafNode, final ParseTree rightTree) {
+    private SExpression apply(final LeafNode leafNode,
+            final ParseTree rightTree, final ParameterBindings bindings) {
         assertTrue("leafnode is null", leafNode != null);
         final Token token = leafNode.getToken();
         assertTrue("token in the leaf node is null", token != null);
@@ -130,82 +141,110 @@ public class Interpreter {
         final Atom atom = (LiteralAtom) token;
         final String lexval = atom.getLexval();
         if (lexval.equals("T")) {
-            return applyT(rightTree);
+            return applyT(rightTree, bindings);
         } else if (lexval.equals("NIL")) {
-            return applyNil(rightTree);
+            return applyNil(rightTree, bindings);
         } else if (lexval.equals("CAR")) {
-            return applyCar(rightTree);
+            return applyCar(rightTree, bindings);
         } else if (lexval.equals("CDR")) {
-            return applyCdr(rightTree);
+            return applyCdr(rightTree, bindings);
         } else if (lexval.equals("CONS")) {
-            return applyCons(rightTree);
+            return applyCons(rightTree, bindings);
         } else if (lexval.equals("ATOM")) {
-            return applyAtom(rightTree);
+            return applyAtom(rightTree, bindings);
         } else if (lexval.equals("EQ")) {
-            return applyEq(rightTree);
+            return applyEq(rightTree, bindings);
         } else if (lexval.equals("NULL")) {
-            return applyNull(rightTree);
+            return applyNull(rightTree, bindings);
         } else if (lexval.equals("INT")) {
-            return applyInt(rightTree);
+            return applyInt(rightTree, bindings);
         } else if (lexval.equals("PLUS")) {
-            return applyPlus(rightTree);
+            return applyPlus(rightTree, bindings);
         } else if (lexval.equals("MINUS")) {
-            return applyMinus(rightTree);
+            return applyMinus(rightTree, bindings);
         } else if (lexval.equals("TIMES")) {
-            return applyTimes(rightTree);
+            return applyTimes(rightTree, bindings);
         } else if (lexval.equals("QUOTIENT")) {
-            return applyQuotient(rightTree);
+            return applyQuotient(rightTree, bindings);
         } else if (lexval.equals("REMAINDER")) {
-            return applyRemainder(rightTree);
+            return applyRemainder(rightTree, bindings);
         } else if (lexval.equals("LESS")) {
-            return applyLess(rightTree);
+            return applyLess(rightTree, bindings);
         } else if (lexval.equals("GREATER")) {
-            return applyGreater(rightTree);
+            return applyGreater(rightTree, bindings);
         } else if (lexval.equals("COND")) {
-            return applyCond(rightTree);
+            return applyCond(rightTree, bindings);
         } else if (lexval.equals("QUOTE")) {
-            return applyQuote(rightTree);
+            return applyQuote(rightTree, bindings);
         } else if (lexval.equals("DEFUN")) {
             return applyDefun(rightTree);
+        } else {
+            return applyFuntion(token.getLexval(), rightTree);
         }
-        return null;
     }
 
-    private SExpression applyT(final ParseTree params) {
+    private SExpression applyFuntion(final String functionName,
+            final ParseTree paramsTree) {
+        final FunctionDefinition functionDefinitions = this.functionList
+                .lookup(functionName);
+        final ParseTree[] actualParams = getAllParams(paramsTree, functionName);
+        final LeafNode[] formalParams = functionDefinitions.getFormalParams();
+        assertTrue(
+                "Number of actual parameters and formal parameters does not mach for "
+                        + functionName,
+                actualParams.length == formalParams.length);
+
+        final ParameterBindings parameterBindings = new ParameterBindings();
+        for (int i = 0; i < actualParams.length; i++) {
+            final SExpression evaluatedParam = evaluate(actualParams[i], null);
+            parameterBindings.addBinding(
+                    formalParams[i].getToken().getLexval(), evaluatedParam);
+        }
+
+        return evaluate(functionDefinitions.getBody(), parameterBindings);
+    }
+
+    private SExpression applyT(final ParseTree params,
+            final ParameterBindings bindings) {
         return raiseInterpreterException("cannot apply T");
     }
 
-    private SExpression applyNil(final ParseTree params) {
+    private SExpression applyNil(final ParseTree params,
+            final ParameterBindings bindings) {
         return raiseInterpreterException("cannot apply NIL");
     }
 
-    private SExpression applyCar(final ParseTree params) {// FIXME
+    private SExpression applyCar(final ParseTree params,
+            final ParameterBindings bindings) {// FIXME
         final ParseTree firstParam = extractOnlyParameter(params, "CAR");
         final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
         final ParseTree head = getLeftChild(firstParamTree, "CAR");
-        return evaluate(head);
+        return evaluate(head, bindings);
     }
 
-    private SExpression applyCdr(final ParseTree params) { // FIXME
+    private SExpression applyCdr(final ParseTree params,
+            final ParameterBindings bindings) { // FIXME
         final ParseTree firstParam = extractOnlyParameter(params, "CAR");
         final InternalNode firstParamTree = castAsTree(firstParam, "CAR");
         final ParseTree tail = getRightChild(firstParamTree, "CAR");
-        return evaluate(tail);
+        return evaluate(tail, bindings);
     }
 
-    private SExpression applyCons(final ParseTree params) {
+    private SExpression applyCons(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree[] allParams = getAllParams(params, "CONS");
         assertTrue("CONS needs two parameters", allParams.length == 2);
         final ParseTree firstParam = allParams[0];
         final ParseTree secondParam = allParams[1];
 
-        final SExpression evaluateFirst = evaluate(firstParam);
-        final SExpression evaluateSecond = evaluate(secondParam);
+        final SExpression evaluateFirst = evaluate(firstParam, bindings);
+        final SExpression evaluateSecond = evaluate(secondParam, bindings);
 
         return new BinaryExpression(evaluateFirst, evaluateSecond);
     }
 
-    private SExpression applyAtom(final ParseTree params) {
+    private SExpression applyAtom(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree paramTree = extractOnlyParameter(params, "ATOM");
         if (paramTree == InternalNode.NILL_LEAF) {
             return BooleanAtomExpression.T;
@@ -218,7 +257,8 @@ public class Interpreter {
         }
     }
 
-    private SExpression applyEq(final ParseTree params) {
+    private SExpression applyEq(final ParseTree params,
+            final ParameterBindings bindings) {
         final String operationName = "EQ";
         assertTrue("Looking for a list of two ints in front of "
                 + operationName, params instanceof InternalNode);
@@ -263,9 +303,10 @@ public class Interpreter {
         return BooleanAtomExpression.NIL;
     }
 
-    private SExpression applyNull(final ParseTree params) {
+    private SExpression applyNull(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree paramTree = extractOnlyParameter(params, "NULL");
-        final SExpression result = evaluate(paramTree);
+        final SExpression result = evaluate(paramTree, bindings);
         if (result == BooleanAtomExpression.NIL) {
             return BooleanAtomExpression.T;
         } else {
@@ -273,9 +314,10 @@ public class Interpreter {
         }
     }
 
-    private SExpression applyInt(final ParseTree params) {
+    private SExpression applyInt(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree paramTree = extractOnlyParameter(params, "INT");
-        final SExpression result = evaluate(paramTree);
+        final SExpression result = evaluate(paramTree, bindings);
         if (result instanceof NumericAtomExpression) {
             return BooleanAtomExpression.T;
         } else {
@@ -283,35 +325,43 @@ public class Interpreter {
         }
     }
 
-    private SExpression applyPlus(final ParseTree params) {
-        return applyAritmeticOperation(params, "PLUS");
+    private SExpression applyPlus(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "PLUS", bindings);
     }
 
-    private SExpression applyMinus(final ParseTree params) {
-        return applyAritmeticOperation(params, "MINUS");
+    private SExpression applyMinus(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "MINUS", bindings);
     }
 
-    private SExpression applyTimes(final ParseTree params) {
-        return applyAritmeticOperation(params, "TIMES");
+    private SExpression applyTimes(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "TIMES", bindings);
     }
 
-    private SExpression applyQuotient(final ParseTree params) {
-        return applyAritmeticOperation(params, "QUOTIENT");
+    private SExpression applyQuotient(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "QUOTIENT", bindings);
     }
 
-    private SExpression applyRemainder(final ParseTree params) {
-        return applyAritmeticOperation(params, "REMAINDER");
+    private SExpression applyRemainder(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "REMAINDER", bindings);
     }
 
-    private SExpression applyLess(final ParseTree params) {
-        return applyAritmeticOperation(params, "LESS");
+    private SExpression applyLess(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "LESS", bindings);
     }
 
-    private SExpression applyGreater(final ParseTree params) {
-        return applyAritmeticOperation(params, "GREATER");
+    private SExpression applyGreater(final ParseTree params,
+            final ParameterBindings bindings) {
+        return applyAritmeticOperation(params, "GREATER", bindings);
     }
 
-    private SExpression applyCond(final ParseTree params) {
+    private SExpression applyCond(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree[] allParams = getAllParams(params, "COND");
         assertParamsInPair(allParams, "COND");
         for (int i = 0; i < allParams.length; i++) {
@@ -321,15 +371,17 @@ public class Interpreter {
             final ParseTree conditionParam = pairParams[0];
             final ParseTree bodyParam = pairParams[1];
 
-            final SExpression conditionResult = evaluate(conditionParam);
+            final SExpression conditionResult = evaluate(conditionParam,
+                    bindings);
             if (conditionResult == BooleanAtomExpression.T) {
-                return evaluate(bodyParam);
+                return evaluate(bodyParam, bindings);
             }
         }
         return raiseInterpreterException("None of the conditions in the COND satisfied");
     }
 
-    private SExpression applyQuote(final ParseTree params) {
+    private SExpression applyQuote(final ParseTree params,
+            final ParameterBindings bindings) {
         final ParseTree[] functionParams = getAllParams(params, "QUOTE");
         assertTrue("QUOTE expects to exactly one parameter",
                 functionParams.length == 1);
@@ -337,23 +389,24 @@ public class Interpreter {
                 functionParams[0] != null);
         if (functionParams[0] instanceof LeafNode) {
             final LeafNode leafNode = castAsLeafNode(params, "QUOTE");
-            return evaluate(leafNode);
+            return evaluate(leafNode, bindings);
         }
 
-        return recursiveQuote(functionParams[0]);
+        return recursiveQuote(functionParams[0], bindings);
     }
 
-    private SExpression recursiveQuote(final ParseTree parseTree) {
+    private SExpression recursiveQuote(final ParseTree parseTree,
+            final ParameterBindings bindings) {
         if (parseTree == InternalNode.NILL_LEAF) {
             return BooleanAtomExpression.NIL;
         } else if (parseTree instanceof LeafNode) {
-            return evaluate(parseTree);
+            return evaluate(parseTree, bindings);
         } else if (parseTree instanceof InternalNode) {
             final InternalNode internalNode = castAsTree(parseTree, "QUOTE");
-            final SExpression leftTreeQuote = recursiveQuote(internalNode
-                    .getLeftTree());
-            final SExpression rightTreeQuote = recursiveQuote(internalNode
-                    .getRightTree());
+            final SExpression leftTreeQuote = recursiveQuote(
+                    internalNode.getLeftTree(), bindings);
+            final SExpression rightTreeQuote = recursiveQuote(
+                    internalNode.getRightTree(), bindings);
             return new BinaryExpression(leftTreeQuote, rightTreeQuote);
         }
         return raiseInterpreterException("Invalid arguments for QUOTE");
@@ -363,14 +416,17 @@ public class Interpreter {
         final ParseTree[] allParams = getAllParams(params, "DEFUN");
         assertTrue("DEFUN should have a parameters list and a body",
                 allParams.length == 3);
-        final ParseTree formalsList = allParams[0];
-        final ParseTree functionName = allParams[1];
-        validateName(functionName);
+        final ParseTree functionNameTree = allParams[0];
+        validateName(functionNameTree);
+        final LeafNode functionName = castAsLeafNode(functionNameTree, "DEFUN");
+        final ParseTree formalsList = allParams[1];
         final ParseTree body = allParams[2];
-        final ParseTree[] allFormalParams = enumerate(formalsList);
+        final LeafNode[] allFormalParams = extractFormalParams(formalsList,
+                "DEFUN");
         validateFormalsList(allFormalParams);
-        // functionList.add(functionName, params, )
-        return new DefunAtomExpression(functionName.toString());
+
+        this.functionList.add(functionName, allFormalParams, body);
+        return new DefunAtomExpression(functionName.getToken().getLexval());
     }
 
     private void validateName(final ParseTree functionName) {
@@ -379,7 +435,7 @@ public class Interpreter {
         final LeafNode castAsLeafNode = castAsLeafNode(functionName, "DEFUN");
         for (int i = 0; i < Interpreter.reservedWord.length; i++) {
             assertTrue("Invalid function name",
-                    Interpreter.reservedWord[i].equals(castAsLeafNode
+                    !Interpreter.reservedWord[i].equals(castAsLeafNode
                             .getToken().getLexval()));
         }
     }
@@ -405,23 +461,21 @@ public class Interpreter {
                 secondParam instanceof LeafNode);
 
         final LeafNode firstParamCasted = castAsLeafNode(firstParam, "DEFUN");
-        final LeafNode secondParamCasted = castAsLeafNode(firstParam, "DEFUN");
+        final LeafNode secondParamCasted = castAsLeafNode(secondParam, "DEFUN");
         assertTrue(
                 "Duplicate name in parameters list",
                 !firstParamCasted.getToken().getLexval()
                         .equals(secondParamCasted.getToken().getLexval()));
     }
 
-    private ParseTree[] enumerate(final ParseTree formalsList) {
-        final InternalNode dumy = new InternalNode(null, formalsList, false);
-        return getAllParams(dumy, "DEFUN");
-    }
-
     /**
      * @param leafNode
+     * @param bindings
+     *            TODO
      * @return
      */
-    private SExpression evaluateNode(final LeafNode leafNode) {
+    private SExpression evaluateNode(final LeafNode leafNode,
+            final ParameterBindings bindings) {
         final Token token = leafNode.getToken();
         if (token instanceof NumericAtom) {
             return new NumericAtomExpression(token.getLexval());
@@ -431,9 +485,10 @@ public class Interpreter {
                 return BooleanAtomExpression.T;
             } else if (literalAtom.getLexval().equals("NIL")) {
                 return BooleanAtomExpression.NIL;
+            } else {
+                final String lexval = leafNode.getToken().getLexval();
+                return bindings.lookup(lexval);
             }
-
-            return new NumericAtomExpression(token.getLexval());
         }
         {
             this.out.println("Evaluating some leafnode");
@@ -442,7 +497,7 @@ public class Interpreter {
     }
 
     private SExpression applyAritmeticOperation(final ParseTree params,
-            final String operationName) {
+            final String operationName, final ParameterBindings bindings) {
         assertTrue("Looking for a list of two ints in front of "
                 + operationName, params instanceof InternalNode);
 
@@ -467,8 +522,8 @@ public class Interpreter {
                 + " has more than two elements",
                 nilParamTree == InternalNode.NILL_LEAF);
 
-        final SExpression evaluatedFirstParam = evaluate(firstParam);
-        final SExpression evaluatedSecondParam = evaluate(secondParam);
+        final SExpression evaluatedFirstParam = evaluate(firstParam, bindings);
+        final SExpression evaluatedSecondParam = evaluate(secondParam, bindings);
 
         assertTrue("First param of " + operationName
                 + " should evaluate to a number in ",
@@ -615,6 +670,47 @@ public class Interpreter {
 
         while (iterator.hasNext()) {
             allParamsArray[i] = (ParseTree) iterator.next();
+            i++;
+        }
+
+        return allParamsArray;
+    }
+
+    /**
+     * @param params
+     * @param string
+     * @return
+     */
+    private LeafNode[] extractFormalParams(final ParseTree params,
+            final String string) {
+        if ((params instanceof LeafNode) || (params == InternalNode.NILL_LEAF)) {
+            raiseInterpreterException("No valid list of parameters for "
+                    + string);
+            return null; // never happens, raising exception in the prev. line
+        }
+
+        final Vector allParams = new Vector();
+        ParseTree currentParam = params;
+
+        while ((currentParam != InternalNode.NILL_LEAF)
+                && (currentParam instanceof InternalNode)) {
+            final InternalNode paramTree = (InternalNode) currentParam;
+
+            final LeafNode formalParam = castAsLeafNode(
+                    paramTree.getLeftTree(), string);
+            assertTrue("Formal parameters cannot be null", formalParam != null);
+            assertTrue("Formal parameters should be leaf nodes ",
+                    formalParam instanceof LeafNode);
+            allParams.add(formalParam);
+            currentParam = paramTree.getRightTree();
+        }
+
+        int i = 0;
+        final Iterator iterator = allParams.iterator();
+        final LeafNode[] allParamsArray = new LeafNode[allParams.size()];
+
+        while (iterator.hasNext()) {
+            allParamsArray[i] = (LeafNode) iterator.next();
             i++;
         }
 
