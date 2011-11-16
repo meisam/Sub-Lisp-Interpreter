@@ -44,7 +44,7 @@ public class InputStreamProvider implements InputProvider {
         try {
             final int read = this.in.read();
             this.in.unread(read);
-            return read != -1;
+            return (read != -1) || (read != 0xffff);
         } catch (final IOException e) {
             throw new LexerExeption("Cannot read from the input");
         }
@@ -58,7 +58,7 @@ public class InputStreamProvider implements InputProvider {
     public char nextChar() {
         try {
             final int nextChar = this.in.read();
-            if (nextChar == -1) {
+            if ((nextChar == -1) || (nextChar == 0xffff)) {
                 throw new LexerExeption("Trying to read from the end of input");
             }
             return (char) nextChar;

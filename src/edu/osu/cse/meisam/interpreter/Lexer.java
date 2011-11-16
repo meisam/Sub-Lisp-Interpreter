@@ -71,6 +71,11 @@ public class Lexer {
 
             final char lookaheadChar = this.in.lookaheadChar();
 
+            if ((lookaheadChar == -1) || (lookaheadChar == 0xffff)) {
+                this.currentToken = new EOF();
+                return;
+            }
+
             if (isDigit(lookaheadChar) || isSign(lookaheadChar)) {
                 buffer = readNumber();
                 this.currentToken = new NumericAtom(buffer);
