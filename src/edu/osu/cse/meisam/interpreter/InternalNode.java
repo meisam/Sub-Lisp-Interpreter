@@ -49,7 +49,6 @@ public class InternalNode extends ParseTree {
      * @param leftTree
      * @param rightTree
      * @param isDoted
-     *            TODO
      * @param token
      */
     public InternalNode(final ParseTree leftTree, final ParseTree rightTree,
