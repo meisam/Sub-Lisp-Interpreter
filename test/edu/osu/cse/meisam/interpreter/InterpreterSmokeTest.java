@@ -196,6 +196,15 @@ public class InterpreterSmokeTest extends TestCase {
         System.out.println();
     }
 
+    public void testApplyFunExpresion() {
+        System.out.println("InterpreterSmokeTest.testDefunExpresion()");
+        final StringInputProvider in = new StringInputProvider(
+                "(Defun x (a b) (PLUS a 4)) (x 6 7)");
+        final Interpreter interpreter = new Interpreter(in, System.out);
+        interpreter.interpret();
+        System.out.println();
+    }
+
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
                 new InputStreamProvider(System.in), System.out);
