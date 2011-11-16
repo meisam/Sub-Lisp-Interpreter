@@ -145,7 +145,7 @@ public class InterpreterSmokeTest extends TestCase {
                 //
                 ,
                 //
-                "NOTSOSILY\n" + "11\n" + "253\n" + "\n");
+                "NOTSOSILLY\n" + "11\n" + "253\n" + "3\n");
     }
 
     public void FIXMEtestInterpret() { // FIXME
