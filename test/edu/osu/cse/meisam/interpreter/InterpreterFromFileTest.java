@@ -88,7 +88,7 @@ public class InterpreterFromFileTest extends TestStub {
                 try {
                     interpreter.interpret();
                     Assert.fail(testFile + " should've faild, but it didn't ");
-                } catch (final ParserException e) {
+                } catch (final InterPreterException e) {
                     // good job
                 }
             } catch (final IOException e) {
