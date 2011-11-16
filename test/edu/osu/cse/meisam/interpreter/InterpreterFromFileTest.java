@@ -37,17 +37,17 @@ public class InterpreterFromFileTest extends TestStub {
 
     public void testInterpreter() {
         try {
-            System.out.println("InterpreterSmokeTest.testNumericAtom()");
             InputStream in;
             in = new FileInputStream(
                     "testfiles/pass-lex-parse-interpret-single-numeric.input");
             System.setIn(in);
             final InputProvider inputProvider = new InputStreamProvider(
                     System.in);
+            final StringOutputReceiver output = new StringOutputReceiver();
             final Interpreter interpreter = new Interpreter(inputProvider,
-                    System.out);
+                    output);
             interpreter.interpret();
-            System.out.println();
+            assertEquals("", output.getOutput(), "5\n");
         } catch (final FileNotFoundException e) {
             fail(e.getMessage());
         }
@@ -104,8 +104,9 @@ public class InterpreterFromFileTest extends TestStub {
                 final String fileContent = readfromFile(testFile);
                 final InputProvider inputProvider = new StringInputProvider(
                         fileContent);
+                final StringOutputReceiver output = new StringOutputReceiver();
                 final Interpreter interpreter = new Interpreter(inputProvider,
-                        System.out);
+                        output);
                 try {
                     interpreter.interpret();
                     Assert.fail(testFile + " should've faild, but it didn't ");
@@ -125,11 +126,19 @@ public class InterpreterFromFileTest extends TestStub {
             final InputProvider inputProvider = new StringInputProvider(
                     fileContent);
 
+            final StringOutputReceiver output = new StringOutputReceiver();
             final Interpreter interpreter = new Interpreter(inputProvider,
-                    System.out);
+                    output);
 
             try {
                 interpreter.interpret();
+                final String expectedOutputFile = getInterpreterExpectedOutputFileName(testFile);
+                final String expectedOutput = readfromFile(new File(
+                        expectedOutputFile));
+
+                assertEquals("When testing " + testFile
+                        + ", actual output does not match expected output",
+                        output.getOutput(), expectedOutput);
             } catch (final Exception e) {
                 fail("When testing " + testFile + ", " + e.getMessage());
             }
@@ -140,8 +149,8 @@ public class InterpreterFromFileTest extends TestStub {
     }
 
     private String getInterpreterExpectedOutputFileName(final File testFile) {
-        final String pathname = testFile.getAbsolutePath().replace("input",
-                "parser");
+        final String pathname = testFile.getAbsolutePath().replace(".input",
+                ".output");
         return pathname;
     }
 

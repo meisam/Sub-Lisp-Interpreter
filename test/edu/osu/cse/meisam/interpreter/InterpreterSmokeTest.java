@@ -4,220 +4,126 @@ import junit.framework.TestCase;
 
 public class InterpreterSmokeTest extends TestCase {
 
-    public void testNumericAtom() {
-        System.out.println("InterpreterSmokeTest.testNumericAtom()");
-        final StringInputProvider in = new StringInputProvider("5");
-        final Interpreter interpreter = new Interpreter(in, System.out);
+    private void evaluateOutputFor(final String input,
+            final String expectedoutput) {
+        final StringOutputReceiver actualOutput = new StringOutputReceiver();
+        final StringInputProvider in = new StringInputProvider(input);
+        final Interpreter interpreter = new Interpreter(in, actualOutput);
         interpreter.interpret();
-        System.out.println();
+        assertEquals(expectedoutput, actualOutput.getOutput());
+    }
+
+    public void testNumericAtom() {
+        evaluateOutputFor("5", "5\n");
     }
 
     public void testSampleExpresion() {
-        System.out.println("InterpreterSmokeTest.testSampleExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(Plus (Minus 4 10) (TIMES 4 5)) 3");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Plus (Minus 4 10) (TIMES 4 5))", "14\n");
     }
 
     public void testPlusExpresion() {
-        System.out.println("InterpreterSmokeTest.testPlusExpresion()");
-        final StringInputProvider in = new StringInputProvider("(Plus 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Plus 3 4)", "7\n");
     }
 
     public void testMinusExpresion() {
-        System.out.println("InterpreterSmokeTest.testMinusExpresion()");
-        final StringInputProvider in = new StringInputProvider("(mInuS 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(mInuS 3 4)", "-1\n");
     }
 
     public void testRemindreExpresion() {
-        System.out.println("InterpreterSmokeTest.testRemindreExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(REMAINDER 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(REMAINDER 3 4)", "3\n");
     }
 
     public void testQuotientExpresion() {
-        System.out.println("InterpreterSmokeTest.testQuotientExpresion()");
-        final StringInputProvider in = new StringInputProvider("(QUOTIENT 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(QUOTIENT 3 4)", "0\n");
     }
 
     public void testTimesExpresion() {
-        System.out.println("InterpreterSmokeTest.testTimesExpresion()");
-        final StringInputProvider in = new StringInputProvider("(Times 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Times 3 4)", "12\n");
     }
 
     public void testEqExpresion() {
-        System.out.println("InterpreterSmokeTest.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(EQ 3 4)", "NIL\n");
     }
 
     public void testEqExpresion2() {
-        System.out.println("InterpreterSmokeTest2.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ a b)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(EQ a b)", "NIL\n");
     }
 
     public void testEqExpresion3() {
-        System.out.println("InterpreterSmokeTest3.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ a a)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(EQ a a)", "T\n");
     }
 
     public void testEqExpresion4() {
-        System.out.println("InterpreterSmokeTest4.testEqExpresion()");
-        final StringInputProvider in = new StringInputProvider("(EQ T T)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(EQ T T)", "T\n");
     }
 
     public void testLessExpresion() {
-        System.out.println("InterpreterSmokeTest.testTimesExpresion()");
-        final StringInputProvider in = new StringInputProvider("(LESS 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(LESS 3 4)", "T\n");
     }
 
     public void testGreaterExpresion() {
-        System.out.println("InterpreterSmokeTest.testTimesExpresion()");
-        final StringInputProvider in = new StringInputProvider("(Greater 3 4)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Greater 3 4)", "NIL\n");
     }
 
     public void testTExpresion() {
-        System.out.println("InterpreterSmokeTest.testTExpresion()");
-        final StringInputProvider in = new StringInputProvider("T");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("T", "T\n");
     }
 
     public void testComplicatedExpresion() {
-        System.out.println("InterpreterSmokeTest.testComplicatedExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(GREATER (PLUS 4 5) (MINUS (TIMES 100 10) (REMAINDER 10 7)))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor(
+                "(GREATER (PLUS 4 5) (MINUS (TIMES 100 10) (REMAINDER 10 7)))",
+                "NIL\n");
     }
 
     public void testAtomExpresion() {
-        System.out.println("InterpreterSmokeTest.testAtomExpresion()");
-        final StringInputProvider in = new StringInputProvider("(ATOM 5)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(ATOM 5)", "T\n");
     }
 
     public void testNullExpresion() {
-        System.out.println("InterpreterSmokeTest.testNullExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(NULL (GREATER 4 1))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(NULL (GREATER 4 1))", "NIL\n");
     }
 
     public void testIntExpresion() {
-        System.out.println("InterpreterSmokeTest.testIntExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(Int (PLUS 4 1))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Int (PLUS 4 1))", "T\n");
     }
 
     public void testNilExpresion() {
-        System.out.println("InterpreterSmokeTest.testNilExpresion()");
-        final StringInputProvider in = new StringInputProvider("NIL");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("NIL", "NIL\n");
     }
 
     public void testCondExpresion() {
-        System.out.println("InterpreterSmokeTest.testCondExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(COND ((LESS 4 3) 2) ((LESS 5 7) 9))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(COND ((LESS 4 3) 2) ((LESS 5 7) 9))", "9\n");
     }
 
     public void testQouteExpresion() {
-        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
-        final StringInputProvider in = new StringInputProvider("(Quote (1 2))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Quote (1 2))", "(1 2)\n");
+    }
+
+    public void testQouteExpresion2() {
+        evaluateOutputFor("(Quote (1 . 2))", "(1 . 2)\n");
     }
 
     public void testQouteAtomExpresion() {
-        System.out.println("InterpreterSmokeTest.testQouteExpresion()");
-        final StringInputProvider in = new StringInputProvider("(Quote 1)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Quote 1)", "1\n");
     }
 
     public void testConsExpresion() {
-        System.out.println("InterpreterSmokeTest.testConsExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(Cons 3 (Cons 5 7))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Cons 3 (Cons 5 7))", "(3 . (5 . 7))\n");
     }
 
     public void testDefunExpresion() {
-        System.out.println("InterpreterSmokeTest.testDefunExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(Defun x (a b) (PLUS 5 4))");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Defun x (a b) (PLUS 5 4))", "X\n");
     }
 
     public void testApplyFunExpresion() {
-        System.out.println("InterpreterSmokeTest.testDefunExpresion()");
-        final StringInputProvider in = new StringInputProvider(
-                "(Defun x (a b) (PLUS a 4)) (x 6 7)");
-        final Interpreter interpreter = new Interpreter(in, System.out);
-        interpreter.interpret();
-        System.out.println();
+        evaluateOutputFor("(Defun x (a b) (PLUS a 4)) (x 6 7)", "X\n10\n");
     }
 
     public void FIXMEtestInterpret() { // FIXME
         final Interpreter interpreter = new Interpreter(
-                new InputStreamProvider(System.in), System.out);
+                new InputStreamProvider(System.in), new StreamOutputReceiver(
+                        System.out));
         interpreter.interpret();
-        System.out.println();
     }
 
 }

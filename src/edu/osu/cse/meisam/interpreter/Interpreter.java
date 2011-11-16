@@ -17,7 +17,6 @@
  */
 package edu.osu.cse.meisam.interpreter;
 
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -47,11 +46,11 @@ public class Interpreter {
     private final InputProvider in;
     private final Lexer lexer;
     private final Parser parser;
-    private final PrintStream out;
+    private final OutputReceiver out;
     private final FunctionList functionList;
 
-    public Interpreter(final InputProvider in, final PrintStream out) {
-        this.out = out;
+    public Interpreter(final InputProvider in, final OutputReceiver output) {
+        this.out = output;
         this.in = in;
         this.functionList = new FunctionList();
         this.lexer = new Lexer(this.in);
@@ -64,10 +63,11 @@ public class Interpreter {
     public static void main(final String[] args) {
         try {
             final Interpreter interpreter = new Interpreter(
-                    new InputStreamProvider(System.in), System.out);
+                    new InputStreamProvider(System.in),
+                    new StreamOutputReceiver(System.out));
             interpreter.interpret();
         } catch (final Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+            System.out.println("ERROR: " + ex.getMessage());
         }
 
     }
@@ -85,7 +85,7 @@ public class Interpreter {
             final SExpression evaluatedExpression = evaluate(parseTree,
                     initialBindings);
             prettyPrint(evaluatedExpression);
-            System.out.println();
+            this.out.println("");
         } while (true);
     }
 
@@ -798,7 +798,7 @@ public class Interpreter {
 
     private void prettyPrint(final SExpression expression) {
         if (expression instanceof LeafExpression) {
-            this.out.print(expression);
+            this.out.print(expression.toString());
         } else if (expression instanceof BinaryExpression) {
             final BinaryExpression binaryExpression = (BinaryExpression) expression;
             if (binaryExpression.isList()) {
@@ -822,7 +822,7 @@ public class Interpreter {
         BinaryExpression list = null;
         list = expression;
         do {
-            this.out.print(list.getHead());
+            this.out.print(list.getHead().toString());
             if ((list.getTail() == BooleanAtomExpression.NIL)
                     || (list.getTail() == null)) {
                 break;
