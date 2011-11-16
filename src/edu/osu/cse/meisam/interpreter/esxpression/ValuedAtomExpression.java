@@ -52,4 +52,29 @@ public class ValuedAtomExpression extends LeafExpression {
         return this.val;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return this.val == null ? 0 : this.val.hashCode();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof ValuedAtomExpression) {
+            final String otherVal = ((ValuedAtomExpression) obj).getVal();
+            return otherVal == null ? this.val == null : otherVal
+                    .equals(this.val);
+        }
+        return false;
+    }
 }

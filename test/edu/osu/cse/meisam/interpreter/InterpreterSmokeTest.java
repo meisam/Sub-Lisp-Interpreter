@@ -49,12 +49,24 @@ public class InterpreterSmokeTest extends TestCase {
         evaluateOutputFor("(EQ a b)", "NIL\n");
     }
 
-    public void testEqExpresion3() {
+    public void testEqExpresion22() {
+        evaluateOutputFor("(EQ (quote a) (quote b))", "NIL\n");
+    }
+
+    public void testEqExpresionAtomAtom() {
         evaluateOutputFor("(EQ a a)", "T\n");
     }
 
-    public void testEqExpresion4() {
+    public void testEqExpresionLiteralLiteral() {
+        evaluateOutputFor("(EQ (quote a) (quote a))", "T\n");
+    }
+
+    public void testEqExpresionTT() {
         evaluateOutputFor("(EQ T T)", "T\n");
+    }
+
+    public void testEqExpresion5() {
+        evaluateOutputFor("(EQ 5 5)", "T\n");
     }
 
     public void testLessExpresion() {
@@ -117,6 +129,23 @@ public class InterpreterSmokeTest extends TestCase {
 
     public void testApplyFunExpresion() {
         evaluateOutputFor("(Defun x (a b) (PLUS a 4)) (x 6 7)", "X\n10\n");
+    }
+
+    public void testDefineRecursiveExpresion() {
+        evaluateOutputFor(
+                "(DEFUN NOTSOSILLY (A B)                                              "
+                        + "    (COND                                                            "
+                        + "            ((EQ A 0) (PLUS B 1))                                    "
+                        + "            ((EQ B 0) (NOTSOSILLY (MINUS A 1) 1))                    "
+                        + "            (T (NOTSOSILLY (MINUS A 1) (NOTSOSILLY A (MINUS B 1))))  "
+                        + "          ))                                                         "
+                        + "(NOTSOSILLY 2 4)                                                     "
+                        + "(NOTSOSILLY 3 5)                                                     "
+                        + "(NOTSOSILLY 1 1)"
+                //
+                ,
+                //
+                "NOTSOSILY\n" + "11\n" + "253\n" + "\n");
     }
 
     public void FIXMEtestInterpret() { // FIXME

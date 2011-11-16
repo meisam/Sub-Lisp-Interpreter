@@ -289,19 +289,27 @@ public class Interpreter {
                 && (secondParam == InternalNode.NILL_LEAF)) {
             return BooleanAtomExpression.T;
 
-        } else if ((firstParam instanceof LeafNode)
-                && (secondParam instanceof LeafNode)) {
+        } else {
 
-            final LeafNode firstToken = (LeafNode) firstParam;
-            final Token secondToken = ((LeafNode) secondParam).getToken();
+            final SExpression evaluatedFirstParam = evaluate(firstParam,
+                    bindings);
+            final SExpression evaluatedSecondParam = evaluate(secondParam,
+                    bindings);
 
-            assertTrue("Invalid Arguments for EQ",
-                    ((firstToken != null) && (secondToken != null)));
-            return firstToken.getToken().equals(secondToken) ? BooleanAtomExpression.T
+            assertTrue(
+                    "Invalid Arguments for EQ",
+                    ((evaluatedFirstParam != null) && (evaluatedSecondParam != null)));
+            assertTrue(
+                    "EQ can only be applied on atoms of valid types",
+                    ((evaluatedFirstParam instanceof ValuedAtomExpression) && (evaluatedSecondParam instanceof ValuedAtomExpression)) //
+                            || //
+                            ((evaluatedFirstParam instanceof NumericAtomExpression) && (evaluatedSecondParam instanceof NumericAtomExpression)) //
+                            || //
+                            ((evaluatedFirstParam instanceof BooleanAtomExpression) && (evaluatedSecondParam instanceof BooleanAtomExpression)));
+            return evaluatedFirstParam.equals(evaluatedSecondParam) ? BooleanAtomExpression.T
                     : BooleanAtomExpression.NIL;
         }
 
-        return BooleanAtomExpression.NIL;
     }
 
     private SExpression applyNull(final ParseTree params,
